@@ -2529,8 +2529,17 @@
         display: flex;
       }
       #services .live-service-card .service-icon {
+        z-index: 20;
         top: 0;
-        left: 28px;
+        left: auto;
+        right: 24px;
+        color: var(--navy);
+        box-shadow: 0 12px 24px rgba(0, 26, 56, 0.24);
+      }
+      #services .live-service-card .service-icon i {
+        position: relative;
+        z-index: 21;
+        font-size: 1.35rem;
       }
       #services .live-service-card .service-copy,
       #services .live-service-card:nth-child(2) .service-copy,
@@ -3583,7 +3592,7 @@
         buildCustomLanguageMenu();
       }
     </script>
-    <script src="live-data.js?v=20260913-9"></script>
+    <script src="live-data.js?v=20260913-10"></script>
 
     <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   </body>
