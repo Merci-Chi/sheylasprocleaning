@@ -75,7 +75,19 @@ alter table public."sheylaspro-staff_profiles" enable row level security;
 do $$ declare t text; begin
   foreach t in array array['sheylaspro-appointments','sheylaspro-clients','sheylaspro-reviews','sheylaspro-services','sheylaspro-estimates','sheylaspro-team','sheylaspro-site_content','sheylaspro-staff_profiles'] loop
     execute format('drop policy if exists "sheylaspro authenticated manage" on public.%I',t);
-    execute format('create policy "sheylaspro authenticated manage" on public.%I for all to authenticated using (true) with check (true)',t);
+    execute format(
+      'create policy "sheylaspro authenticated manage" on public.%I
+       for all to authenticated
+       using (
+         lower(coalesce(auth.jwt() ->> ''email'', '''')) ~
+         ''^[^@]+@(sheylaspro[.]com|steadyhandsop[.]com)$''
+       )
+       with check (
+         lower(coalesce(auth.jwt() ->> ''email'', '''')) ~
+         ''^[^@]+@(sheylaspro[.]com|steadyhandsop[.]com)$''
+       )',
+      t
+    );
   end loop;
 end $$;
 
