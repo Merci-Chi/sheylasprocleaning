@@ -2796,21 +2796,11 @@
           <label for="details">What would you like done?</label
           ><textarea id="details" name="details" required></textarea>
         </div>
-        <div class="field full">
-          <label for="attachment">Photo or attachment (optional)</label
-          ><input
-            id="attachment"
-            name="attachment"
-            type="file"
-            accept="image/*,.pdf"
-          />
-        </div>
         <p class="status" id="status">
-          Messages should open with your request. Add your selected attachment
-          before sending.
+          Submit your request and we’ll follow up with you directly.
         </p>
         <button class="btn btn-yellow send" type="submit">
-          <i class="fa-solid fa-message"></i> Send Request by Text
+          <i class="fa-solid fa-paper-plane"></i> Submit Request
         </button>
       </form>
     </dialog>
@@ -3193,29 +3183,6 @@
         document.documentElement.classList.remove("modal-open");
         document.body.classList.remove("modal-open");
       });
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const f = form.elements;
-        if (!f.service.value) {
-          const custom = f.service.nextElementSibling;
-          custom.classList.add("open");
-          custom
-            .querySelector(".custom-select-trigger")
-            .setAttribute("aria-expanded", "true");
-          custom.querySelector(".custom-select-trigger").focus();
-          return;
-        }
-        const isEstimate = f.requestType.value === "estimate";
-        let text = `Hello! My name is ${f.name.value.trim()}. ${isEstimate ? "I’d like a free estimate for" : "I’m ready to request"} ${f.service.value}.\n\nDetails: ${f.details.value.trim()}\n\nBest contact number: ${f.phone.value.trim()}.`;
-        if (f.attachment.files.length) {
-          text += "\n\nI have an attachment and will add it before sending.";
-          status.classList.add("show");
-        }
-        const separator = /iPhone|iPad|iPod/i.test(navigator.userAgent)
-          ? "&"
-          : "?";
-        location.href = `sms:+17028599565${separator}body=${encodeURIComponent(text)}`;
-      });
       /* Google Translate header menu */
       const translateToggle = document.getElementById("translate-toggle");
       const translatePanel = document.getElementById("translate-panel");
@@ -3544,7 +3511,7 @@
         buildCustomLanguageMenu();
       }
     </script>
-    <script src="live-data.js?v=20260913-2"></script>
+    <script src="live-data.js?v=20260913-3"></script>
 
     <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   </body>
