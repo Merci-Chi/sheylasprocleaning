@@ -1,7 +1,7 @@
 (()=>{
 const URL='https://wfxuxrvygyzonkflpwoq.supabase.co',KEY='sb_publishable_e2h4t8AvCobzftt36UrDbw_NJGq8qlJ',db=supabase.createClient(URL,KEY);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),fmt=v=>v?new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric'}).format(new Date(`${v}T00:00:00`)):'—',dateTime=v=>v?new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}).format(new Date(v)):'—';
-const tables={appointments:'sheylaspro-appointments',clients:'sheylaspro-clients',reviews:'sheylaspro-reviews',services:'sheylaspro-services',estimates:'sheylaspro-estimates',team:'sheylaspro-team',content:'sheylaspro-sitecontent'};
+const tables={appointments:'sheylaspro-appointments',clients:'sheylaspro-clients',reviews:'sheylaspro-reviews',services:'sheylaspro-services',estimates:'sheylaspro-estimates',team:'sheylaspro-team',content:'sheylaspro-site_content',staffProfiles:'sheylaspro-staff_profiles'};
 const tbody=id=>document.querySelector(`#${id} tbody`),empty=(cols,msg)=>`<tr><td colspan="${cols}" class="empty-pad">${esc(msg)}</td></tr>`;
 function labels(){document.querySelectorAll('table').forEach(table=>{const hs=[...table.querySelectorAll('th')];table.querySelectorAll('tbody tr').forEach(row=>[...row.children].forEach((c,i)=>c.dataset.label=hs[i]?.textContent||''))})}
 function render(d){
