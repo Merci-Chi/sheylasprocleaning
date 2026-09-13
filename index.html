@@ -2796,6 +2796,14 @@
           <label for="details">What would you like done?</label
           ><textarea id="details" name="details" required></textarea>
         </div>
+        <div class="field">
+          <label for="room-count">Number of rooms</label>
+          <input id="room-count" name="room_count" type="number" min="1" step="1" required />
+        </div>
+        <div class="field">
+          <label for="estimate-photos">Photos (optional)</label>
+          <input id="estimate-photos" name="photos" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" multiple />
+        </div>
         <p class="status" id="status">
           Submit your request and we’ll follow up with you directly.
         </p>
@@ -3511,7 +3519,7 @@
         buildCustomLanguageMenu();
       }
     </script>
-    <script src="live-data.js?v=20260913-3"></script>
+    <script src="live-data.js?v=20260913-4"></script>
 
     <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   </body>

@@ -49,6 +49,27 @@ create table if not exists public."sheylaspro-estimates" (
   amount numeric(10,2), status text not null default 'new' check (status in ('new','sent','accepted','declined','closed')),
   created_at timestamptz not null default now(), updated_at timestamptz not null default now()
 );
+alter table public."sheylaspro-estimates"
+  add column if not exists room_count integer check (room_count is null or room_count > 0),
+  add column if not exists photo_paths text[] not null default '{}';
+
+insert into storage.buckets (id,name,public,file_size_limit,allowed_mime_types)
+values ('sheylaspro-estimate-photos','sheylaspro-estimate-photos',false,10485760,
+  array['image/jpeg','image/png','image/webp','image/heic','image/heif'])
+on conflict (id) do update set public=false,file_size_limit=excluded.file_size_limit,
+  allowed_mime_types=excluded.allowed_mime_types;
+
+drop policy if exists "sheylaspro upload estimate photos" on storage.objects;
+create policy "sheylaspro upload estimate photos" on storage.objects
+for insert to anon with check (bucket_id = 'sheylaspro-estimate-photos');
+
+drop policy if exists "sheylaspro staff read estimate photos" on storage.objects;
+create policy "sheylaspro staff read estimate photos" on storage.objects
+for select to authenticated using (
+  bucket_id = 'sheylaspro-estimate-photos'
+  and lower(coalesce(auth.jwt() ->> 'email','')) ~
+    '^[^@]+@(sheylaspro[.]com|steadyhandsop[.]com)$'
+);
 create table if not exists public."sheylaspro-team" (
   id uuid primary key default gen_random_uuid(), name text not null, role text,
   availability text, active boolean not null default true, sort_order integer not null default 0,
