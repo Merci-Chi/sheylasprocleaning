@@ -4,12 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
   <meta name="theme-color" content="#001a38">
+  <script>document.documentElement.classList.add('admin-access-locked')</script>
   <title>Sheyla’s Pro Cleaning — Admin Version 30</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root{--purple:#001a38;--purple-2:#20ddec;--purple-pale:#e8fcfd;--ink:#001a38;--muted:#607489;--line:#d6e6eb;--coral:#20ddec;--yellow:#ffd21f;--green:#079d89;--white:#fff;--shadow:0 18px 48px rgba(0,26,56,.11)}
+    html.admin-access-locked .shell{display:none!important}
     body,.main{background:#fffcf5}.sidebar{background:#001a38}.brand-mark{background:transparent;box-shadow:none;transform:none;padding:0;width:50px;height:50px}.brand-logo-icon{width:50px;height:50px;object-fit:contain}.brand-wordmark{display:block;width:132px;height:auto;max-height:31px;object-fit:contain;object-position:left center}.brand span{color:#a8f4fb;opacity:1}.nav-item.active{background:#20ddec;color:#001a38}.nav-item .badge{background:#ffd21f;color:#001a38}.button.primary{background:#20ddec;color:#001a38;box-shadow:0 8px 19px rgba(32,221,236,.25)}.button.primary:hover{background:#5cebf5}.button.secondary{color:#063f73;background:#e8fcfd}.stat.coral{--tone:#027d9c;--tint:#e3fbfd}.stat.purple{--tone:#063f73;--tint:#e6f3fb}.stat.yellow{--tone:#9c7800;--tint:#fff8cf}.round-control{color:#063f73}.activity-dot{background:#20ddec}.profile .avatar{background:#ffd21f;color:#001a38}.tag{background:#e7fbf7;color:#08715f}.tag.new{background:#e4fbfd;color:#006d86}.tag.pending{background:#fff5c9;color:#836400}
     :root{--purple:#7b51bd;--purple-2:#a87ee8;--purple-pale:#f3edff;--ink:#292333;--muted:#7b7485;--line:#e9e2ee;--coral:#fa6961;--yellow:#ffd84d;--green:#29a46f;--white:#fff;--shadow:0 18px 48px rgba(70,44,94,.1);--sidebar:260px}
     *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#faf8fc;color:var(--ink);font-family:Inter,system-ui,sans-serif}button,input,textarea,select{font:inherit}button,a{ -webkit-tap-highlight-color:transparent}button{cursor:pointer}a{color:inherit;text-decoration:none}
@@ -77,4 +79,4 @@
   $$('.toggle').forEach(b=>b.onclick=()=>{b.classList.toggle('on');toast(b.classList.contains('on')?'Service is visible':'Service hidden from site')});$$('.approve').forEach(b=>b.onclick=()=>{b.closest('tr').querySelector('.tag').className='tag';b.closest('tr').querySelector('.tag').textContent='Published';b.remove();toast('Review published')});$$('.generic-add').forEach(b=>b.onclick=()=>toast('Ready to add a new item'));
   $('#request-form').onsubmit=e=>{e.preventDefault();e.target.reset();toast('Request sent successfully')};$('#logout').onclick=()=>toast('Logout button is ready to connect to your login system');
   const first=location.hash.slice(1);if(document.getElementById(first)?.classList.contains('page'))showPage(first);
-</script><script src="admin-live-data.js"></script><script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script></body></html>
+</script><script src="admin-live-data.js?v=20260913-2"></script><script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script></body></html>
