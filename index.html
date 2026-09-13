@@ -2515,7 +2515,71 @@
         background: transparent;
         box-shadow: none;
       }
-    </style>
+    
+      /* Live service cards */
+      #services .service-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 32px;
+        align-items: stretch;
+      }
+      #services .live-service-card {
+        height: auto;
+        min-height: 250px;
+        padding-top: 34px;
+        display: flex;
+      }
+      #services .live-service-card .service-icon {
+        top: 0;
+        left: 28px;
+      }
+      #services .live-service-card .service-copy,
+      #services .live-service-card:nth-child(2) .service-copy,
+      #services .live-service-card:nth-child(3) .service-copy,
+      #services .live-service-card:nth-child(4) .service-copy {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        min-height: 216px;
+        padding: 56px 62px 30px 28px;
+        border-radius: 34px;
+        display: flex;
+        flex-direction: column;
+      }
+      #services .live-service-card .service-copy h3 {
+        font-size: 1.4rem;
+        line-height: 1.15;
+        overflow-wrap: anywhere;
+      }
+      #services .live-service-card .service-copy p {
+        font-size: 0.98rem;
+        line-height: 1.5;
+      }
+      #services .live-service-card .card-arrow {
+        right: 18px;
+        bottom: 18px;
+      }
+      @media (max-width: 950px) {
+        #services .service-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 620px) {
+        #services .service-grid {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+        #services .live-service-card {
+          min-height: 0;
+        }
+        #services .live-service-card .service-copy,
+        #services .live-service-card:nth-child(2) .service-copy,
+        #services .live-service-card:nth-child(3) .service-copy,
+        #services .live-service-card:nth-child(4) .service-copy {
+          min-height: 210px;
+          padding: 56px 60px 28px 26px;
+        }
+      }
+</style>
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
@@ -3519,7 +3583,7 @@
         buildCustomLanguageMenu();
       }
     </script>
-    <script src="live-data.js?v=20260913-8"></script>
+    <script src="live-data.js?v=20260913-9"></script>
 
     <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   </body>
