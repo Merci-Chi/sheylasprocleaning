@@ -62,6 +62,17 @@ create table if not exists public."sheylaspro-staff_profiles" (
   display_name text not null, role text not null default 'staff', active boolean not null default true,
   created_at timestamptz not null default now(), updated_at timestamptz not null default now()
 );
+create table if not exists public."sheylaspro-requests" (
+  id uuid primary key default gen_random_uuid(),
+  request_type text not null,
+  subject text not null,
+  details text not null,
+  status text not null default 'open' check (status in ('open','completed')),
+  created_by uuid not null references auth.users(id) on delete cascade,
+  created_by_name text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
 
 alter table public."sheylaspro-appointments" enable row level security;
 alter table public."sheylaspro-clients" enable row level security;
@@ -71,9 +82,10 @@ alter table public."sheylaspro-estimates" enable row level security;
 alter table public."sheylaspro-team" enable row level security;
 alter table public."sheylaspro-site_content" enable row level security;
 alter table public."sheylaspro-staff_profiles" enable row level security;
+alter table public."sheylaspro-requests" enable row level security;
 
 do $$ declare t text; begin
-  foreach t in array array['sheylaspro-appointments','sheylaspro-clients','sheylaspro-reviews','sheylaspro-services','sheylaspro-estimates','sheylaspro-team','sheylaspro-site_content','sheylaspro-staff_profiles'] loop
+  foreach t in array array['sheylaspro-appointments','sheylaspro-clients','sheylaspro-reviews','sheylaspro-services','sheylaspro-estimates','sheylaspro-team','sheylaspro-site_content','sheylaspro-staff_profiles','sheylaspro-requests'] loop
     execute format('drop policy if exists "sheylaspro authenticated manage" on public.%I',t);
     execute format(
       'create policy "sheylaspro authenticated manage" on public.%I
@@ -114,6 +126,7 @@ grant all on public."sheylaspro-estimates" to authenticated;
 grant all on public."sheylaspro-team" to authenticated;
 grant all on public."sheylaspro-site_content" to authenticated;
 grant all on public."sheylaspro-staff_profiles" to authenticated;
+grant all on public."sheylaspro-requests" to authenticated;
 
 -- Enable live updates used by index.html and admin.html.
 do $realtime$
@@ -127,7 +140,8 @@ begin
     'sheylaspro-services',
     'sheylaspro-estimates',
     'sheylaspro-team',
-    'sheylaspro-site_content'
+    'sheylaspro-site_content',
+    'sheylaspro-requests'
   ]
   loop
     if not exists (
