@@ -88,6 +88,51 @@ create policy "sheylaspro public content" on public."sheylaspro-site_content" fo
 drop policy if exists "sheylaspro public estimates" on public."sheylaspro-estimates";
 create policy "sheylaspro public estimates" on public."sheylaspro-estimates" for insert to anon with check (status = 'new' and amount is null);
 
+-- Explicit API privileges for Supabase browser clients.
+grant select on public."sheylaspro-services" to anon;
+grant select on public."sheylaspro-reviews" to anon;
+grant select on public."sheylaspro-site_content" to anon;
+grant insert on public."sheylaspro-estimates" to anon;
+
+grant all on public."sheylaspro-appointments" to authenticated;
+grant all on public."sheylaspro-clients" to authenticated;
+grant all on public."sheylaspro-reviews" to authenticated;
+grant all on public."sheylaspro-services" to authenticated;
+grant all on public."sheylaspro-estimates" to authenticated;
+grant all on public."sheylaspro-team" to authenticated;
+grant all on public."sheylaspro-site_content" to authenticated;
+grant all on public."sheylaspro-staff_profiles" to authenticated;
+
+-- Enable live updates used by index.html and admin.html.
+do $realtime$
+declare
+  table_name_to_add text;
+begin
+  foreach table_name_to_add in array array[
+    'sheylaspro-appointments',
+    'sheylaspro-clients',
+    'sheylaspro-reviews',
+    'sheylaspro-services',
+    'sheylaspro-estimates',
+    'sheylaspro-team',
+    'sheylaspro-site_content'
+  ]
+  loop
+    if not exists (
+      select 1 from pg_publication_tables
+      where pubname = 'supabase_realtime'
+        and schemaname = 'public'
+        and tablename = table_name_to_add
+    ) then
+      execute format(
+        'alter publication supabase_realtime add table public.%I',
+        table_name_to_add
+      );
+    end if;
+  end loop;
+end
+$realtime$;
+
 insert into public."sheylaspro-site_content" (key,value) values
  ('business','Sheyla’s Pro Cleaning'),('phone','(702) 859-9565'),
  ('email','sheylacleaning91@gmail.com'),('address','Las Vegas, NV'),
