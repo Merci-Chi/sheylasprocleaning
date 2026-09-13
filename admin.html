@@ -79,4 +79,4 @@
   $$('.toggle').forEach(b=>b.onclick=()=>{b.classList.toggle('on');toast(b.classList.contains('on')?'Service is visible':'Service hidden from site')});$$('.approve').forEach(b=>b.onclick=()=>{b.closest('tr').querySelector('.tag').className='tag';b.closest('tr').querySelector('.tag').textContent='Published';b.remove();toast('Review published')});$$('.generic-add').forEach(b=>b.onclick=()=>toast('Ready to add a new item'));
   $('#request-form').onsubmit=e=>{e.preventDefault();e.target.reset();toast('Request sent successfully')};$('#logout').onclick=()=>toast('Logout button is ready to connect to your login system');
   const first=location.hash.slice(1);if(document.getElementById(first)?.classList.contains('page'))showPage(first);
-</script><script src="admin-live-data.js?v=20260913-6"></script><script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script></body></html>
+</script><script src="admin-live-data.js?v=20260913-7"></script><script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script></body></html>
