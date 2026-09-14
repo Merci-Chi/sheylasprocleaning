@@ -2515,202 +2515,120 @@
         background: transparent;
         box-shadow: none;
       }
-    
-      /* Live service cards */
-      #services .service-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 32px;
-        align-items: stretch;
+
+
+      /* Mobile facts blob + Google Translate spacing fix */
+      :root {
+        --google-translate-space: 42px;
       }
-      #services .live-service-card {
-        height: auto;
-        min-height: 250px;
-        padding-top: 34px;
-        display: flex;
+
+      /* Keep the photo shaped like one smooth blob, but do not clip the icons/text. */
+      .facts {
+        overflow: visible;
+        clip-path: none !important;
+        background: transparent !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        filter: none !important;
+        box-shadow: none !important;
       }
-      #services .live-service-card .service-icon {
-        z-index: 20;
-        top: 0;
-        left: auto;
-        right: 24px;
-        color: var(--navy);
-        box-shadow: 0 12px 24px rgba(0, 26, 56, 0.24);
+
+      .facts-photo-rotator,
+      .facts:before {
+        clip-path: none !important;
+        border-radius: 19% 13% 18% 14% / 13% 18% 14% 19%;
       }
-      #services .live-service-card .service-icon i {
+
+      .facts-photo-rotator {
+        overflow: hidden;
+        box-shadow: 0 22px 38px rgba(0, 26, 56, 0.24);
+      }
+
+      .facts .fact {
         position: relative;
-        z-index: 21;
-        font-size: 1.35rem;
+        z-index: 4;
       }
-      #services .live-service-card .service-copy,
-      #services .live-service-card:nth-child(2) .service-copy,
-      #services .live-service-card:nth-child(3) .service-copy,
-      #services .live-service-card:nth-child(4) .service-copy {
+
+      .facts .fact > span:last-child {
         position: relative;
-        inset: auto;
-        width: 100%;
-        min-height: 216px;
-        padding: 56px 62px 30px 28px;
-        border-radius: 34px;
-        display: flex;
-        flex-direction: column;
+        z-index: 5;
       }
-      #services .live-service-card .service-copy h3 {
-        font-size: 1.4rem;
-        line-height: 1.15;
-        overflow-wrap: anywhere;
+
+      .facts .fact-icon {
+        position: relative;
+        z-index: 6;
+        flex-shrink: 0;
+        background: rgba(0, 26, 56, 0.88);
+        box-shadow:
+          0 9px 22px rgba(0, 18, 42, 0.4),
+          0 0 0 2px rgba(255, 255, 255, 0.08);
       }
-      #services .live-service-card .service-copy p {
-        font-size: 0.98rem;
-        line-height: 1.5;
+
+      /* When Google Translate is active, move the site header below its banner
+         and give the hero matching breathing room. */
+      html.translated-page .top {
+        top: var(--google-translate-space) !important;
       }
-      #services .live-service-card .card-arrow {
-        right: 18px;
-        bottom: 18px;
+
+      html.translated-page .translate-panel {
+        margin-top: var(--google-translate-space);
       }
-      @media (max-width: 950px) {
-        #services .service-grid {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-      }
-      @media (max-width: 620px) {
-        #services .service-grid {
-          grid-template-columns: 1fr;
-          gap: 24px;
-        }
-        #services .live-service-card {
-          min-height: 0;
-        }
-        #services .live-service-card .service-copy,
-        #services .live-service-card:nth-child(2) .service-copy,
-        #services .live-service-card:nth-child(3) .service-copy,
-        #services .live-service-card:nth-child(4) .service-copy {
-          min-height: 210px;
-          padding: 56px 60px 28px 26px;
+
+      @media (min-width: 951px) {
+        html.translated-page .hero {
+          padding-top: calc(158px + var(--google-translate-space)) !important;
         }
       }
 
-      /* Polished photo service cards and tighter page rhythm */
-      #services.services {
-        padding: 54px 0 70px;
-      }
-      #services .section-head {
-        margin-bottom: 26px;
-      }
-      #services .service-grid {
-        gap: 26px;
-      }
-      #services .live-service-card {
-        position: relative;
-        display: block;
-        height: 370px;
-        min-height: 0;
-        padding: 0;
-        overflow: visible;
-        border-radius: 30px;
-      }
-      #services .live-service-card .service-photo {
-        position: absolute;
-        z-index: 2;
-        inset: 0 0 132px;
-        overflow: hidden;
-        border: 6px solid #fff;
-        border-radius: 30px;
-        background: #d9f7fb;
-        filter: none;
-        box-shadow: 0 18px 34px rgba(0, 26, 56, 0.18);
-      }
-      #services .live-service-card .service-photo::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, transparent 48%, rgba(0, 31, 66, 0.3));
-        pointer-events: none;
-      }
-      #services .live-service-card .service-photo img {
-        width: 100%;
-        height: 100%;
-        display: block;
-        object-fit: cover;
-        transition: transform 0.45s ease;
-      }
-      #services .live-service-card:hover .service-photo img {
-        transform: scale(1.055);
-      }
-      #services .live-service-card .service-icon {
-        z-index: 20;
-        top: 16px;
-        right: 18px;
-        left: auto;
-        width: 60px;
-        height: 60px;
-        border: 5px solid #fff;
-        color: var(--navy);
-        box-shadow: 0 12px 24px rgba(0, 26, 56, 0.28);
-      }
-      #services .live-service-card .service-copy,
-      #services .live-service-card:nth-child(2) .service-copy,
-      #services .live-service-card:nth-child(3) .service-copy,
-      #services .live-service-card:nth-child(4) .service-copy {
-        position: absolute;
-        z-index: 8;
-        left: 14px;
-        right: 14px;
-        bottom: 0;
-        width: auto;
-        min-height: 166px;
-        padding: 27px 62px 25px 25px;
-        border-radius: 26px;
-        background: rgba(255, 255, 255, 0.97);
-        box-shadow: 0 18px 38px rgba(0, 26, 56, 0.18);
-        backdrop-filter: blur(10px);
-      }
-      #services .live-service-card .service-copy h3 {
-        margin-bottom: 10px;
-        font-size: 1.34rem;
-        line-height: 1.12;
-      }
-      #services .live-service-card .service-copy p {
-        font-size: 0.94rem;
-        line-height: 1.42;
-      }
-      #services .live-service-card .card-arrow {
-        right: 16px;
-        bottom: 16px;
-      }
-      .facts-section {
-        padding-bottom: 56px;
-      }
-      .contact {
-        min-height: 400px;
-        padding: 70px 0;
-      }
       @media (max-width: 950px) {
-        #services.services {
-          padding: 48px 0 62px;
+        html.translated-page .hero {
+          padding-top: calc(104px + var(--google-translate-space)) !important;
         }
-        #services .service-grid {
-          gap: 24px;
-        }
-      }
-      @media (max-width: 620px) {
-        #services.services {
-          padding: 42px 0 52px;
-        }
-        #services .live-service-card {
-          height: 350px;
-        }
-        #services .live-service-card .service-photo {
-          bottom: 124px;
-        }
-        #services .live-service-card .service-copy,
-        #services .live-service-card:nth-child(2) .service-copy,
-        #services .live-service-card:nth-child(3) .service-copy,
-        #services .live-service-card:nth-child(4) .service-copy {
-          min-height: 154px;
-          padding: 24px 58px 22px 22px;
+
+        html.translated-page .translate-panel {
+          top: calc(84px + var(--google-translate-space));
+          margin-top: 0;
         }
       }
-</style>
+
+      @media (max-width: 560px) {
+        .facts-section {
+          padding-top: 48px;
+          padding-bottom: 74px;
+        }
+
+        .facts {
+          min-height: 500px;
+          padding: 34px 12px 34px 18px;
+        }
+
+        .facts-photo-rotator,
+        .facts:before {
+          /* Four broad, soft lobes instead of the many-wave edge. */
+          border-radius: 18% 12% 17% 13% / 11% 17% 12% 18%;
+        }
+
+        .facts .fact {
+          gap: 16px;
+          min-height: 102px;
+          padding: 10px 4px 10px 0;
+        }
+
+        .facts .fact-icon {
+          width: 64px;
+          height: 64px;
+          flex-basis: 64px;
+          margin-left: -6px;
+          font-size: 1.5rem;
+        }
+
+        .facts .fact > span:last-child {
+          max-width: calc(100% - 76px);
+          overflow-wrap: anywhere;
+        }
+      }
+
+    </style>
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
@@ -2893,7 +2811,161 @@
             <div class="eyebrow">What we clean</div>
             <h2>Our Cleaning Services</h2>
           </div>
-          <div class="service-grid"><div class="live-empty">Loading live services…</div></div>
+          <div class="service-grid">
+            <article class="service-card">
+              <div class="service-photo">
+                <svg viewBox="0 0 320 300">
+                  <defs>
+                    <clipPath id="b1">
+                      <path
+                        d="M40 43C78 5 145 20 181 14C229 6 286 37 295 83C304 129 276 156 282 205C288 252 244 287 193 280C151 274 126 295 80 272C31 247 9 207 22 163C33 127 5 79 40 43Z"
+                      />
+                    </clipPath>
+                  </defs>
+                  <image
+                    href="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&amp;fit=crop&amp;w=900&amp;q=86"
+                    width="320"
+                    height="300"
+                    preserveAspectRatio="xMidYMid slice"
+                    clip-path="url(#b1)"
+                  />
+                  <path
+                    d="M40 43C78 5 145 20 181 14C229 6 286 37 295 83C304 129 276 156 282 205C288 252 244 287 193 280C151 274 126 295 80 272C31 247 9 207 22 163C33 127 5 79 40 43Z"
+                    fill="none"
+                    stroke="#fff"
+                    stroke-width="9"
+                  />
+                </svg>
+              </div>
+              <span class="service-icon"><i class="fa-solid fa-house"></i></span
+              ><span class="card-spark">✦</span>
+              <div class="service-copy">
+                <h3>Residential Cleaning</h3>
+                <p>A fresh, healthy home you’ll love coming back to.</p>
+                <a
+                  class="card-arrow open-estimate"
+                  href="#estimate"
+                  aria-label="Request residential cleaning estimate"
+                  ><i class="fa-solid fa-arrow-right"></i
+                ></a>
+              </div>
+            </article>
+            <article class="service-card">
+              <div class="service-photo">
+                <svg viewBox="0 0 320 300">
+                  <defs>
+                    <clipPath id="b2">
+                      <path
+                        d="M66 22C107 2 143 28 184 20C235 10 283 33 292 79C301 124 272 148 291 190C311 235 267 279 218 277C177 276 153 294 108 283C56 270 14 237 25 187C35 142 8 102 28 65C37 48 49 31 66 22Z"
+                      />
+                    </clipPath>
+                  </defs>
+                  <image
+                    href="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&amp;fit=crop&amp;w=900&amp;q=86"
+                    width="320"
+                    height="300"
+                    preserveAspectRatio="xMidYMid slice"
+                    clip-path="url(#b2)"
+                  />
+                  <path
+                    d="M66 22C107 2 143 28 184 20C235 10 283 33 292 79C301 124 272 148 291 190C311 235 267 279 218 277C177 276 153 294 108 283C56 270 14 237 25 187C35 142 8 102 28 65C37 48 49 31 66 22Z"
+                    fill="none"
+                    stroke="#fff"
+                    stroke-width="9"
+                  />
+                </svg>
+              </div>
+              <span class="service-icon"><i class="fa-solid fa-bed"></i></span
+              ><span class="card-spark">✦</span>
+              <div class="service-copy">
+                <h3>Airbnb Turnovers</h3>
+                <p>Spotless spaces and happier guests between stays.</p>
+                <a
+                  class="card-arrow open-estimate"
+                  href="#estimate"
+                  aria-label="Request Airbnb turnover estimate"
+                  ><i class="fa-solid fa-arrow-right"></i
+                ></a>
+              </div>
+            </article>
+            <article class="service-card">
+              <div class="service-photo">
+                <svg viewBox="0 0 320 300">
+                  <defs>
+                    <clipPath id="b3">
+                      <path
+                        d="M51 31C88 7 127 25 164 15C210 3 259 18 282 57C307 99 282 137 295 177C312 225 278 266 233 276C190 286 163 265 124 284C82 304 39 277 25 238C9 197 31 166 20 125C9 83 19 51 51 31Z"
+                      />
+                    </clipPath>
+                  </defs>
+                  <image
+                    href="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&amp;fit=crop&amp;w=900&amp;q=86"
+                    width="320"
+                    height="300"
+                    preserveAspectRatio="xMidYMid slice"
+                    clip-path="url(#b3)"
+                  />
+                  <path
+                    d="M51 31C88 7 127 25 164 15C210 3 259 18 282 57C307 99 282 137 295 177C312 225 278 266 233 276C190 286 163 265 124 284C82 304 39 277 25 238C9 197 31 166 20 125C9 83 19 51 51 31Z"
+                    fill="none"
+                    stroke="#fff"
+                    stroke-width="9"
+                  />
+                </svg>
+              </div>
+              <span class="service-icon"><i class="fa-solid fa-box"></i></span
+              ><span class="card-spark">✦</span>
+              <div class="service-copy">
+                <h3>Move-In &amp; Move-Out</h3>
+                <p>A clean start—or a polished final handoff.</p>
+                <a
+                  class="card-arrow open-estimate"
+                  href="#estimate"
+                  aria-label="Request move-in or move-out estimate"
+                  ><i class="fa-solid fa-arrow-right"></i
+                ></a>
+              </div>
+            </article>
+            <article class="service-card">
+              <div class="service-photo">
+                <svg viewBox="0 0 320 300">
+                  <defs>
+                    <clipPath id="b4">
+                      <path
+                        d="M73 18C113 4 143 22 184 16C233 9 279 28 293 67C309 111 279 144 295 187C312 232 273 273 229 281C188 288 159 270 119 287C72 307 27 276 23 232C19 190 42 159 24 119C5 77 28 34 73 18Z"
+                      />
+                    </clipPath>
+                  </defs>
+                  <image
+                    href="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&amp;fit=crop&amp;w=900&amp;q=86"
+                    width="320"
+                    height="300"
+                    preserveAspectRatio="xMidYMid slice"
+                    clip-path="url(#b4)"
+                  />
+                  <path
+                    d="M73 18C113 4 143 22 184 16C233 9 279 28 293 67C309 111 279 144 295 187C312 232 273 273 229 281C188 288 159 270 119 287C72 307 27 276 23 232C19 190 42 159 24 119C5 77 28 34 73 18Z"
+                    fill="none"
+                    stroke="#fff"
+                    stroke-width="9"
+                  />
+                </svg>
+              </div>
+              <span class="service-icon"
+                ><i class="fa-solid fa-champagne-glasses"></i></span
+              ><span class="card-spark">✦</span>
+              <div class="service-copy">
+                <h3>After-Party Cleanup</h3>
+                <p>Enjoy the memories. We’ll handle the mess.</p>
+                <a
+                  class="card-arrow open-estimate"
+                  href="#estimate"
+                  aria-label="Request after-party cleanup estimate"
+                  ><i class="fa-solid fa-arrow-right"></i
+                ></a>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
       <section class="contact" id="contact">
@@ -2991,19 +3063,21 @@
           <label for="details">What would you like done?</label
           ><textarea id="details" name="details" required></textarea>
         </div>
-        <div class="field">
-          <label for="room-count">Number of rooms</label>
-          <input id="room-count" name="room_count" type="number" min="1" step="1" required />
-        </div>
-        <div class="field">
-          <label for="estimate-photos">Photos (optional)</label>
-          <input id="estimate-photos" name="photos" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" multiple />
+        <div class="field full">
+          <label for="attachment">Photo or attachment (optional)</label
+          ><input
+            id="attachment"
+            name="attachment"
+            type="file"
+            accept="image/*,.pdf"
+          />
         </div>
         <p class="status" id="status">
-          Submit your request and we’ll follow up with you directly.
+          Messages should open with your request. Add your selected attachment
+          before sending.
         </p>
         <button class="btn btn-yellow send" type="submit">
-          <i class="fa-solid fa-paper-plane"></i> Submit Request
+          <i class="fa-solid fa-message"></i> Send Request by Text
         </button>
       </form>
     </dialog>
@@ -3023,7 +3097,6 @@
         <a class="phone" href="tel:+17028599565">(702) 859-9565</a>
       </div>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       const menu = document.querySelector(".menu"),
         links = document.querySelector(".links"),
@@ -3386,6 +3459,29 @@
         document.documentElement.classList.remove("modal-open");
         document.body.classList.remove("modal-open");
       });
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const f = form.elements;
+        if (!f.service.value) {
+          const custom = f.service.nextElementSibling;
+          custom.classList.add("open");
+          custom
+            .querySelector(".custom-select-trigger")
+            .setAttribute("aria-expanded", "true");
+          custom.querySelector(".custom-select-trigger").focus();
+          return;
+        }
+        const isEstimate = f.requestType.value === "estimate";
+        let text = `Hello! My name is ${f.name.value.trim()}. ${isEstimate ? "I’d like a free estimate for" : "I’m ready to request"} ${f.service.value}.\n\nDetails: ${f.details.value.trim()}\n\nBest contact number: ${f.phone.value.trim()}.`;
+        if (f.attachment.files.length) {
+          text += "\n\nI have an attachment and will add it before sending.";
+          status.classList.add("show");
+        }
+        const separator = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+          ? "&"
+          : "?";
+        location.href = `sms:+17028599565${separator}body=${encodeURIComponent(text)}`;
+      });
       /* Google Translate header menu */
       const translateToggle = document.getElementById("translate-toggle");
       const translatePanel = document.getElementById("translate-panel");
@@ -3416,7 +3512,30 @@
         }
       });
 
+      function syncTranslatedLayout(forceTranslated) {
+        const html = document.documentElement;
+        const classShowsTranslation =
+          html.classList.contains("translated-ltr") ||
+          html.classList.contains("translated-rtl");
+        const cookieShowsTranslation = /(?:^|;\\s*)googtrans=\\/en\\/(?!en(?:;|$))[^;]+/.test(
+          document.cookie || "",
+        );
+        const translated =
+          typeof forceTranslated === "boolean"
+            ? forceTranslated
+            : classShowsTranslation || cookieShowsTranslation;
+
+        html.classList.toggle("translated-page", translated);
+      }
+
+      syncTranslatedLayout();
+      new MutationObserver(() => syncTranslatedLayout()).observe(
+        document.documentElement,
+        { attributes: true, attributeFilter: ["class"] },
+      );
+
       function resetWebsiteToEnglish() {
+        syncTranslatedLayout(false);
         document.cookie =
           "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
 
@@ -3526,6 +3645,7 @@
             if (!currentGoogleSelect) return;
 
             currentGoogleSelect.value = language.code;
+            syncTranslatedLayout(true);
 
             currentGoogleSelect.dispatchEvent(
               new Event("change", {
@@ -3714,7 +3834,6 @@
         buildCustomLanguageMenu();
       }
     </script>
-    <script src="live-data.js?v=20260913-13"></script>
 
     <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   </body>
