@@ -761,35 +761,37 @@ html[data-theme="dark"] .limit-help{background:#0b314e;color:#dffcff;border-colo
 @media(max-width:560px){.service-description-label,.service-description-meta{align-items:flex-start;flex-direction:column;gap:5px}.service-description-rule{white-space:normal}}
 
 
-/* ===== Estimate cards / photo carousel / quick actions ===== */
+/* ===== Compact estimate cards / image preview / quick actions ===== */
 #page-estimates .table-wrap{overflow:visible}
 #page-estimates table{min-width:0;display:block;background:transparent}
 #page-estimates thead{display:none}
-#page-estimates tbody{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding:18px}
-#page-estimates tbody tr.estimate-card-row{display:block;border:1px solid var(--line);border-radius:24px;overflow:hidden;background:#fff;box-shadow:var(--softshadow)}
+#page-estimates tbody{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:18px}
+#page-estimates tbody tr.estimate-card-row{display:block;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff;box-shadow:var(--softshadow)}
 #page-estimates tbody tr.estimate-card-row:hover{background:#fff}
 #page-estimates tbody tr.estimate-card-row>td{display:block;padding:0;border:0}
-.estimate-card{display:grid;grid-template-columns:minmax(0,180px) 1fr;min-height:220px}
-.estimate-media{position:relative;background:#eaf5f7;min-height:220px;overflow:hidden}
-.estimate-photo-track{height:100%;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none}
-.estimate-photo-track::-webkit-scrollbar{display:none}
-.estimate-photo-slide{min-width:100%;height:100%;scroll-snap-align:start;position:relative;display:grid;place-items:center;background:#eef7f9}
-.estimate-photo-slide img{width:100%;height:100%;object-fit:cover;display:block}
-.estimate-photo-slide.photo-loading::after{content:"Loading photo…";font-size:11px;color:var(--muted)}
-.estimate-no-photo{height:100%;min-height:220px;display:grid;place-items:center;text-align:center;color:var(--muted);padding:18px}
-.estimate-no-photo i{font-size:34px;color:var(--navy2);margin-bottom:8px}
-.estimate-carousel-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:36px;height:36px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(0,26,56,.82);color:#fff;box-shadow:0 6px 16px rgba(0,0,0,.2)}
-.estimate-carousel-arrow.prev{left:8px}.estimate-carousel-arrow.next{right:8px}
-.estimate-photo-count{position:absolute;right:9px;bottom:9px;z-index:3;padding:5px 8px;border-radius:999px;background:rgba(0,26,56,.82);color:#fff;font-size:10px;font-weight:900}
-.estimate-body{padding:18px;display:flex;flex-direction:column;min-width:0}
+.estimate-card{display:block;padding:18px}
+.estimate-card-main{display:flex;gap:14px;align-items:flex-start}
+.estimate-preview{position:relative;flex:0 0 96px;width:96px;height:96px;border-radius:16px;overflow:hidden;background:#eef7f9;border:1px solid var(--line)}
+.estimate-preview-track{width:100%;height:100%;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none}
+.estimate-preview-track::-webkit-scrollbar{display:none}
+.estimate-preview-slide{min-width:100%;width:100%;height:100%;scroll-snap-align:start;display:grid;place-items:center;background:#eef7f9}
+.estimate-preview-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.estimate-preview-slide.photo-loading::after{content:"Loading…";font-size:9px;color:var(--muted)}
+.estimate-preview-empty{width:100%;height:100%;display:grid;place-items:center;text-align:center;color:var(--muted);font-size:10px;padding:8px}
+.estimate-preview-empty i{display:block;font-size:22px;color:var(--navy2);margin-bottom:5px}
+.estimate-preview-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:25px;height:25px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(0,26,56,.82);color:#fff;font-size:10px}
+.estimate-preview-arrow.prev{left:4px}.estimate-preview-arrow.next{right:4px}
+.estimate-preview-count{position:absolute;right:5px;bottom:5px;z-index:3;padding:3px 6px;border-radius:999px;background:rgba(0,26,56,.82);color:#fff;font-size:8px;font-weight:900}
+.estimate-content{flex:1;min-width:0}
 .estimate-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-.estimate-card h3{margin:0;font-size:18px;line-height:1.2}.estimate-card .estimate-phone{display:block;margin-top:4px;color:var(--muted);font-size:11px}
-.estimate-service-pill{display:inline-flex;align-items:center;gap:6px;width:max-content;max-width:100%;padding:6px 9px;margin:12px 0 8px;border-radius:999px;background:var(--cyanp);color:var(--navy2);font-size:10px;font-weight:900}
-.estimate-meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}
-.estimate-meta span{padding:5px 8px;border-radius:999px;background:#f4f8fa;color:var(--muted);font-size:10px;font-weight:800}
-.estimate-note{margin:0;color:var(--muted);font-size:12px;line-height:1.55;white-space:pre-wrap}
-.estimate-actions{margin-top:auto;padding-top:16px;display:flex;flex-wrap:wrap;gap:7px}
-.estimate-action{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--navy2);display:grid;place-items:center}
+.estimate-card h3{margin:0;font-size:17px;line-height:1.2}
+.estimate-phone{display:block;margin-top:4px;color:var(--muted);font-size:11px}
+.estimate-service-pill{display:inline-flex;align-items:center;gap:6px;width:max-content;max-width:100%;padding:5px 8px;margin:10px 0 8px;border-radius:999px;background:var(--cyanp);color:var(--navy2);font-size:10px;font-weight:900}
+.estimate-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:9px}
+.estimate-meta span{padding:4px 7px;border-radius:999px;background:#f4f8fa;color:var(--muted);font-size:9px;font-weight:800}
+.estimate-note{margin:0;color:var(--muted);font-size:11px;line-height:1.5;white-space:pre-wrap}
+.estimate-actions{margin-top:14px;display:flex;flex-wrap:wrap;gap:7px}
+.estimate-action{width:36px;height:36px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--navy2);display:grid;place-items:center}
 .estimate-action:hover{background:var(--cyanp)}
 .estimate-action.danger{color:var(--red);background:#fff7f7}
 .estimate-action[disabled]{opacity:.38;cursor:not-allowed}
@@ -801,20 +803,153 @@ html[data-theme="dark"] .limit-help{background:#0b314e;color:#dffcff;border-colo
 #estimateMessageDialog textarea{width:100%;min-height:170px;padding:12px;border:1px solid var(--line);border-radius:14px;resize:vertical;background:#fff;color:var(--ink);font:inherit;line-height:1.55}
 #estimateMessageDialog .message-help{margin:9px 0 0;color:var(--muted);font-size:10px;line-height:1.5}
 html[data-theme="dark"] #page-estimates tbody tr.estimate-card-row,
-html[data-theme="dark"] .estimate-body,
 html[data-theme="dark"] #estimateMessageDialog .message-option,
 html[data-theme="dark"] #estimateMessageDialog textarea{background:#071d31;color:#f4fcff}
-html[data-theme="dark"] .estimate-media,
-html[data-theme="dark"] .estimate-photo-slide{background:#09243b}
+html[data-theme="dark"] .estimate-preview,
+html[data-theme="dark"] .estimate-preview-slide{background:#09243b}
 html[data-theme="dark"] .estimate-meta span{background:#09243b}
 @media(max-width:1000px){#page-estimates tbody{grid-template-columns:1fr}}
 @media(max-width:650px){
   #page-estimates tbody{padding:12px;gap:12px}
+  .estimate-card{padding:14px}
+  .estimate-card-main{gap:11px}
+  .estimate-preview{flex-basis:82px;width:82px;height:82px}
+  #estimateMessageDialog .message-option-grid{grid-template-columns:1fr}
+}
   .estimate-card{grid-template-columns:1fr}
   .estimate-media{min-height:250px}
   .estimate-photo-slide,.estimate-no-photo{min-height:250px}
   #estimateMessageDialog .message-option-grid{grid-template-columns:1fr}
 }
+
+
+html[data-theme="dark"] .estimate-service-pill{
+  color:#fff!important;
+}
+
+
+/* ===== Appointment cards / quick actions ===== */
+#page-appointments .table-wrap{overflow:visible}
+#page-appointments table{min-width:0;display:block;background:transparent}
+#page-appointments thead{display:none}
+#page-appointments tbody{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:18px}
+#page-appointments tbody tr.appointment-card-row{display:block;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff;box-shadow:var(--softshadow)}
+#page-appointments tbody tr.appointment-card-row:hover{background:#fff}
+#page-appointments tbody tr.appointment-card-row>td{display:block;padding:0;border:0}
+.appointment-card{padding:18px}
+.appointment-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.appointment-card h3{margin:0;font-size:17px;line-height:1.2}
+.appointment-phone{display:block;margin-top:4px;color:var(--muted);font-size:11px}
+.appointment-service-pill{display:inline-flex;align-items:center;gap:6px;width:max-content;max-width:100%;padding:5px 8px;margin:10px 0 8px;border-radius:999px;background:var(--cyanp);color:var(--navy2);font-size:10px;font-weight:900}
+.appointment-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:9px}
+.appointment-meta span{padding:4px 7px;border-radius:999px;background:#f4f8fa;color:var(--muted);font-size:9px;font-weight:800}
+.appointment-note{margin:0;color:var(--muted);font-size:11px;line-height:1.5;white-space:pre-wrap}
+.appointment-actions{margin-top:14px;display:flex;flex-wrap:wrap;gap:7px}
+.appointment-action{width:36px;height:36px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--navy2);display:grid;place-items:center}
+.appointment-action:hover{background:var(--cyanp)}
+.appointment-action.danger{color:var(--red);background:#fff7f7}
+.appointment-action[disabled]{opacity:.38;cursor:not-allowed}
+html[data-theme="dark"] #page-appointments tbody tr.appointment-card-row{background:#071d31;color:#f4fcff}
+html[data-theme="dark"] .appointment-service-pill{color:#fff}
+html[data-theme="dark"] .appointment-meta span{background:#09243b}
+@media(max-width:1000px){#page-appointments tbody{grid-template-columns:1fr}}
+@media(max-width:650px){#page-appointments tbody{padding:12px;gap:12px}.appointment-card{padding:14px}}
+
+
+/* ===== Unified admin cards ===== */
+#page-clients .table-wrap,
+#page-services .table-wrap,
+#page-team .table-wrap{overflow:visible}
+
+#page-clients table,
+#page-services table{min-width:0;display:block;background:transparent}
+
+#page-clients thead,
+#page-services thead{display:none}
+
+#page-clients tbody,
+#page-services tbody{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+  padding:18px;
+}
+
+#page-clients tbody tr.client-card-row,
+#page-services tbody tr.service-card-row{
+  display:block;
+  border:1px solid var(--line);
+  border-radius:22px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:var(--softshadow);
+}
+
+#page-clients tbody tr.client-card-row>td,
+#page-services tbody tr.service-card-row>td{
+  display:block;
+  padding:0;
+  border:0;
+}
+
+.unified-card{padding:18px}
+.unified-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.unified-card h3{margin:0;font-size:17px;line-height:1.2}
+.unified-sub{display:block;margin-top:4px;color:var(--muted);font-size:11px}
+.unified-pill{display:inline-flex;align-items:center;gap:6px;width:max-content;max-width:100%;padding:5px 8px;margin:10px 0 8px;border-radius:999px;background:var(--cyanp);color:var(--navy2);font-size:10px;font-weight:900}
+.unified-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:9px}
+.unified-meta span{padding:4px 7px;border-radius:999px;background:#f4f8fa;color:var(--muted);font-size:9px;font-weight:800}
+.unified-note{margin:0;color:var(--muted);font-size:11px;line-height:1.5;white-space:pre-wrap}
+.unified-actions{margin-top:14px;display:flex;flex-wrap:wrap;gap:7px}
+.unified-action{width:36px;height:36px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--navy2);display:grid;place-items:center}
+.unified-action:hover{background:var(--cyanp)}
+.unified-action.danger{color:var(--red);background:#fff7f7}
+.unified-action[disabled]{opacity:.38;cursor:not-allowed}
+
+html[data-theme="dark"] #page-clients tbody tr.client-card-row,
+html[data-theme="dark"] #page-services tbody tr.service-card-row{background:#071d31;color:#f4fcff}
+html[data-theme="dark"] .unified-pill{color:#fff}
+html[data-theme="dark"] .unified-meta span{background:#09243b}
+
+@media(max-width:1000px){
+  #page-clients tbody,#page-services tbody{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+  #page-clients tbody,#page-services tbody{padding:12px;gap:12px}
+  .unified-card{padding:14px}
+}
+
+/* ===== Attached images popup ===== */
+#estimateImagesDialog .modal{max-width:760px}
+.estimate-gallery-shell{position:relative;border-radius:18px;overflow:hidden;background:#071d31;min-height:360px;display:grid;place-items:center}
+.estimate-gallery-track{width:100%;height:100%;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none}
+.estimate-gallery-track::-webkit-scrollbar{display:none}
+.estimate-gallery-slide{min-width:100%;scroll-snap-align:start;display:grid;place-items:center;padding:18px}
+.estimate-gallery-slide img{max-width:100%;max-height:66vh;object-fit:contain;border-radius:12px}
+.estimate-gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:42px;height:42px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.58);color:#fff}
+.estimate-gallery-arrow.prev{left:10px}.estimate-gallery-arrow.next{right:10px}
+.estimate-gallery-count{position:absolute;right:12px;bottom:12px;z-index:3;background:rgba(0,0,0,.62);color:#fff;border-radius:999px;padding:6px 10px;font-size:10px;font-weight:900}
+
+
+/* Estimates use the exact same card layout as Appointments */
+#page-estimates tbody{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+  padding:18px;
+}
+#page-estimates tbody tr.appointment-card-row{
+  display:block;
+  border:1px solid var(--line);
+  border-radius:22px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:var(--softshadow);
+}
+#page-estimates tbody tr.appointment-card-row>td{display:block;padding:0;border:0}
+html[data-theme="dark"] #page-estimates tbody tr.appointment-card-row{background:#071d31;color:#f4fcff}
+@media(max-width:1000px){#page-estimates tbody{grid-template-columns:1fr}}
+@media(max-width:650px){#page-estimates tbody{padding:12px;gap:12px}}
 
 </style>
 </head>
@@ -1173,6 +1308,14 @@ html[data-theme="dark"] .estimate-meta span{background:#09243b}
   <label for="appointmentGuestPhone">Phone number</label>
   <input id="appointmentGuestPhone" type="tel" maxlength="40" placeholder="Phone number">
 </div>
+<div class="field">
+  <label for="appointmentClientEmail">Email <span class="optional-label">(from client)</span></label>
+  <input id="appointmentClientEmail" type="email" placeholder="Client email" readonly>
+</div>
+<div class="field full">
+  <label for="appointmentClientAddress">Address <span class="optional-label">(from client)</span></label>
+  <input id="appointmentClientAddress" placeholder="Client address" readonly>
+</div>
 <div class="field"><label for="appointmentService">Service</label><select id="appointmentService" required></select></div><div class="field full">
   <label>Team Member(s) <span class="optional-label">(optional)</span></label>
   <div class="multi-picker" id="appointmentTeamPicker">
@@ -1207,6 +1350,14 @@ html[data-theme="dark"] .estimate-meta span{background:#09243b}
 <div class="field">
   <label for="estimateGuestPhone">Phone number</label>
   <input id="estimateGuestPhone" type="tel" maxlength="40" placeholder="Phone number">
+</div>
+<div class="field">
+  <label for="estimateClientEmail">Email <span class="optional-label">(from client)</span></label>
+  <input id="estimateClientEmail" type="email" placeholder="Client email" readonly>
+</div>
+<div class="field full">
+  <label for="estimateClientAddress">Address <span class="optional-label">(from client)</span></label>
+  <input id="estimateClientAddress" placeholder="Client address" readonly>
 </div>
 <div class="field"><label for="estimateService">Service</label><select id="estimateService" required></select></div><div class="field"><label>Amount</label><div class="money"><span>$</span><input id="estimateAmount" inputmode="decimal" required></div></div><div class="field"><label>Date</label><input id="estimateDate" type="date" required></div><div class="field full"><label>Notes</label><textarea id="estimateNotes"></textarea></div></div><div class="modal-actions"><button class="button ghost" type="button" data-close="estimateDialog">Cancel</button><button class="button primary">Save estimate</button></div></form></div></dialog>
 
@@ -1496,7 +1647,10 @@ function refreshSelects(){
   const set=(el,rows,label,optional=false)=>{
     const old=el.value;
     el.innerHTML=`<option value="">${optional?"No saved client selected":"Choose "+label}</option>`+
-      rows.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
+      rows.map(x=>{
+        const detail=[x.phone,x.email].filter(Boolean).join(" · ");
+        return `<option value="${x.id}">${esc(x.name)}${detail?` — ${esc(detail)}`:""}</option>`;
+      }).join("");
     if(rows.some(x=>x.id===old))el.value=old;
   };
   set(appointmentClient,data.clients,"client",true);
@@ -1584,8 +1738,14 @@ function openAppointment(r=null){
   appointmentId.value=r?.id||"";
   appointmentClient.value=r?.clientId||"";
   const existingClient=r?.clientId?get("clients",r.clientId):null;
-  appointmentGuestName.value=existingClient?.name||r?.guestName||"";
-  appointmentGuestPhone.value=existingClient?.phone||r?.guestPhone||"";
+  if(existingClient){
+    fillAppointmentClient(existingClient);
+  }else{
+    appointmentGuestName.value=r?.guestName||"";
+    appointmentGuestPhone.value=r?.guestPhone||"";
+    appointmentClientEmail.value="";
+    appointmentClientAddress.value="";
+  }
   appointmentService.value=r?.serviceId||"";
   appointmentSelectedTeamIds=normalizeTeamIds(r);
   appointmentDate.value=r?.date||"";
@@ -1656,19 +1816,28 @@ function renderEstimates(){
 }
 estimateSearch.oninput=renderEstimates;
 
+function fillAppointmentClient(client){
+  appointmentGuestName.value=client?.name||"";
+  appointmentGuestPhone.value=client?.phone||"";
+  appointmentClientEmail.value=client?.email||"";
+  appointmentClientAddress.value=client?.address||"";
+}
+
+function fillEstimateClient(client){
+  estimateGuestName.value=client?.name||"";
+  estimateGuestPhone.value=client?.phone||"";
+  estimateClientEmail.value=client?.email||"";
+  estimateClientAddress.value=client?.address||"";
+}
+
 appointmentClient.addEventListener("change",()=>{
   const c=get("clients",appointmentClient.value);
-  if(c){
-    appointmentGuestName.value=c.name||"";
-    appointmentGuestPhone.value=c.phone||"";
-  }
+  fillAppointmentClient(c);
 });
+
 estimateClient.addEventListener("change",()=>{
   const c=get("clients",estimateClient.value);
-  if(c){
-    estimateGuestName.value=c.name||"";
-    estimateGuestPhone.value=c.phone||"";
-  }
+  fillEstimateClient(c);
 });
 
 function openEstimate(r=null){
@@ -1678,8 +1847,14 @@ function openEstimate(r=null){
   estimateId.value=r?.id||"";
   estimateClient.value=r?.clientId||"";
   const existingClient=r?.clientId?get("clients",r.clientId):null;
-  estimateGuestName.value=existingClient?.name||r?.guestName||"";
-  estimateGuestPhone.value=existingClient?.phone||r?.guestPhone||"";
+  if(existingClient){
+    fillEstimateClient(existingClient);
+  }else{
+    estimateGuestName.value=r?.guestName||"";
+    estimateGuestPhone.value=r?.guestPhone||"";
+    estimateClientEmail.value="";
+    estimateClientAddress.value="";
+  }
   estimateService.value=r?.serviceId||"";
   estimateAmount.value=r?.amount||"";
   estimateDate.value=r?.date||new Date().toISOString().slice(0,10);
@@ -2731,6 +2906,24 @@ if ('serviceWorker' in navigator) {
   </div>
 </dialog>
 
+
+<dialog id="estimateImagesDialog">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Attached images</h2>
+      <button class="modal-close" type="button" id="estimateImagesClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="estimate-gallery-shell">
+        <div class="estimate-gallery-track" id="estimateGalleryTrack" tabindex="0"></div>
+        <button class="estimate-gallery-arrow prev" type="button" id="estimateGalleryPrev" aria-label="Previous image"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="estimate-gallery-arrow next" type="button" id="estimateGalleryNext" aria-label="Next image"><i class="fa-solid fa-chevron-right"></i></button>
+        <span class="estimate-gallery-count" id="estimateGalleryCount"></span>
+      </div>
+    </div>
+  </div>
+</dialog>
+
 <script>
 /* ===== Authoritative live page sync =====
    The dashboard and every sidebar page are rendered from the SAME live records.
@@ -2778,26 +2971,97 @@ if ('serviceWorker' in navigator) {
     if(rows===null)return;
     setCount('clientCount',rows.length);showEmpty('clientEmpty',rows.length===0);
     const body=$('clientRows');if(!body)return;
-    body.innerHTML=rows.map(c=>`<tr>
-      <td data-label="Name"><strong>${html(c.name||'—')}</strong></td>
-      <td data-label="Phone">${html(c.phone||'—')}</td>
-      <td data-label="Email">${html(c.email||'—')}</td>
-      <td data-label="Address">${html(c.address||'—')}</td>
-      <td data-label="Notes">${html(c.notes||'—')}</td>
-      <td data-label="Actions"></td>
-    </tr>`).join('');
+    body.innerHTML=rows.map(c=>`<tr class="client-card-row"><td colspan="6">
+      <article class="unified-card">
+        <div class="unified-card-top">
+          <div>
+            <h3>${html(c.name||'—')}</h3>
+            <span class="unified-sub">${html(c.phone||'No phone number')}</span>
+          </div>
+          <span class="tag">${c.active===false?'inactive':'active'}</span>
+        </div>
+
+        ${c.email?`<span class="unified-pill"><i class="fa-regular fa-envelope"></i>${html(c.email)}</span>`:''}
+
+        <div class="unified-meta">
+          ${c.address?`<span><i class="fa-solid fa-location-dot"></i> ${html(c.address)}</span>`:''}
+          ${c.last_service?`<span><i class="fa-solid fa-spray-can-sparkles"></i> ${html(c.last_service)}</span>`:''}
+          ${c.total_visits!=null?`<span><i class="fa-solid fa-repeat"></i> ${html(c.total_visits)} visit${Number(c.total_visits)===1?'':'s'}</span>`:''}
+        </div>
+
+        <p class="unified-note">${html(c.notes||'No notes')}</p>
+
+        <div class="unified-actions">
+          <button class="unified-action" type="button" data-client-edit="${html(c.id)}" title="Edit client" aria-label="Edit client"><i class="fa-solid fa-pen"></i></button>
+          <button class="unified-action danger" type="button" data-client-delete="${html(c.id)}" title="Delete client" aria-label="Delete client"><i class="fa-solid fa-trash"></i></button>
+          <a class="unified-action" href="${c.phone?`tel:${html(String(c.phone).replace(/[^\d+]/g,''))}`:'#'}" ${c.phone?'':'aria-disabled="true"'} title="Call client" aria-label="Call client"><i class="fa-solid fa-phone"></i></a>
+          <a class="unified-action" href="${c.phone?`sms:${html(String(c.phone).replace(/[^\d+]/g,''))}`:'#'}" ${c.phone?'':'aria-disabled="true"'} title="Text client" aria-label="Text client"><i class="fa-regular fa-message"></i></a>
+        </div>
+      </article>
+    </td></tr>`).join('');
+
+    body.querySelectorAll('[data-client-edit]').forEach(btn=>btn.onclick=()=>{
+      if(typeof data==='undefined'||typeof openClient!=='function')return;
+      const c=data.clients.find(x=>String(x.id)===String(btn.dataset.clientEdit));
+      if(c)openClient(c);
+    });
+
+    body.querySelectorAll('[data-client-delete]').forEach(btn=>btn.onclick=async()=>{
+      const id=btn.dataset.clientDelete;
+      const c=rows.find(x=>String(x.id)===String(id));
+      if(!confirm(`Delete ${c?.name||'this client'}? This cannot be undone.`))return;
+      const {error}=await sheylasDb.from(TABLES.clients).delete().eq('id',id);
+      if(error){
+        console.error(error);
+        if(typeof showMessage==='function')showMessage('Couldn’t delete client','Please try again.','error');
+        return;
+      }
+      await refreshAllLivePages();
+    });
   }
 
   function renderServices(rows){
     if(rows===null)return;
     setCount('serviceCount',rows.length);showEmpty('serviceEmpty',rows.length===0);
     const body=$('serviceRows');if(!body)return;
-    body.innerHTML=rows.map(s=>`<tr>
-      <td data-label="Name"><strong>${html(s.name||'—')}</strong></td>
-      <td data-label="Price">${html(s.price||s.price_label||'—')}</td>
-      <td data-label="Description">${html(s.description||'—')}</td>
-      <td data-label="Actions"></td>
-    </tr>`).join('');
+    body.innerHTML=rows.map(s=>`<tr class="service-card-row"><td colspan="4">
+      <article class="unified-card">
+        <div class="unified-card-top">
+          <div>
+            <h3>${html(s.name||'—')}</h3>
+            <span class="unified-sub">${html(s.price||s.price_label||'Custom estimate')}</span>
+          </div>
+          <span class="tag">${s.is_live===false?'hidden':'live'}</span>
+        </div>
+
+        <span class="unified-pill"><i class="fa-solid fa-spray-can-sparkles"></i>${html(s.name||'Service')}</span>
+        <p class="unified-note">${html(s.description||'No description')}</p>
+
+        <div class="unified-actions">
+          <button class="unified-action" type="button" data-service-edit="${html(s.id)}" title="Edit service" aria-label="Edit service"><i class="fa-solid fa-pen"></i></button>
+          <button class="unified-action danger" type="button" data-service-delete="${html(s.id)}" title="Delete service" aria-label="Delete service"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </article>
+    </td></tr>`).join('');
+
+    body.querySelectorAll('[data-service-edit]').forEach(btn=>btn.onclick=()=>{
+      if(typeof data==='undefined'||typeof openService!=='function')return;
+      const s=data.services.find(x=>String(x.id)===String(btn.dataset.serviceEdit));
+      if(s)openService(s);
+    });
+
+    body.querySelectorAll('[data-service-delete]').forEach(btn=>btn.onclick=async()=>{
+      const id=btn.dataset.serviceDelete;
+      const s=rows.find(x=>String(x.id)===String(id));
+      if(!confirm(`Delete ${s?.name||'this service'}? This cannot be undone.`))return;
+      const {error}=await sheylasDb.from(TABLES.services).delete().eq('id',id);
+      if(error){
+        console.error(error);
+        if(typeof showMessage==='function')showMessage('Couldn’t delete service','Please try again.','error');
+        return;
+      }
+      await refreshAllLivePages();
+    });
   }
 
   function renderTeam(rows){
@@ -2813,20 +3077,50 @@ if ('serviceWorker' in navigator) {
     if(rows===null)return;
     setCount('appointmentCount',rows.length);showEmpty('appointmentEmpty',rows.length===0);
     const body=$('appointmentRows');if(!body)return;
+
+    window.__appointmentLiveRows=new Map((rows||[]).map(r=>[String(r.id),r]));
+
     body.innerHTML=rows.map(a=>{
       const client=(a.client_id&&clients?.find(x=>x.id===a.client_id))||byName(clients||[],a.client_name);
       const service=(a.service_id&&services?.find(x=>x.id===a.service_id))||byName(services||[],a.service);
-      const team=Array.isArray(a.team_ids)&&a.team_ids.length?`${a.team_ids.length} assigned`:(a.team_member||'Unassigned');
-      return `<tr>
-        <td data-label="Date">${html(dateText(a.appointment_date))}</td>
-        <td data-label="Time">${html(shortTime(a.appointment_time)||'—')}</td>
-        <td data-label="Client"><strong>${html(client?.name||a.client_name||a.guest_name||'—')}</strong></td>
-        <td data-label="Service">${html(service?.name||a.service||'—')}</td>
-        <td data-label="Team">${html(team)}</td>
-        <td data-label="Phone">${html(client?.phone||a.phone||a.guest_phone||'—')}</td>
-        <td data-label="Actions"></td>
-      </tr>`;
+      const clientName=client?.name||a.client_name||a.guest_name||'Client';
+      const phone=client?.phone||a.phone||a.guest_phone||'';
+      const serviceName=service?.name||a.service||'Service';
+      const team=Array.isArray(a.team_ids)&&a.team_ids.length?`${a.team_ids.length} team member${a.team_ids.length===1?'':'s'}`:(a.team_member||'Unassigned');
+      const whenDate=dateText(a.appointment_date);
+      const whenTime=friendlyAppointmentTime(a)||shortTime(a.appointment_time)||'—';
+      return `<tr class="appointment-card-row" data-appointment-card="${html(a.id)}"><td colspan="7">
+        <article class="appointment-card">
+          <div class="appointment-card-top">
+            <div>
+              <h3>${html(clientName)}</h3>
+              <span class="appointment-phone">${html(phone||'No phone number')}</span>
+            </div>
+            <span class="tag">${html(a.status||'pending')}</span>
+          </div>
+
+          <span class="appointment-service-pill"><i class="fa-solid fa-spray-can-sparkles"></i>${html(serviceName)}</span>
+
+          <div class="appointment-meta">
+            <span><i class="fa-regular fa-calendar"></i> ${html(whenDate)}</span>
+            <span><i class="fa-regular fa-clock"></i> ${html(whenTime)}</span>
+            <span><i class="fa-solid fa-user-group"></i> ${html(team)}</span>
+          </div>
+
+          <p class="appointment-note">${html(a.notes||'No notes')}</p>
+
+          <div class="appointment-actions">
+            <button class="appointment-action" type="button" data-appt-edit="${html(a.id)}" title="Edit appointment" aria-label="Edit appointment"><i class="fa-solid fa-pen"></i></button>
+            <button class="appointment-action danger" type="button" data-appt-delete="${html(a.id)}" title="Delete appointment" aria-label="Delete appointment"><i class="fa-solid fa-trash"></i></button>
+            <a class="appointment-action" href="${phone?`tel:${html(String(phone).replace(/[^\d+]/g,''))}`:'#'}" ${phone?'':'aria-disabled="true"'} title="Call client" aria-label="Call client"><i class="fa-solid fa-phone"></i></a>
+            <button class="appointment-action" type="button" data-appt-message="${html(a.id)}" title="Text client" aria-label="Text client" ${phone?'':'disabled'}><i class="fa-regular fa-message"></i></button>
+            <button class="appointment-action" type="button" data-appt-calendar="${html(a.id)}" title="Add to calendar" aria-label="Add appointment to calendar"><i class="fa-regular fa-calendar-plus"></i></button>
+          </div>
+        </article>
+      </td></tr>`;
     }).join('');
+
+    bindAppointmentCardActions(body,clients||[],services||[]);
   }
 
   async function hydrateEstimatePhotos(root){
@@ -2838,13 +3132,13 @@ if ('serviceWorker' in navigator) {
         const {data:signed,error}=await sheylasDb.storage.from('sheylaspro-estimate-photos').createSignedUrl(path,3600);
         if(error||!signed?.signedUrl)throw error||new Error('No signed URL');
         img.src=signed.signedUrl;
-        img.closest('.estimate-photo-slide')?.classList.remove('photo-loading');
+        img.closest('.estimate-preview-slide')?.classList.remove('photo-loading');
       }catch(error){
         console.error('Could not load estimate photo:',error);
-        const slide=img.closest('.estimate-photo-slide');
+        const slide=img.closest('.estimate-preview-slide');
         if(slide){
           slide.classList.remove('photo-loading');
-          slide.innerHTML='<div class="estimate-no-photo"><div><i class="fa-regular fa-image"></i><br>Photo unavailable</div></div>';
+          slide.innerHTML='<div class="estimate-preview-empty"><div><i class="fa-regular fa-image"></i>Photo unavailable</div></div>';
         }
       }
     }));
@@ -2878,49 +3172,46 @@ if ('serviceWorker' in navigator) {
       const photos=Array.isArray(e.photo_paths)?e.photo_paths.filter(Boolean):[];
       const appointment=findEstimateAppointment(e,appointments||[]);
       const roomText=e.room_count?`${e.room_count} room${Number(e.room_count)===1?'':'s'}`:'';
-      const date=dateText(e.estimate_date||String(e.created_at||'').slice(0,10));
+      const whenDate=dateText(e.estimate_date||String(e.created_at||'').slice(0,10));
       const phone=client?.phone||e.phone||e.guest_phone||'';
       const clientName=client?.name||e.client_name||e.guest_name||'Client';
       const serviceName=service?.name||e.service||'Service';
-      const slides=photos.length
-        ? photos.map((path,i)=>`<div class="estimate-photo-slide photo-loading" data-slide="${i}"><img data-photo-path="${html(path)}" alt="Estimate photo ${i+1}"></div>`).join('')
-        : '<div class="estimate-no-photo"><div><i class="fa-regular fa-images"></i><br>No photos attached</div></div>';
-      const arrows=photos.length>1
-        ? `<button class="estimate-carousel-arrow prev" type="button" data-photo-prev="${html(e.id)}" aria-label="Previous photo"><i class="fa-solid fa-chevron-left"></i></button>
-           <button class="estimate-carousel-arrow next" type="button" data-photo-next="${html(e.id)}" aria-label="Next photo"><i class="fa-solid fa-chevron-right"></i></button>`
-        : '';
-      return `<tr class="estimate-card-row" data-estimate-card="${html(e.id)}"><td colspan="6">
-        <article class="estimate-card">
-          <div class="estimate-media">
-            <div class="estimate-photo-track" data-photo-track="${html(e.id)}" tabindex="0">${slides}</div>
-            ${arrows}
-            ${photos.length?`<span class="estimate-photo-count">${photos.length} photo${photos.length===1?'':'s'}</span>`:''}
+
+      return `<tr class="appointment-card-row" data-estimate-card="${html(e.id)}"><td colspan="6">
+        <article class="appointment-card">
+          <div class="appointment-card-top">
+            <div>
+              <h3>${html(clientName)}</h3>
+              <span class="appointment-phone">${html(phone||'No phone number')}</span>
+            </div>
+            <span class="tag">${html(e.status||'new')}</span>
           </div>
-          <div class="estimate-body">
-            <div class="estimate-card-top">
-              <div><h3>${html(clientName)}</h3><span class="estimate-phone">${html(phone||'No phone number')}</span></div>
-              <strong>${html(moneyText(e.amount))}</strong>
-            </div>
-            <span class="estimate-service-pill"><i class="fa-solid fa-spray-can-sparkles"></i>${html(serviceName)}</span>
-            <div class="estimate-meta">
-              <span><i class="fa-regular fa-calendar"></i> ${html(date)}</span>
-              ${roomText?`<span><i class="fa-solid fa-door-open"></i> ${html(roomText)}</span>`:''}
-              ${appointment?`<span><i class="fa-regular fa-clock"></i> Appointment ${html(dateText(appointment.appointment_date))} ${html(shortTime(appointment.appointment_time))}</span>`:''}
-            </div>
-            <p class="estimate-note">${html(e.notes||e.details||'No notes')}</p>
-            <div class="estimate-actions">
-              <button class="estimate-action" type="button" data-est-edit="${html(e.id)}" title="Edit estimate" aria-label="Edit estimate"><i class="fa-solid fa-pen"></i></button>
-              <button class="estimate-action danger" type="button" data-est-delete="${html(e.id)}" title="Delete estimate" aria-label="Delete estimate"><i class="fa-solid fa-trash"></i></button>
-              <a class="estimate-action" href="${phone?`tel:${html(String(phone).replace(/[^\d+]/g,''))}`:'#'}" ${phone?'':'aria-disabled="true"'} title="Call client" aria-label="Call client"><i class="fa-solid fa-phone"></i></a>
-              <button class="estimate-action" type="button" data-est-message="${html(e.id)}" title="Text client" aria-label="Text client" ${phone?'':'disabled'}><i class="fa-regular fa-message"></i></button>
-              <button class="estimate-action" type="button" data-est-calendar="${html(e.id)}" title="${appointment?'Add appointment to calendar':'No upcoming appointment'}" aria-label="Add appointment to calendar" ${appointment?'':'disabled'}><i class="fa-regular fa-calendar-plus"></i></button>
-            </div>
+
+          <span class="appointment-service-pill"><i class="fa-solid fa-spray-can-sparkles"></i>${html(serviceName)}</span>
+
+          <div class="appointment-meta">
+            <span><i class="fa-regular fa-calendar"></i> ${html(whenDate)}</span>
+            ${roomText?`<span><i class="fa-solid fa-door-open"></i> ${html(roomText)}</span>`:''}
+            ${e.amount!=null&&e.amount!==''?`<span><i class="fa-solid fa-dollar-sign"></i> ${html(moneyText(e.amount))}</span>`:''}
+          </div>
+
+          <p class="appointment-note">${html(e.notes||e.details||'No notes')}</p>
+
+          ${photos.length?`<button class="button ghost" type="button" data-est-images="${html(e.id)}" style="margin-top:12px;width:max-content;max-width:100%">
+            <i class="fa-regular fa-images"></i> See attached photos
+          </button>`:''}
+
+          <div class="appointment-actions">
+            <button class="appointment-action" type="button" data-est-edit="${html(e.id)}" title="Edit estimate" aria-label="Edit estimate"><i class="fa-solid fa-pen"></i></button>
+            <button class="appointment-action danger" type="button" data-est-delete="${html(e.id)}" title="Delete estimate" aria-label="Delete estimate"><i class="fa-solid fa-trash"></i></button>
+            <a class="appointment-action" href="${phone?`tel:${html(String(phone).replace(/[^\d+]/g,''))}`:'#'}" ${phone?'':'aria-disabled="true"'} title="Call client" aria-label="Call client"><i class="fa-solid fa-phone"></i></a>
+            <button class="appointment-action" type="button" data-est-message="${html(e.id)}" title="Text client" aria-label="Text client" ${phone?'':'disabled'}><i class="fa-regular fa-message"></i></button>
+            <button class="appointment-action" type="button" data-est-calendar="${html(e.id)}" title="${appointment?'Add appointment to calendar':'No upcoming appointment'}" aria-label="Add appointment to calendar" ${appointment?'':'disabled'}><i class="fa-regular fa-calendar-plus"></i></button>
           </div>
         </article>
       </td></tr>`;
     }).join('');
 
-    hydrateEstimatePhotos(body);
     bindEstimateCardActions(body,clients||[],services||[],appointments||[]);
   }
   function updateDashboard(appointments,estimates,clients,services,team){
@@ -2956,7 +3247,7 @@ if ('serviceWorker' in navigator) {
 
       // Keep the original admin state synchronized too, so its modals/searches keep working.
       if(typeof data!=='undefined'){
-        if(clients!==null)data.clients=clients.map(x=>({id:x.id,name:x.name||'',phone:x.phone||'',email:x.email||'',address:x.address||'',notes:x.notes||'',active:x.active!==false}));
+        if(clients!==null)data.clients=clients.map(x=>({id:x.id,name:x.name||'',phone:x.phone||'',email:x.email||'',address:x.address||'',notes:x.notes||'',lastService:x.last_service||'',totalVisits:x.total_visits??0,active:x.active!==false}));
         if(services!==null)data.services=services.map(x=>({id:x.id,name:x.name||'',price:x.price||String(x.price_label||'').replace(/^\$/,''),description:x.description||'',imageUrl:x.image_url||'',icon:x.icon||'',isLive:x.is_live!==false,sortOrder:x.sort_order||0}));
         if(team!==null)data.team=team.map(x=>({id:x.id,name:x.name||'',role:x.role||'',days:Array.isArray(x.days)?x.days:[],start:shortTime(x.start_time),end:shortTime(x.end_time),dayHours:x.day_hours||{},active:x.active!==false}));
         if(appointments!==null)data.appointments=appointments.map(x=>({
@@ -2994,6 +3285,190 @@ if ('serviceWorker' in navigator) {
     }
   }
 
+
+
+
+  function findClientRecordById(id){
+    if(!id)return null;
+    if(typeof data!=='undefined'&&Array.isArray(data.clients)){
+      const local=data.clients.find(c=>String(c.id)===String(id));
+      if(local)return local;
+    }
+    return null;
+  }
+
+  function fillAppointmentFromSelectedClient(){
+    const id=document.getElementById('appointmentClient')?.value||'';
+    const client=findClientRecordById(id);
+    if(!client)return;
+    if(document.getElementById('appointmentGuestName'))appointmentGuestName.value=client.name||'';
+    if(document.getElementById('appointmentGuestPhone'))appointmentGuestPhone.value=client.phone||'';
+  }
+
+  function fillEstimateFromSelectedClient(){
+    const id=document.getElementById('estimateClient')?.value||'';
+    const client=findClientRecordById(id);
+    if(!client)return;
+    if(document.getElementById('estimateGuestName'))estimateGuestName.value=client.name||'';
+    if(document.getElementById('estimateGuestPhone'))estimateGuestPhone.value=client.phone||'';
+  }
+
+  document.getElementById('appointmentClient')?.addEventListener('change',fillAppointmentFromSelectedClient);
+  document.getElementById('estimateClient')?.addEventListener('change',fillEstimateFromSelectedClient);
+
+  function firstNameFromAppointment(a,clients){
+    const client=(a.client_id&&clients.find(c=>c.id===a.client_id))||byName(clients,a.client_name);
+    return String(client?.name||a.client_name||a.guest_name||'there').trim().split(/\s+/)[0]||'there';
+  }
+
+  function phoneForAppointment(a,clients){
+    const client=(a.client_id&&clients.find(c=>c.id===a.client_id))||byName(clients,a.client_name);
+    return client?.phone||a.phone||a.guest_phone||'';
+  }
+
+  function serviceNameForAppointment(a,services){
+    return (a.service_id&&services.find(s=>s.id===a.service_id)?.name)||a.service||'your cleaning service';
+  }
+
+  function appointmentCalendarLink(a,services){
+    const base=new URL('calendar.html',location.href);
+    if(a.calendar_token){
+      base.searchParams.set('token',a.calendar_token);
+      return base.href;
+    }
+    base.searchParams.set('service',serviceNameForAppointment(a,services));
+    base.searchParams.set('date',a.appointment_date||'');
+    base.searchParams.set('time',shortTime(a.appointment_time)||'');
+    base.searchParams.set('name',a.client_name||a.guest_name||'Client');
+    return base.href;
+  }
+
+  function buildAppointmentMessage(kind,a,clients,services){
+    const first=firstNameFromAppointment(a,clients);
+    const sender=companySenderName();
+    const service=serviceNameForAppointment(a,services);
+    const date=friendlyAppointmentDate(a);
+    const time=friendlyAppointmentTime(a);
+
+    if(kind==='photos'){
+      return `Hey ${first}, this is ${sender} from Sheyla's Pro Cleaning. Before your upcoming ${service}, could you send a few clear photos of the areas you'd like us to focus on? Wide shots plus any spots that need extra attention are especially helpful. Thank you!`;
+    }
+
+    if(kind==='reminder'){
+      return `Hey ${first}, this is ${sender} from Sheyla's Pro Cleaning. Just a friendly reminder that your ${service} is scheduled for ${date} at ${time}. If anything changes or you have any questions before then, just reply here. We look forward to seeing you!`;
+    }
+
+    const calendarLink=appointmentCalendarLink(a,services);
+    return `Hey ${first}, this is ${sender} from Sheyla's Pro Cleaning. Your ${service} is confirmed for ${date} at ${time}. You can add it to your calendar here: ${calendarLink} If you need to make any changes, just reply to this message.`;
+  }
+
+  function openAppointmentMessage(a,clients,services){
+    activeMessageContext={type:'appointment',appointment:a,clients,services,kind:'reminder'};
+    const dialog=document.getElementById('estimateMessageDialog');
+    const textarea=document.getElementById('estimateMessageText');
+    if(!dialog||!textarea)return;
+    document.querySelectorAll('#estimateMessageDialog [data-message-kind]').forEach(b=>b.classList.toggle('active',b.dataset.messageKind==='reminder'));
+    textarea.value=buildAppointmentMessage('reminder',a,clients,services);
+    dialog.showModal();
+  }
+
+  function mappedAppointmentForEdit(a){
+    if(typeof data==='undefined')return null;
+    const mapped=data.appointments.find(x=>String(x.id)===String(a.id));
+    if(mapped)return mapped;
+    return {
+      id:a.id,
+      clientId:a.client_id||'',
+      guestName:a.guest_name||a.client_name||'',
+      guestPhone:a.guest_phone||a.phone||'',
+      serviceId:a.service_id||'',
+      teamIds:Array.isArray(a.team_ids)?a.team_ids:[],
+      teamId:'',
+      date:a.appointment_date||'',
+      time:shortTime(a.appointment_time),
+      notes:a.notes||'',
+      status:a.status||'pending'
+    };
+  }
+
+  function bindAppointmentCardActions(root,clients,services){
+    root.querySelectorAll('[data-appt-edit]').forEach(btn=>btn.onclick=()=>{
+      const a=window.__appointmentLiveRows?.get(String(btn.dataset.apptEdit));if(!a)return;
+      const mapped=mappedAppointmentForEdit(a);
+      if(mapped&&typeof openAppointment==='function')openAppointment(mapped);
+    });
+
+    root.querySelectorAll('[data-appt-delete]').forEach(btn=>btn.onclick=async()=>{
+      const id=btn.dataset.apptDelete;
+      const a=window.__appointmentLiveRows?.get(String(id));
+      const name=a?.client_name||a?.guest_name||'this appointment';
+      if(!confirm(`Delete ${name}'s appointment? This cannot be undone.`))return;
+      const {error}=await sheylasDb.from(TABLES.appointments).delete().eq('id',id);
+      if(error){
+        console.error(error);
+        if(typeof showMessage==='function')showMessage('Couldn’t delete appointment','Please try again.','error');
+        return;
+      }
+      await refreshAllLivePages();
+    });
+
+    root.querySelectorAll('[data-appt-message]').forEach(btn=>btn.onclick=()=>{
+      const a=window.__appointmentLiveRows?.get(String(btn.dataset.apptMessage));
+      if(a)openAppointmentMessage(a,clients,services);
+    });
+
+    root.querySelectorAll('[data-appt-calendar]').forEach(btn=>btn.onclick=()=>{
+      const a=window.__appointmentLiveRows?.get(String(btn.dataset.apptCalendar));if(!a)return;
+      const fakeEstimate={
+        service_id:a.service_id,
+        service:a.service,
+        client_name:a.client_name,
+        guest_name:a.guest_name
+      };
+      makeIcsDownload(a,fakeEstimate,services);
+    });
+  }
+
+
+  async function openEstimateImages(e){
+    const dialog=document.getElementById('estimateImagesDialog');
+    const track=document.getElementById('estimateGalleryTrack');
+    const count=document.getElementById('estimateGalleryCount');
+    if(!dialog||!track)return;
+
+    const paths=Array.isArray(e.photo_paths)?e.photo_paths.filter(Boolean):[];
+    if(!paths.length)return;
+
+    track.innerHTML=paths.map(()=>'<div class="estimate-gallery-slide">Loading…</div>').join('');
+    count.textContent=`1 / ${paths.length}`;
+
+    await Promise.all(paths.map(async(path,i)=>{
+      try{
+        const {data:signed,error}=await sheylasDb.storage.from('sheylaspro-estimate-photos').createSignedUrl(path,3600);
+        if(error||!signed?.signedUrl)throw error||new Error('No signed URL');
+        track.children[i].innerHTML=`<img src="${html(signed.signedUrl)}" alt="Attached estimate image ${i+1}">`;
+      }catch(error){
+        console.error(error);
+        track.children[i].textContent='Image unavailable';
+      }
+    }));
+
+    const updateCount=()=>{
+      const index=Math.round(track.scrollLeft/Math.max(1,track.clientWidth));
+      count.textContent=`${Math.min(paths.length,index+1)} / ${paths.length}`;
+    };
+    track.onscroll=updateCount;
+    track.onkeydown=event=>{
+      if(event.key==='ArrowLeft'){event.preventDefault();track.scrollBy({left:-track.clientWidth,behavior:'smooth'})}
+      if(event.key==='ArrowRight'){event.preventDefault();track.scrollBy({left:track.clientWidth,behavior:'smooth'})}
+    };
+    document.getElementById('estimateGalleryPrev').onclick=()=>track.scrollBy({left:-track.clientWidth,behavior:'smooth'});
+    document.getElementById('estimateGalleryNext').onclick=()=>track.scrollBy({left:track.clientWidth,behavior:'smooth'});
+
+    dialog.showModal();
+  }
+
+  document.getElementById('estimateImagesClose')?.addEventListener('click',()=>document.getElementById('estimateImagesDialog')?.close());
 
   function firstNameFromEstimate(e,clients){
     const client=(e.client_id&&clients.find(c=>c.id===e.client_id))||byName(clients,e.client_name);
@@ -3085,7 +3560,7 @@ if ('serviceWorker' in navigator) {
   }
 
   function openEstimateMessage(e,clients,services,appointments){
-    activeMessageContext={e,clients,services,appointments,kind:'reminder'};
+    activeMessageContext={type:'estimate',e,clients,services,appointments,kind:'reminder'};
     const dialog=document.getElementById('estimateMessageDialog');
     const textarea=document.getElementById('estimateMessageText');
     if(!dialog||!textarea)return;
@@ -3130,6 +3605,10 @@ if ('serviceWorker' in navigator) {
       const e=window.__estimateLiveRows?.get(String(btn.dataset.estMessage));if(e)openEstimateMessage(e,clients,services,appointments);
     });
 
+    root.querySelectorAll('[data-est-images]').forEach(btn=>btn.onclick=()=>{
+      const e=window.__estimateLiveRows?.get(String(btn.dataset.estImages));if(e)openEstimateImages(e);
+    });
+
     root.querySelectorAll('[data-est-calendar]').forEach(btn=>btn.onclick=()=>{
       const e=window.__estimateLiveRows?.get(String(btn.dataset.estCalendar));if(!e)return;
       const appointment=findEstimateAppointment(e,appointments);
@@ -3142,13 +3621,21 @@ if ('serviceWorker' in navigator) {
     if(!activeMessageContext)return;
     activeMessageContext.kind=btn.dataset.messageKind;
     document.querySelectorAll('#estimateMessageDialog [data-message-kind]').forEach(b=>b.classList.toggle('active',b===btn));
-    document.getElementById('estimateMessageText').value=buildMessage(
-      activeMessageContext.kind,
-      activeMessageContext.e,
-      activeMessageContext.clients,
-      activeMessageContext.services,
-      activeMessageContext.appointments
-    );
+    document.getElementById('estimateMessageText').value=
+      activeMessageContext.type==='appointment'
+        ? buildAppointmentMessage(
+            activeMessageContext.kind,
+            activeMessageContext.appointment,
+            activeMessageContext.clients,
+            activeMessageContext.services
+          )
+        : buildMessage(
+            activeMessageContext.kind,
+            activeMessageContext.e,
+            activeMessageContext.clients,
+            activeMessageContext.services,
+            activeMessageContext.appointments
+          );
   }));
   document.getElementById('estimateMessageCopy')?.addEventListener('click',async()=>{
     const value=document.getElementById('estimateMessageText')?.value||'';
@@ -3156,7 +3643,9 @@ if ('serviceWorker' in navigator) {
   });
   document.getElementById('estimateMessageSend')?.addEventListener('click',()=>{
     if(!activeMessageContext)return;
-    const phone=phoneForEstimate(activeMessageContext.e,activeMessageContext.clients);
+    const phone=activeMessageContext.type==='appointment'
+      ? phoneForAppointment(activeMessageContext.appointment,activeMessageContext.clients)
+      : phoneForEstimate(activeMessageContext.e,activeMessageContext.clients);
     const body=document.getElementById('estimateMessageText')?.value||'';
     const clean=String(phone||'').replace(/[^\d+]/g,'');
     if(!clean)return;
