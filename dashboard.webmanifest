@@ -2,7 +2,7 @@
   "id": "./admin.html",
   "name": "Dashboard",
   "short_name": "Dashboard",
-  "description": "Sheyla's Pro Cleaning admin dashboard",
+  "description": "Admin dashboard",
   "start_url": "./admin.html",
   "scope": "./",
   "display": "standalone",
@@ -12,9 +12,15 @@
   "icons": [
     {
       "src": "Images/logo-icon.png",
-      "sizes": "any",
+      "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "Images/logo-icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
