@@ -18,6 +18,7 @@ alter table public."sheylaspro-estimates"
   check (room_count is null or room_count >= 1);
 
 alter table public."sheylaspro-estimates" enable row level security;
+alter table public."sheylaspro-clients" enable row level security;
 
 drop policy if exists "sheylaspro public estimates" on public."sheylaspro-estimates";
 create policy "sheylaspro public estimates"
@@ -27,6 +28,21 @@ to anon, authenticated
 with check (status = 'new' and amount is null);
 
 grant insert on public."sheylaspro-estimates" to anon, authenticated;
+
+-- When a customer submits the public estimate form, also create a client card.
+drop policy if exists "sheylaspro public client intake" on public."sheylaspro-clients";
+create policy "sheylaspro public client intake"
+on public."sheylaspro-clients"
+for insert
+to anon, authenticated
+with check (
+  char_length(trim(coalesce(name, ''))) >= 2
+  and phone is not null
+  and char_length(trim(phone)) >= 7
+  and total_visits = 0
+);
+
+grant insert on public."sheylaspro-clients" to anon, authenticated;
 
 insert into storage.buckets
   (id, name, public, file_size_limit, allowed_mime_types)
@@ -45,8 +61,6 @@ set public = false,
     file_size_limit = excluded.file_size_limit,
     allowed_mime_types = excluded.allowed_mime_types;
 
--- The public site may be anonymous or may already have an authenticated
--- session in the browser. Allow either role to add a photo to this bucket.
 drop policy if exists "sheylaspro upload estimate photos" on storage.objects;
 drop policy if exists "sheylaspro public estimate photo uploads" on storage.objects;
 create policy "sheylaspro public estimate photo uploads"
