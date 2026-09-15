@@ -11,8 +11,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <title>Dashboard</title>
 <link rel="manifest" href="dashboard.webmanifest">
-<link rel="icon" href="Images/logo-icon.png">
-<link rel="apple-touch-icon" href="Images/logo-icon.png">
+<link rel="icon" href="Images/app-icon.png">
+<link rel="apple-touch-icon" href="Images/app-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1123,7 +1123,7 @@ html[data-theme="dark"] #page-dashboard .workspace-icon{
 </style>
 
 </head>
-<body class="auth-locked">
+<body>
 <aside class="sidebar" id="sidebar">
   <div class="brand">
     <img class="brand-icon" src="Images/logo-icon.png" alt="">
@@ -2270,41 +2270,10 @@ syncCustomSelects();
 </script>
 
 <style>
-body.auth-locked{background:#001a38!important;overflow:hidden!important}
-body.auth-locked>.sidebar,body.auth-locked>.mobile-overlay,body.auth-locked>.main{display:none!important}
-#loginDialog,#resetPasswordDialog{width:min(440px,calc(100vw - 24px))!important;max-width:440px!important}
-#loginDialog::backdrop,#resetPasswordDialog::backdrop{background:#001a38;backdrop-filter:none}
-#loginDialog .modal,#resetPasswordDialog .modal{
-  width:100%!important;max-width:440px!important;border-radius:24px!important;
-  border:1px solid var(--line);background:#fff;overflow:hidden!important;
-  box-shadow:0 35px 90px rgba(0,26,56,.32);animation:popIn .18s ease-out
-}
-#loginDialog .modal-head,#resetPasswordDialog .modal-head{
-  position:relative;overflow:hidden;padding:20px 22px;
-  background:linear-gradient(135deg,#ffffff,#ebfdff);border-bottom:1px solid var(--line)
-}
-#loginDialog .modal-head::after,#resetPasswordDialog .modal-head::after{
-  content:"";position:absolute;right:-24px;top:-28px;width:84px;height:84px;border-radius:50%;
-  background:var(--cyan2);opacity:.35
-}
-#loginDialog .modal-head h2,#resetPasswordDialog .modal-head h2{position:relative;z-index:1;margin:0;font-size:21px;line-height:1.25}
-#loginDialog .modal-body,#resetPasswordDialog .modal-body{padding:22px!important}
-#loginDialog .field input,#resetPasswordDialog .field input{
-  min-height:46px;border-radius:14px;background:#fff;border:1px solid var(--line);color:var(--ink)
-}
-#loginDialog .login-note,#resetPasswordDialog .login-note{margin:0 0 16px;color:var(--muted);font-size:12px;line-height:1.55}
-#loginDialog .login-error,#resetPasswordDialog .login-error{min-height:18px;margin:8px 0 0;color:var(--red);font-size:12px;font-weight:800}
-.login-options{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:4px}
-.remember-email{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:11px;font-weight:800;cursor:pointer}
-.remember-email input{width:16px;height:16px;accent-color:var(--cyan)}
-.forgot-password{border:0;background:none;padding:4px 0;color:var(--navy2);font-size:11px;font-weight:900}
-.forgot-password:hover{text-decoration:underline}
-#loginDialog .modal-actions,#resetPasswordDialog .modal-actions{margin-top:18px}
-#loginDialog .button.primary,#resetPasswordDialog .button.primary{min-height:46px;padding:0 18px}
-html[data-theme="dark"] #loginDialog .modal,html[data-theme="dark"] #resetPasswordDialog .modal{background:linear-gradient(145deg,#071d31,#0a2439);color:var(--ink)}
-html[data-theme="dark"] #loginDialog .modal-head,html[data-theme="dark"] #resetPasswordDialog .modal-head{background:linear-gradient(135deg,#09243b,#0b2c46)}
-html[data-theme="dark"] #loginDialog .field input,html[data-theme="dark"] #resetPasswordDialog .field input{background:#09243b;color:#f4fcff;border-color:#2a506d}
-@media(max-width:520px){.login-options{align-items:flex-start;flex-direction:column}}
+#loginDialog{width:min(430px,calc(100vw - 24px));max-width:430px}
+#loginDialog::backdrop{background:rgba(0,26,56,.82);backdrop-filter:blur(7px)}
+#loginDialog .login-note{margin:0 0 16px;color:var(--muted);font-size:12px;line-height:1.55}
+#loginDialog .login-error{min-height:18px;margin:8px 0 0;color:var(--red);font-size:12px;font-weight:800}
 .db-status{display:inline-flex;align-items:center;gap:7px;margin-left:8px;color:var(--muted);font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.05em}
 .db-status::before{content:"";width:7px;height:7px;border-radius:50%;background:#f59e0b}
 .db-status.connected::before{background:#22c55e}
@@ -2320,27 +2289,8 @@ html[data-theme="dark"] #loginDialog .field input,html[data-theme="dark"] #reset
         <div class="field full"><label>Email</label><input id="loginEmail" type="email" autocomplete="username" required></div>
         <div class="field full"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" required></div>
       </div>
-      <div class="login-options">
-        <label class="remember-email"><input id="rememberEmail" type="checkbox"> Save email on this device</label>
-        <button class="forgot-password" id="forgotPasswordButton" type="button">Forgot password?</button>
-      </div>
       <p class="login-error" id="loginError"></p>
       <div class="modal-actions"><button class="button primary" type="submit">Sign in</button></div>
-    </form>
-  </div>
-</dialog>
-
-<dialog id="resetPasswordDialog">
-  <div class="modal">
-    <div class="modal-head"><h2>Set a new password</h2></div>
-    <form class="modal-body" id="resetPasswordForm">
-      <p class="login-note">Enter your new password below.</p>
-      <div class="form-grid">
-        <div class="field full"><label>New password</label><input id="resetPassword" type="password" autocomplete="new-password" minlength="8" required></div>
-        <div class="field full"><label>Confirm password</label><input id="resetPasswordConfirm" type="password" autocomplete="new-password" minlength="8" required></div>
-      </div>
-      <p class="login-error" id="resetPasswordError"></p>
-      <div class="modal-actions"><button class="button primary" type="submit">Update password</button></div>
     </form>
   </div>
 </dialog>
@@ -2375,22 +2325,6 @@ const loginFormEl=document.getElementById("loginForm");
 const loginEmailEl=document.getElementById("loginEmail");
 const loginPasswordEl=document.getElementById("loginPassword");
 const loginErrorEl=document.getElementById("loginError");
-const rememberEmailEl=document.getElementById("rememberEmail");
-const forgotPasswordButton=document.getElementById("forgotPasswordButton");
-const resetPasswordDialog=document.getElementById("resetPasswordDialog");
-const resetPasswordForm=document.getElementById("resetPasswordForm");
-const resetPasswordEl=document.getElementById("resetPassword");
-const resetPasswordConfirmEl=document.getElementById("resetPasswordConfirm");
-const resetPasswordErrorEl=document.getElementById("resetPasswordError");
-const SAVED_EMAIL_KEY="sheylaspro_admin_saved_email";
-
-function lockAdmin(){document.body.classList.add("auth-locked")}
-function unlockAdmin(){document.body.classList.remove("auth-locked")}
-
-try{
-  const savedEmail=localStorage.getItem(SAVED_EMAIL_KEY)||"";
-  if(savedEmail){loginEmailEl.value=savedEmail;rememberEmailEl.checked=true}
-}catch(error){console.warn("Could not read saved email.",error)}
 
 function setDbStatus(label,state=""){
   /* Connection state is intentionally not shown in the admin UI. */
@@ -2415,12 +2349,9 @@ async function requireSession(){
   }
   if(session?.user){
     sheylasUser=session.user;
-    unlockAdmin();
-    if(loginDialogEl?.open)loginDialogEl.close();
     return true;
   }
   sheylasUser=null;
-  lockAdmin();
   setDbStatus("Sign in required","error");
   if(loginDialogEl && !loginDialogEl.open)loginDialogEl.showModal();
   return false;
@@ -3087,67 +3018,15 @@ loginFormEl?.addEventListener("submit",async e=>{
   }
 
   sheylasUser=authData.user;
-  try{
-    if(rememberEmailEl.checked)localStorage.setItem(SAVED_EMAIL_KEY,loginEmailEl.value.trim());
-    else localStorage.removeItem(SAVED_EMAIL_KEY);
-  }catch(error){console.warn("Could not save email preference.",error)}
   loginPasswordEl.value="";
-  unlockAdmin();
   loginDialogEl?.close();
   await loadSheylasData();
-});
-
-forgotPasswordButton?.addEventListener("click",async()=>{
-  loginErrorEl.textContent="";
-  const email=loginEmailEl.value.trim();
-  if(!email){
-    loginErrorEl.textContent="Enter your email first, then choose Forgot password.";
-    loginEmailEl.focus();
-    return;
-  }
-  forgotPasswordButton.disabled=true;
-  const redirectTo=location.href.split("#")[0].split("?")[0];
-  const {error}=await sheylasDb.auth.resetPasswordForEmail(email,{redirectTo});
-  forgotPasswordButton.disabled=false;
-  loginErrorEl.style.color=error?"var(--red)":"#15803d";
-  loginErrorEl.textContent=error?"Couldn’t send the reset email. Please try again.":"Password reset email sent. Check your inbox.";
-});
-
-resetPasswordForm?.addEventListener("submit",async e=>{
-  e.preventDefault();
-  resetPasswordErrorEl.textContent="";
-  const password=resetPasswordEl.value;
-  const confirm=resetPasswordConfirmEl.value;
-  if(password!==confirm){resetPasswordErrorEl.textContent="Passwords do not match.";return}
-  if(password.length<8){resetPasswordErrorEl.textContent="Use at least 8 characters.";return}
-  const submit=e.currentTarget.querySelector('button[type="submit"]');
-  submit.disabled=true;
-  const {error}=await sheylasDb.auth.updateUser({password});
-  submit.disabled=false;
-  if(error){resetPasswordErrorEl.textContent="Couldn’t update the password. Please try again.";return}
-  resetPasswordEl.value="";resetPasswordConfirmEl.value="";
-  resetPasswordDialog?.close();
-  unlockAdmin();
-  await loadSheylasData();
-});
-
-sheylasDb.auth.onAuthStateChange((event,session)=>{
-  if(event==="PASSWORD_RECOVERY"){
-    sheylasUser=session?.user||null;
-    lockAdmin();
-    if(loginDialogEl?.open)loginDialogEl.close();
-    if(resetPasswordDialog && !resetPasswordDialog.open)resetPasswordDialog.showModal();
-  }else if(event==="SIGNED_OUT"){
-    sheylasUser=null;lockAdmin();
-    if(loginDialogEl && !loginDialogEl.open)loginDialogEl.showModal();
-  }
 });
 
 logoutButton.onclick=()=>logoutDialog.showModal();
 confirmLogout.onclick=async()=>{
   await sheylasDb.auth.signOut();
   sheylasUser=null;
-  lockAdmin();
   logoutDialog.close();
   setDbStatus("Signed out","error");
   if(loginDialogEl && !loginDialogEl.open)loginDialogEl.showModal();
