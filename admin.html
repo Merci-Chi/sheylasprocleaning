@@ -951,6 +951,114 @@ html[data-theme="dark"] #page-estimates tbody tr.appointment-card-row{background
 @media(max-width:1000px){#page-estimates tbody{grid-template-columns:1fr}}
 @media(max-width:650px){#page-estimates tbody{padding:12px;gap:12px}}
 
+/* ===== Photo previews for Estimates + Appointments only ===== */
+.record-photo-preview{position:relative;width:100%;height:150px;margin:0 0 14px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#eef7f9}
+.record-photo-preview img{display:block;width:100%;height:100%;object-fit:cover}
+.record-photo-preview.photo-loading::after{content:"Loading photo…";position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:10px;background:#eef7f9}
+.record-photo-count{position:absolute;right:7px;bottom:7px;z-index:2;padding:4px 7px;border-radius:999px;background:rgba(0,26,56,.82);color:#fff;font-size:9px;font-weight:900}
+.record-photo-icon{position:absolute;left:7px;bottom:7px;z-index:3;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:rgba(0,26,56,.86);color:#fff;font-size:13px;box-shadow:0 5px 14px rgba(0,26,56,.2)}
+html[data-theme="dark"] .record-photo-preview,html[data-theme="dark"] .record-photo-preview.photo-loading::after{background:#09243b}
+@media(max-width:650px){.record-photo-preview{height:128px}}
+
+/* ===== Appointments + Estimates card layout: compact dark reference style ===== */
+#page-appointments tbody tr.appointment-card-row,
+#page-estimates tbody tr.appointment-card-row{
+  border-radius:18px;
+}
+#page-appointments .appointment-card,
+#page-estimates .appointment-card{
+  padding:20px 22px 18px;
+}
+#page-appointments .appointment-card h3,
+#page-estimates .appointment-card h3{
+  font-size:19px;
+  font-weight:900;
+}
+#page-appointments .appointment-phone,
+#page-estimates .appointment-phone{
+  margin-top:3px;
+  font-size:12px;
+  font-weight:700;
+}
+#page-appointments .appointment-service-pill,
+#page-estimates .appointment-service-pill{
+  margin:11px 0 9px;
+  padding:6px 10px;
+  font-size:11px;
+}
+#page-appointments .appointment-meta,
+#page-estimates .appointment-meta{
+  gap:7px;
+  margin-bottom:10px;
+}
+#page-appointments .appointment-meta span,
+#page-estimates .appointment-meta span{
+  padding:5px 9px;
+  font-size:10px;
+}
+#page-appointments .appointment-note,
+#page-estimates .appointment-note{
+  min-height:24px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--line);
+  font-size:12px;
+}
+#page-appointments .appointment-actions,
+#page-estimates .appointment-actions{
+  margin-top:10px;
+  gap:9px;
+  flex-wrap:nowrap;
+}
+#page-appointments .appointment-action,
+#page-estimates .appointment-action{
+  flex:1 1 0;
+  width:auto;
+  min-width:42px;
+  height:46px;
+  border-radius:11px;
+  font-size:15px;
+}
+html[data-theme="dark"] #page-appointments tbody tr.appointment-card-row,
+html[data-theme="dark"] #page-estimates tbody tr.appointment-card-row{
+  background:linear-gradient(145deg,#062541,#05203a);
+  border-color:#08bfff;
+  box-shadow:0 12px 32px rgba(0,0,0,.24),0 0 22px rgba(0,191,255,.06);
+}
+html[data-theme="dark"] #page-appointments .appointment-service-pill,
+html[data-theme="dark"] #page-estimates .appointment-service-pill,
+html[data-theme="dark"] #page-appointments .appointment-meta span,
+html[data-theme="dark"] #page-estimates .appointment-meta span{
+  background:#07558f;
+  color:#fff;
+}
+html[data-theme="dark"] #page-appointments .appointment-note,
+html[data-theme="dark"] #page-estimates .appointment-note{
+  border-bottom-color:#155178;
+}
+html[data-theme="dark"] #page-appointments .appointment-action,
+html[data-theme="dark"] #page-estimates .appointment-action{
+  background:#f7f9fc;
+  color:#063f73;
+  border-color:#e6eef6;
+}
+html[data-theme="dark"] #page-appointments .appointment-action.danger,
+html[data-theme="dark"] #page-estimates .appointment-action.danger{
+  background:#f7f9fc;
+  color:#ff3b47;
+}
+html[data-theme="dark"] #page-appointments .appointment-action:hover,
+html[data-theme="dark"] #page-estimates .appointment-action:hover{
+  background:#eaf6ff;
+}
+@media(max-width:650px){
+  #page-appointments .appointment-card,
+  #page-estimates .appointment-card{padding:16px}
+  #page-appointments .appointment-actions,
+  #page-estimates .appointment-actions{gap:6px}
+  #page-appointments .appointment-action,
+  #page-estimates .appointment-action{min-width:38px;height:43px}
+}
+
 </style>
 </head>
 <body>
@@ -3073,12 +3181,51 @@ if ('serviceWorker' in navigator) {
     </article>`).join(''):'<div class="empty">No team members yet</div>';
   }
 
-  function renderAppointments(rows,clients,services){
+  function matchingEstimateForAppointment(a,estimates){
+    if(!Array.isArray(estimates))return null;
+    const apptPhone=String(a.phone||a.guest_phone||'').replace(/\D/g,'');
+    const apptName=String(a.client_name||a.guest_name||'').trim().toLowerCase();
+    const matches=estimates.filter(e=>{
+      const sameClient=a.client_id&&e.client_id&&a.client_id===e.client_id;
+      const estimatePhone=String(e.phone||e.guest_phone||'').replace(/\D/g,'');
+      const samePhone=apptPhone&&estimatePhone&&apptPhone===estimatePhone;
+      const sameName=apptName&&String(e.client_name||e.guest_name||'').trim().toLowerCase()===apptName;
+      const sameService=!a.service_id||!e.service_id||a.service_id===e.service_id;
+      return (sameClient||samePhone||sameName)&&sameService&&Array.isArray(e.photo_paths)&&e.photo_paths.filter(Boolean).length;
+    });
+    return matches.sort((x,y)=>String(y.created_at||y.estimate_date||'').localeCompare(String(x.created_at||x.estimate_date||'')))[0]||null;
+  }
+
+  function recordPhotoPreview(paths,label){
+    const photos=Array.isArray(paths)?paths.filter(Boolean):[];
+    if(!photos.length)return '';
+    return `<div class="record-photo-preview photo-loading"><img data-photo-path="${html(photos[0])}" alt="${html(label||'Attached photo')}" loading="lazy"><span class="record-photo-icon" title="Photos" aria-label="Photos"><i class="fa-regular fa-images"></i></span>${photos.length>1?`<span class="record-photo-count">+${photos.length-1}</span>`:''}</div>`;
+  }
+
+  async function hydrateRecordPhotoPreviews(root){
+    if(!root||typeof sheylasDb==='undefined')return;
+    const images=[...root.querySelectorAll('.record-photo-preview img[data-photo-path]')];
+    await Promise.all(images.map(async img=>{
+      try{
+        const {data:signed,error}=await sheylasDb.storage.from('sheylaspro-estimate-photos').createSignedUrl(img.dataset.photoPath,3600);
+        if(error||!signed?.signedUrl)throw error||new Error('No signed URL');
+        img.src=signed.signedUrl;
+        img.closest('.record-photo-preview')?.classList.remove('photo-loading');
+      }catch(error){
+        console.error('Could not load photo preview:',error);
+        const preview=img.closest('.record-photo-preview');
+        if(preview){preview.classList.remove('photo-loading');preview.innerHTML='<div class="estimate-preview-empty"><div><i class="fa-regular fa-image"></i>Photo unavailable</div></div>'}
+      }
+    }));
+  }
+
+  function renderAppointments(rows,clients,services,estimates){
     if(rows===null)return;
     setCount('appointmentCount',rows.length);showEmpty('appointmentEmpty',rows.length===0);
     const body=$('appointmentRows');if(!body)return;
 
     window.__appointmentLiveRows=new Map((rows||[]).map(r=>[String(r.id),r]));
+    window.__appointmentPhotoRows=new Map();
 
     body.innerHTML=rows.map(a=>{
       const client=(a.client_id&&clients?.find(x=>x.id===a.client_id))||byName(clients||[],a.client_name);
@@ -3089,6 +3236,9 @@ if ('serviceWorker' in navigator) {
       const team=Array.isArray(a.team_ids)&&a.team_ids.length?`${a.team_ids.length} team member${a.team_ids.length===1?'':'s'}`:(a.team_member||'Unassigned');
       const whenDate=dateText(a.appointment_date);
       const whenTime=friendlyAppointmentTime(a)||shortTime(a.appointment_time)||'—';
+      const relatedEstimate=matchingEstimateForAppointment(a,estimates||[]);
+      const appointmentPhotos=Array.isArray(a.photo_paths)&&a.photo_paths.filter(Boolean).length?a.photo_paths:(relatedEstimate?.photo_paths||[]);
+      window.__appointmentPhotoRows.set(String(a.id),appointmentPhotos);
       return `<tr class="appointment-card-row" data-appointment-card="${html(a.id)}"><td colspan="7">
         <article class="appointment-card">
           <div class="appointment-card-top">
@@ -3115,6 +3265,7 @@ if ('serviceWorker' in navigator) {
             <a class="appointment-action" href="${phone?`tel:${html(String(phone).replace(/[^\d+]/g,''))}`:'#'}" ${phone?'':'aria-disabled="true"'} title="Call client" aria-label="Call client"><i class="fa-solid fa-phone"></i></a>
             <button class="appointment-action" type="button" data-appt-message="${html(a.id)}" title="Text client" aria-label="Text client" ${phone?'':'disabled'}><i class="fa-regular fa-message"></i></button>
             <button class="appointment-action" type="button" data-appt-calendar="${html(a.id)}" title="Add to calendar" aria-label="Add appointment to calendar"><i class="fa-regular fa-calendar-plus"></i></button>
+            <button class="appointment-action" type="button" data-appt-images="${html(a.id)}" title="${appointmentPhotos.length?'View photos':'No photos attached'}" aria-label="${appointmentPhotos.length?'View appointment photos':'No appointment photos attached'}" ${appointmentPhotos.length?'':'disabled'}><i class="fa-regular fa-images"></i></button>
           </div>
         </article>
       </td></tr>`;
@@ -3197,16 +3348,13 @@ if ('serviceWorker' in navigator) {
 
           <p class="appointment-note">${html(e.notes||e.details||'No notes')}</p>
 
-          ${photos.length?`<button class="button ghost" type="button" data-est-images="${html(e.id)}" style="margin-top:12px;width:max-content;max-width:100%">
-            <i class="fa-regular fa-images"></i> See attached photos
-          </button>`:''}
-
           <div class="appointment-actions">
             <button class="appointment-action" type="button" data-est-edit="${html(e.id)}" title="Edit estimate" aria-label="Edit estimate"><i class="fa-solid fa-pen"></i></button>
             <button class="appointment-action danger" type="button" data-est-delete="${html(e.id)}" title="Delete estimate" aria-label="Delete estimate"><i class="fa-solid fa-trash"></i></button>
             <a class="appointment-action" href="${phone?`tel:${html(String(phone).replace(/[^\d+]/g,''))}`:'#'}" ${phone?'':'aria-disabled="true"'} title="Call client" aria-label="Call client"><i class="fa-solid fa-phone"></i></a>
             <button class="appointment-action" type="button" data-est-message="${html(e.id)}" title="Text client" aria-label="Text client" ${phone?'':'disabled'}><i class="fa-regular fa-message"></i></button>
             <button class="appointment-action" type="button" data-est-calendar="${html(e.id)}" title="${appointment?'Add appointment to calendar':'No upcoming appointment'}" aria-label="Add appointment to calendar" ${appointment?'':'disabled'}><i class="fa-regular fa-calendar-plus"></i></button>
+            <button class="appointment-action" type="button" data-est-images="${html(e.id)}" title="${photos.length?'View photos':'No photos attached'}" aria-label="${photos.length?'View estimate photos':'No estimate photos attached'}" ${photos.length?'':'disabled'}><i class="fa-regular fa-images"></i></button>
           </div>
         </article>
       </td></tr>`;
@@ -3242,7 +3390,7 @@ if ('serviceWorker' in navigator) {
       renderClients(clients);
       renderServices(services);
       renderTeam(team);
-      renderAppointments(appointments,clients||[],services||[]);
+      renderAppointments(appointments,clients||[],services||[],estimates||[]);
       renderEstimates(estimates,clients||[],services||[],appointments||[]);
 
       // Keep the original admin state synchronized too, so its modals/searches keep working.
@@ -3426,6 +3574,11 @@ if ('serviceWorker' in navigator) {
         guest_name:a.guest_name
       };
       makeIcsDownload(a,fakeEstimate,services);
+    });
+
+    root.querySelectorAll('[data-appt-images]').forEach(btn=>btn.onclick=()=>{
+      const paths=window.__appointmentPhotoRows?.get(String(btn.dataset.apptImages))||[];
+      if(paths.length)openEstimateImages({photo_paths:paths});
     });
   }
 
