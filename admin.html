@@ -728,6 +728,19 @@ html[data-theme="dark"] .help-type i{background:#071d31}
 html[data-theme="dark"] .service-image-option{background:#09243b;color:#f4fcff}
 @media(max-width:700px){#serviceDialog{width:calc(100vw - 16px)!important;max-width:none!important}.service-image-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-height:44dvh}.service-image-option span{font-size:10px}}
 
+
+/* ===== Service icon picker ===== */
+.service-icon-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+.service-icon-option{position:relative;min-width:0;padding:10px 6px 8px;border:2px solid transparent;border-radius:14px;background:#f4fafc;color:var(--ink);display:grid;place-items:center;gap:6px;font-size:9px;font-weight:900;transition:.16s;box-shadow:0 5px 14px rgba(0,26,56,.06)}
+.service-icon-option:hover{transform:translateY(-2px);border-color:rgba(32,221,236,.55)}
+.service-icon-preview{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--cyan);color:var(--navy);font-size:18px;box-shadow:0 5px 12px rgba(0,26,56,.12)}
+.service-icon-option>span:last-of-type{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.service-icon-check{position:absolute;right:5px;top:5px;color:var(--navy2);background:#fff;border-radius:50%;opacity:0;transform:scale(.7);transition:.16s}
+.service-icon-option.selected{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(32,221,236,.16),0 8px 18px rgba(0,26,56,.11)}
+.service-icon-option.selected .service-icon-check{opacity:1;transform:scale(1)}
+html[data-theme="dark"] .service-icon-option{background:#09243b;color:#f4fcff}
+@media(max-width:700px){.service-icon-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.service-icon-option{font-size:8px}}
+
 </style>
 </head>
 <body>
@@ -923,7 +936,7 @@ html[data-theme="dark"] .service-image-option{background:#09243b;color:#f4fcff}
 
 <dialog id="clientDialog"><div class="modal"><div class="modal-head"><h2 id="clientTitle">Add client</h2><button class="modal-close" data-close="clientDialog"><i class="fa-solid fa-xmark"></i></button></div><form class="modal-body" id="clientForm"><input type="hidden" id="clientId"><div class="form-grid"><div class="field"><label>Name</label><input id="clientName" required></div><div class="field"><label>Phone</label><input id="clientPhone" type="tel"></div><div class="field"><label>Email</label><input id="clientEmail" type="email"></div><div class="field"><label>Address</label><input id="clientAddress"></div><div class="field full"><label>Notes</label><textarea id="clientNotes"></textarea></div></div><div class="modal-actions"><button class="button ghost" type="button" data-close="clientDialog">Cancel</button><button class="button primary">Save client</button></div></form></div></dialog>
 
-<dialog id="serviceDialog"><div class="modal"><div class="modal-head"><h2 id="serviceTitle">Add service</h2><button class="modal-close" data-close="serviceDialog"><i class="fa-solid fa-xmark"></i></button></div><form class="modal-body" id="serviceForm"><input type="hidden" id="serviceId"><input type="hidden" id="serviceImageUrl"><div class="form-grid"><div class="field full"><label>Service name</label><input id="serviceName" required></div><div class="field"><label>Price label</label><input id="servicePrice" placeholder="Free estimate or $120"></div><div class="field full"><label>Description</label><textarea id="serviceDescription"></textarea></div><div class="field full"><label>Stock image</label><p class="service-image-help">Choose the photo that will appear on this service card on the main website.</p><div class="service-image-grid" id="serviceImageGrid" role="radiogroup" aria-label="Choose a stock image"></div></div></div><div class="modal-actions"><button class="button ghost" type="button" data-close="serviceDialog">Cancel</button><button class="button primary">Save service</button></div></form></div></dialog>
+<dialog id="serviceDialog"><div class="modal"><div class="modal-head"><h2 id="serviceTitle">Add service</h2><button class="modal-close" data-close="serviceDialog"><i class="fa-solid fa-xmark"></i></button></div><form class="modal-body" id="serviceForm"><input type="hidden" id="serviceId"><input type="hidden" id="serviceImageUrl"><input type="hidden" id="serviceIcon"><div class="form-grid"><div class="field full"><label>Service name</label><input id="serviceName" required></div><div class="field"><label>Price label</label><input id="servicePrice" placeholder="Free estimate or $120"></div><div class="field full"><label>Description</label><textarea id="serviceDescription"></textarea></div><div class="field full"><label>Stock image</label><p class="service-image-help">Choose the photo that will appear on this service card on the main website.</p><div class="service-image-grid" id="serviceImageGrid" role="radiogroup" aria-label="Choose a stock image"></div></div><div class="field full"><label>Service icon</label><p class="service-image-help">Choose the icon shown in the circle on the service card.</p><div class="service-icon-grid" id="serviceIconGrid" role="radiogroup" aria-label="Choose a service icon"></div></div></div><div class="modal-actions"><button class="button ghost" type="button" data-close="serviceDialog">Cancel</button><button class="button primary">Save service</button></div></form></div></dialog>
 
 <dialog id="teamDialog"><div class="modal"><div class="modal-head"><h2 id="teamTitle">Add team member</h2><button class="modal-close" data-close="teamDialog" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div><form class="modal-body" id="teamForm"><input type="hidden" id="teamId"><div class="form-grid"><div class="field"><label>Name</label><input id="teamName" required></div><div class="field"><label>Role</label><input id="teamRole" required></div><div class="field full"><label>Working days</label><div class="day-grid"><label class="day-check"><input type="checkbox" name="workday" value="Sun">Sun</label><label class="day-check"><input type="checkbox" name="workday" value="Mon">Mon</label><label class="day-check"><input type="checkbox" name="workday" value="Tue">Tue</label><label class="day-check"><input type="checkbox" name="workday" value="Wed">Wed</label><label class="day-check"><input type="checkbox" name="workday" value="Thu">Thu</label><label class="day-check"><input type="checkbox" name="workday" value="Fri">Fri</label><label class="day-check"><input type="checkbox" name="workday" value="Sat">Sat</label></div></div><div class="field"><label>Starts</label><div class="compact-time" data-time-prefix="teamStart">
 <select id="teamStartHour" aria-label="Hour">
@@ -1272,6 +1285,42 @@ function renderServiceImagePicker(selectedUrl=""){
     };
   });
 }
+const SERVICE_ICON_OPTIONS=[
+  {label:"Home",value:"fa-solid fa-house-chimney"},
+  {label:"Sparkles",value:"fa-solid fa-sparkles"},
+  {label:"Spray bottle",value:"fa-solid fa-spray-can-sparkles"},
+  {label:"Soap",value:"fa-solid fa-soap"},
+  {label:"Broom",value:"fa-solid fa-broom"},
+  {label:"Bucket",value:"fa-solid fa-bucket"},
+  {label:"Bed",value:"fa-solid fa-bed"},
+  {label:"Building",value:"fa-solid fa-building"},
+  {label:"Boxes",value:"fa-solid fa-box-open"},
+  {label:"Construction",value:"fa-solid fa-helmet-safety"},
+  {label:"Kitchen",value:"fa-solid fa-kitchen-set"},
+  {label:"Bath",value:"fa-solid fa-bath"},
+  {label:"Couch",value:"fa-solid fa-couch"},
+  {label:"Office",value:"fa-solid fa-briefcase"},
+  {label:"Store",value:"fa-solid fa-store"},
+  {label:"Hotel",value:"fa-solid fa-hotel"},
+  {label:"Car",value:"fa-solid fa-car"},
+  {label:"Party",value:"fa-solid fa-champagne-glasses"},
+  {label:"Star",value:"fa-solid fa-star"},
+  {label:"Shield",value:"fa-solid fa-shield-heart"}
+];
+function renderServiceIconPicker(selectedIcon=""){
+  if(!serviceIconGrid)return;
+  serviceIconGrid.innerHTML=SERVICE_ICON_OPTIONS.map(item=>`<button type="button" class="service-icon-option${item.value===selectedIcon?" selected":""}" data-service-icon="${esc(item.value)}" role="radio" aria-checked="${item.value===selectedIcon}" title="${esc(item.label)}"><span class="service-icon-preview"><i class="${esc(item.value)}"></i></span><span>${esc(item.label)}</span><i class="fa-solid fa-circle-check service-icon-check" aria-hidden="true"></i></button>`).join("");
+  serviceIconGrid.querySelectorAll("[data-service-icon]").forEach(button=>{
+    button.onclick=()=>{
+      serviceIcon.value=button.dataset.serviceIcon;
+      serviceIconGrid.querySelectorAll(".service-icon-option").forEach(option=>{
+        const selected=option===button;
+        option.classList.toggle("selected",selected);
+        option.setAttribute("aria-checked",String(selected));
+      });
+    };
+  });
+}
 function openService(r=null){
   serviceTitle.textContent=r?"Edit service":"Add service";
   serviceId.value=r?.id||"";
@@ -1279,7 +1328,9 @@ function openService(r=null){
   servicePrice.value=r?.price||"";
   serviceDescription.value=r?.description||"";
   serviceImageUrl.value=r?.imageUrl||SERVICE_STOCK_IMAGES[0].url;
+  serviceIcon.value=r?.icon||"fa-solid fa-house-chimney";
   renderServiceImagePicker(serviceImageUrl.value);
+  renderServiceIconPicker(serviceIcon.value);
   serviceDialog.showModal();
 }
 addService.onclick=()=>openService();
@@ -2097,6 +2148,7 @@ serviceForm.onsubmit=async e=>{
       price_label:rawPrice?`$${rawPrice}`:"Custom estimate",
       description:serviceDescription.value.trim()||null,
       image_url:serviceImageUrl.value||null,
+      icon:serviceIcon.value||"fa-solid fa-house-chimney",
       is_live:true
     };
     if(!id)payload.sort_order=(data.services.length+1)*10;
