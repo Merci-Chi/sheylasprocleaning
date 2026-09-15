@@ -2,50 +2,81 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Add Appointment to Calendar</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#001a38">
+<title>Your Appointment | Sheyla’s Pro Cleaning</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-body{font-family:Inter,system-ui,sans-serif;margin:0;background:#fffdf7;color:#031d3e;min-height:100vh;display:grid;place-items:center;padding:20px}
-.card{width:min(520px,100%);background:#fff;border:1px solid #d6e6eb;border-radius:24px;padding:24px;box-shadow:0 18px 50px rgba(0,26,56,.12)}
-h1{margin:0 0 8px}.muted{color:#607489;line-height:1.55}.summary{padding:16px;border-radius:16px;background:#e8fcfd;margin:18px 0}.row{margin:7px 0}
-button{width:100%;min-height:48px;border:0;border-radius:14px;background:#20ddec;color:#001a38;font-weight:900;font-size:15px;cursor:pointer}
+:root{--navy:#001a38;--blue:#063f73;--cyan:#20ddec;--cyan-soft:#e8fcfd;--yellow:#ffd21f;--cream:#fffdf7;--ink:#031d3e;--muted:#607489;--line:#d6e6eb;--green:#178a56;--shadow:0 28px 80px rgba(0,26,56,.14)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(circle at 80% 12%,rgba(32,221,236,.18),transparent 24rem),radial-gradient(circle at 12% 88%,rgba(255,210,31,.11),transparent 20rem),var(--cream);display:grid;place-items:center;padding:24px}.shell{width:min(620px,100%)}.brand{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:18px}.brand img{max-width:min(360px,80vw);height:auto}.card{overflow:hidden;border:1px solid var(--line);border-radius:30px;background:#fff;box-shadow:var(--shadow)}.hero{padding:26px 26px 22px;background:linear-gradient(135deg,var(--navy),#064a80);color:#fff;position:relative}.hero:after{content:"";position:absolute;width:130px;height:130px;border-radius:50%;right:-38px;top:-48px;background:rgba(32,221,236,.24)}.check{width:56px;height:56px;border-radius:18px;background:var(--cyan);color:var(--navy);display:grid;place-items:center;font-size:26px;font-weight:900;margin-bottom:18px}.hero h1{margin:0;font-size:30px;line-height:1.05}.hero p{margin:9px 0 0;color:#d6f9fc;line-height:1.55}.body{padding:24px}.status{display:none;padding:13px 14px;border-radius:14px;margin-bottom:18px;font-size:13px;font-weight:800}.status.show{display:block}.status.error{background:#fff0f1;color:#9f2731}.status.loading{background:var(--cyan-soft);color:var(--blue)}.appointment{border:1px solid var(--line);border-radius:22px;padding:18px;background:linear-gradient(145deg,#fff,#fbffff)}.service{font-size:21px;font-weight:900;margin:0 0 16px}.details{display:grid;grid-template-columns:1fr 1fr;gap:12px}.detail{padding:13px;border-radius:15px;background:#f6fbfc}.detail small{display:block;color:var(--muted);font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}.detail strong{font-size:14px}.full{grid-column:1/-1}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.btn{min-height:50px;border:0;border-radius:15px;padding:0 16px;font:inherit;font-size:14px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none}.primary{background:linear-gradient(135deg,var(--cyan),#73eef6);color:var(--navy)}.secondary{background:#eef7f9;color:var(--navy)}.note{margin:14px 0 0;color:var(--muted);font-size:11px;line-height:1.55;text-align:center}.hidden{display:none!important}@media(max-width:560px){body{padding:14px}.card{border-radius:24px}.hero,.body{padding:20px}.hero h1{font-size:26px}.details,.actions{grid-template-columns:1fr}.full{grid-column:auto}}
 </style>
 </head>
 <body>
-<div class="card">
-<h1>Add appointment</h1>
-<p class="muted">Save your Sheyla's Pro Cleaning appointment to your device calendar.</p>
-<div class="summary">
-  <div class="row"><strong id="service"></strong></div>
-  <div class="row" id="when"></div>
-  <div class="row" id="name"></div>
-</div>
-<button id="add">Add to calendar</button>
-</div>
+<main class="shell">
+  <div class="brand"><img src="Images/logo-wordmark.png" alt="Sheyla’s Pro Cleaning"></div>
+  <section class="card">
+    <div class="hero">
+      <div class="check">✓</div>
+      <h1>Your cleaning appointment</h1>
+      <p id="heroText">Loading your appointment details…</p>
+    </div>
+    <div class="body">
+      <div class="status loading show" id="status">Loading appointment…</div>
+      <div class="appointment hidden" id="appointmentCard">
+        <h2 class="service" id="service">Cleaning appointment</h2>
+        <div class="details">
+          <div class="detail"><small>Date</small><strong id="date">—</strong></div>
+          <div class="detail"><small>Time</small><strong id="time">—</strong></div>
+          <div class="detail full"><small>For</small><strong id="client">—</strong></div>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="addDevice">Add to device calendar</button>
+          <a class="btn secondary" id="googleCalendar" target="_blank" rel="noopener">Google Calendar</a>
+        </div>
+        <p class="note">The appointment details on this page come directly from Sheyla’s Pro Cleaning’s appointment records.</p>
+      </div>
+    </div>
+  </section>
+</main>
 <script>
+const SUPABASE_URL='https://wfxuxrvygyzonkflpwoq.supabase.co';
+const SUPABASE_KEY='sb_publishable_e2h4t8AvCobzftt36UrDbw_NJGq8qlJ';
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
 const q=new URLSearchParams(location.search);
-const service=q.get('service')||"Cleaning appointment";
-const date=q.get('date')||"";
-const time=q.get('time')||"09:00";
-const name=q.get('name')||"Client";
-document.getElementById('service').textContent=service;
-document.getElementById('name').textContent=name;
-const start=new Date(`${date}T${time}:00`);
-document.getElementById('when').textContent=Number.isNaN(start.getTime())?'Appointment time':start.toLocaleString([], {dateStyle:'full',timeStyle:'short'});
+const token=q.get('token');
+const status=document.getElementById('status');
+const card=document.getElementById('appointmentCard');
+let current=null;
 const pad=n=>String(n).padStart(2,'0');
-const stamp=d=>`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
-document.getElementById('add').onclick=()=>{
-  if(Number.isNaN(start.getTime()))return;
-  const end=new Date(start.getTime()+120*60000);
-  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Sheylas Pro Cleaning//Appointment//EN','BEGIN:VEVENT',
-    `UID:${Date.now()}@sheylasprocleaning`,`DTSTART:${stamp(start)}`,`DTEND:${stamp(end)}`,
-    `SUMMARY:${service.replace(/[,\n;]/g,' ')}`,"DESCRIPTION:Appointment with Sheyla's Pro Cleaning",
-    'END:VEVENT','END:VCALENDAR'].join('\r\n');
-  const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download='sheylas-pro-cleaning-appointment.ics';document.body.append(a);a.click();a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
+const icsStamp=d=>`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+function showError(message){status.className='status error show';status.textContent=message;card.classList.add('hidden');document.getElementById('heroText').textContent='We could not load this appointment.'}
+function formatDate(value){const d=new Date(`${value}T12:00:00`);return d.toLocaleDateString([], {weekday:'long',month:'long',day:'numeric',year:'numeric'})}
+function formatTime(value){const raw=String(value||'').slice(0,5);const d=new Date(`2000-01-01T${raw}:00`);return d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})}
+function startDate(appt){return new Date(`${appt.appointment_date}T${String(appt.appointment_time||'09:00').slice(0,5)}:00`)}
+function endDate(appt){return new Date(startDate(appt).getTime()+(Number(appt.duration_minutes)||120)*60000)}
+function googleUrl(appt){const start=startDate(appt),end=endDate(appt);const params=new URLSearchParams({action:'TEMPLATE',text:appt.service||'Cleaning appointment',dates:`${icsStamp(start)}/${icsStamp(end)}`,details:"Appointment with Sheyla's Pro Cleaning"});return `https://calendar.google.com/calendar/render?${params.toString()}`}
+function render(appt){current=appt;status.className='status';status.textContent='';card.classList.remove('hidden');document.getElementById('service').textContent=appt.service||'Cleaning appointment';document.getElementById('date').textContent=formatDate(appt.appointment_date);document.getElementById('time').textContent=formatTime(appt.appointment_time);document.getElementById('client').textContent=appt.client_first_name||'Client';document.getElementById('heroText').textContent=`${appt.client_first_name||'Your'} appointment is confirmed.`;document.getElementById('googleCalendar').href=googleUrl(appt)}
+async function load(){
+  if(token){
+    const {data,error}=await db.rpc('get_sheylaspro_calendar_appointment',{p_token:token});
+    const appt=Array.isArray(data)?data[0]:data;
+    if(error){console.error(error);showError('This appointment link is not available. Please contact Sheyla’s Pro Cleaning for a new confirmation link.');return}
+    if(!appt){showError('We could not find an active appointment for this link. It may have been changed or cancelled.');return}
+    render(appt);return;
+  }
+  // Temporary support for older confirmation links created before appointment tokens were enabled.
+  const service=q.get('service'),date=q.get('date'),time=q.get('time'),name=q.get('name');
+  if(service&&date&&time){render({service,appointment_date:date,appointment_time:time,duration_minutes:120,client_first_name:name||'Client'});return}
+  showError('This calendar link is missing the appointment reference. Please ask for a new confirmation message.');
+}
+document.getElementById('addDevice').onclick=()=>{
+  if(!current)return;
+  const start=startDate(current),end=endDate(current);
+  const safe=v=>String(v||'').replace(/[\\,;\n]/g,' ');
+  const ics=['BEGIN:VCALENDAR','VERSION:2.0','CALSCALE:GREGORIAN','PRODID:-//Sheylas Pro Cleaning//Appointment//EN','BEGIN:VEVENT',`UID:${crypto.randomUUID()}@sheylasprocleaning`,`DTSTART:${icsStamp(start)}`,`DTEND:${icsStamp(end)}`,`SUMMARY:${safe(current.service||'Cleaning appointment')}`,"DESCRIPTION:Appointment with Sheyla's Pro Cleaning",'END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='sheylas-pro-cleaning-appointment.ics';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
 };
+load();
 </script>
 </body>
 </html>
