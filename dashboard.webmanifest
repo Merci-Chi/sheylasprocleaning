@@ -6,7 +6,10 @@
   "start_url": "./admin.html",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui"],
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
   "background_color": "#001a38",
   "theme_color": "#001a38",
   "icons": [
