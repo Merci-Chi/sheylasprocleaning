@@ -1,98 +1,43 @@
 from pathlib import Path
+import re
 
 p=Path('admin.html')
 text=p.read_text()
 
-# Add hidden icon value next to selected image value.
-old='<input type="hidden" id="serviceImageUrl">'
-new='<input type="hidden" id="serviceImageUrl"><input type="hidden" id="serviceIcon">'
-if old not in text:
-    raise SystemExit('service image hidden field marker not found')
-text=text.replace(old,new,1)
+# Replace the service form with required fields, description limits, counter, and help popup trigger.
+pattern=r'<dialog id="serviceDialog">.*?</dialog>'
+replacement='''<dialog id="serviceDialog"><div class="modal"><div class="modal-head"><h2 id="serviceTitle">Add service</h2><button class="modal-close" data-close="serviceDialog"><i class="fa-solid fa-xmark"></i></button></div><form class="modal-body" id="serviceForm"><input type="hidden" id="serviceId"><input type="hidden" id="serviceImageUrl"><input type="hidden" id="serviceIcon"><div class="form-grid"><div class="field full"><label>Service name</label><input id="serviceName" required></div><div class="field"><label>Price label</label><input id="servicePrice" placeholder="Free estimate or $120" required></div><div class="field full"><label class="service-description-label"><span>Description</span><span class="service-description-rule">75 min · 160 max <button type="button" class="limit-help" id="serviceDescriptionHelp" aria-label="Why is there a description limit?">?</button></span></label><textarea id="serviceDescription" minlength="75" maxlength="160" required></textarea><div class="service-description-meta"><span>Keep the description concise enough to fit the website card.</span><strong><span id="serviceDescriptionCount">0</span>/160</strong></div></div><div class="field full"><label>Stock image</label><p class="service-image-help">Choose the photo that will appear on this service card on the main website.</p><div class="service-image-grid" id="serviceImageGrid" role="radiogroup" aria-label="Choose a stock image"></div></div><div class="field full"><label>Service icon</label><p class="service-image-help">Choose the icon shown in the circle on the service card.</p><div class="service-icon-grid" id="serviceIconGrid" role="radiogroup" aria-label="Choose a service icon"></div></div></div><div class="modal-actions"><button class="button ghost" type="button" data-close="serviceDialog">Cancel</button><button class="button primary">Save service</button></div></form></div></dialog>'''
+text,new_count=re.subn(pattern,replacement,text,count=1,flags=re.S)
+if new_count!=1:
+    raise SystemExit('service dialog not replaced')
 
-# Add visual icon picker below the stock-image picker.
-old='''<div class="field full"><label>Stock image</label><p class="service-image-help">Choose the photo that will appear on this service card on the main website.</p><div class="service-image-grid" id="serviceImageGrid" role="radiogroup" aria-label="Choose a stock image"></div></div>'''
-new='''<div class="field full"><label>Stock image</label><p class="service-image-help">Choose the photo that will appear on this service card on the main website.</p><div class="service-image-grid" id="serviceImageGrid" role="radiogroup" aria-label="Choose a stock image"></div></div><div class="field full"><label>Service icon</label><p class="service-image-help">Choose the icon shown in the circle on the service card.</p><div class="service-icon-grid" id="serviceIconGrid" role="radiogroup" aria-label="Choose a service icon"></div></div>'''
-if old not in text:
-    raise SystemExit('stock image picker marker not found')
-text=text.replace(old,new,1)
+# New services must explicitly select both an image and icon. Existing services keep their saved selections.
+text=text.replace('serviceImageUrl.value=r?.imageUrl||SERVICE_STOCK_IMAGES[0].url;','serviceImageUrl.value=r?.imageUrl||"";',1)
+text=text.replace('serviceIcon.value=r?.icon||"fa-solid fa-house-chimney";','serviceIcon.value=r?.icon||"";',1)
 
-icon_code='''const SERVICE_ICON_OPTIONS=[
-  {label:"Home",value:"fa-solid fa-house-chimney"},
-  {label:"Sparkles",value:"fa-solid fa-sparkles"},
-  {label:"Spray bottle",value:"fa-solid fa-spray-can-sparkles"},
-  {label:"Soap",value:"fa-solid fa-soap"},
-  {label:"Broom",value:"fa-solid fa-broom"},
-  {label:"Bucket",value:"fa-solid fa-bucket"},
-  {label:"Bed",value:"fa-solid fa-bed"},
-  {label:"Building",value:"fa-solid fa-building"},
-  {label:"Boxes",value:"fa-solid fa-box-open"},
-  {label:"Construction",value:"fa-solid fa-helmet-safety"},
-  {label:"Kitchen",value:"fa-solid fa-kitchen-set"},
-  {label:"Bath",value:"fa-solid fa-bath"},
-  {label:"Couch",value:"fa-solid fa-couch"},
-  {label:"Office",value:"fa-solid fa-briefcase"},
-  {label:"Store",value:"fa-solid fa-store"},
-  {label:"Hotel",value:"fa-solid fa-hotel"},
-  {label:"Car",value:"fa-solid fa-car"},
-  {label:"Party",value:"fa-solid fa-champagne-glasses"},
-  {label:"Star",value:"fa-solid fa-star"},
-  {label:"Shield",value:"fa-solid fa-shield-heart"}
-];
-function renderServiceIconPicker(selectedIcon=""){
-  if(!serviceIconGrid)return;
-  serviceIconGrid.innerHTML=SERVICE_ICON_OPTIONS.map(item=>`<button type="button" class="service-icon-option${item.value===selectedIcon?" selected":""}" data-service-icon="${esc(item.value)}" role="radio" aria-checked="${item.value===selectedIcon}" title="${esc(item.label)}"><span class="service-icon-preview"><i class="${esc(item.value)}"></i></span><span>${esc(item.label)}</span><i class="fa-solid fa-circle-check service-icon-check" aria-hidden="true"></i></button>`).join("");
-  serviceIconGrid.querySelectorAll("[data-service-icon]").forEach(button=>{
-    button.onclick=()=>{
-      serviceIcon.value=button.dataset.serviceIcon;
-      serviceIconGrid.querySelectorAll(".service-icon-option").forEach(option=>{
-        const selected=option===button;
-        option.classList.toggle("selected",selected);
-        option.setAttribute("aria-checked",String(selected));
-      });
-    };
-  });
-}
-'''
-marker='function openService(r=null){'
+# Add description counter + visuals help popup after openService.
+open_pattern=r'(function openService\(r=null\)\{.*?serviceDialog\.showModal\(\);\n\})'
+extra='''\nfunction updateServiceDescriptionCount(){\n  if(serviceDescriptionCount)serviceDescriptionCount.textContent=String(serviceDescription.value.length);\n}\nserviceDescription.addEventListener("input",updateServiceDescriptionCount);\nserviceDescriptionHelp.onclick=()=>showMessage(\n  "Why 75–160 characters?",\n  "This range keeps each service card visually balanced on the website. Too little text can make one card look empty, while too much text can make the card taller or crowded compared with the others.",\n  "info"\n);\n'''
+text,n=re.subn(open_pattern,r'\1'+extra,text,count=1,flags=re.S)
+if n!=1:
+    raise SystemExit('openService block not found')
+
+# Make the counter refresh whenever the service editor opens.
+text=text.replace('renderServiceIconPicker(serviceIcon.value);\n  serviceDialog.showModal();','renderServiceIconPicker(serviceIcon.value);\n  updateServiceDescriptionCount();\n  serviceDialog.showModal();',1)
+
+# Validate every required field before the live save starts.
+marker='''serviceForm.onsubmit=async e=>{\n  e.preventDefault();'''
+validation='''serviceForm.onsubmit=async e=>{\n  e.preventDefault();\n\n  const serviceNameValue=serviceName.value.trim();\n  const servicePriceValue=servicePrice.value.trim();\n  const serviceDescriptionValue=serviceDescription.value.trim();\n\n  if(!serviceNameValue)return showMessage("Service name required","Enter a service name before saving.","error");\n  if(!servicePriceValue)return showMessage("Price label required","Enter a price label such as Free estimate or $120.","error");\n  if(serviceDescriptionValue.length<75)return showMessage("Description too short","The description must be at least 75 characters so the service card has enough visual content.","error");\n  if(serviceDescriptionValue.length>160)return showMessage("Description too long","The description can be no more than 160 characters so it fits cleanly inside the service card.","error");\n  if(!serviceImageUrl.value)return showMessage("Stock image required","Choose a stock image before saving the service.","error");\n  if(!serviceIcon.value)return showMessage("Service icon required","Choose an icon before saving the service.","error");'''
 if marker not in text:
-    raise SystemExit('openService marker not found')
-text=text.replace(marker,icon_code+marker,1)
+    raise SystemExit('live service submit handler not found')
+text=text.replace(marker,validation,1)
 
-old='''  serviceImageUrl.value=r?.imageUrl||SERVICE_STOCK_IMAGES[0].url;
-  renderServiceImagePicker(serviceImageUrl.value);
-  serviceDialog.showModal();'''
-new='''  serviceImageUrl.value=r?.imageUrl||SERVICE_STOCK_IMAGES[0].url;
-  serviceIcon.value=r?.icon||"fa-solid fa-house-chimney";
-  renderServiceImagePicker(serviceImageUrl.value);
-  renderServiceIconPicker(serviceIcon.value);
-  serviceDialog.showModal();'''
-if old not in text:
-    raise SystemExit('openService image selection marker not found')
-text=text.replace(old,new,1)
+# Ensure the saved description uses the already-validated trimmed value.
+text=text.replace('description:serviceDescription.value.trim()||null,','description:serviceDescriptionValue,',1)
+# Require a real icon instead of silently assigning a default.
+text=text.replace('icon:serviceIcon.value||"fa-solid fa-house-chimney",','icon:serviceIcon.value,',1)
 
-old='''      image_url:serviceImageUrl.value||null,
-      is_live:true'''
-new='''      image_url:serviceImageUrl.value||null,
-      icon:serviceIcon.value||"fa-solid fa-house-chimney",
-      is_live:true'''
-if old not in text:
-    raise SystemExit('service save payload marker not found')
-text=text.replace(old,new,1)
-
-css='''
-/* ===== Service icon picker ===== */
-.service-icon-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
-.service-icon-option{position:relative;min-width:0;padding:10px 6px 8px;border:2px solid transparent;border-radius:14px;background:#f4fafc;color:var(--ink);display:grid;place-items:center;gap:6px;font-size:9px;font-weight:900;transition:.16s;box-shadow:0 5px 14px rgba(0,26,56,.06)}
-.service-icon-option:hover{transform:translateY(-2px);border-color:rgba(32,221,236,.55)}
-.service-icon-preview{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--cyan);color:var(--navy);font-size:18px;box-shadow:0 5px 12px rgba(0,26,56,.12)}
-.service-icon-option>span:last-of-type{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.service-icon-check{position:absolute;right:5px;top:5px;color:var(--navy2);background:#fff;border-radius:50%;opacity:0;transform:scale(.7);transition:.16s}
-.service-icon-option.selected{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(32,221,236,.16),0 8px 18px rgba(0,26,56,.11)}
-.service-icon-option.selected .service-icon-check{opacity:1;transform:scale(1)}
-html[data-theme="dark"] .service-icon-option{background:#09243b;color:#f4fcff}
-@media(max-width:700px){.service-icon-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.service-icon-option{font-size:8px}}
-'''
+css='''\n/* ===== Required service fields + description limits ===== */\n.service-description-label{display:flex!important;align-items:center;justify-content:space-between;gap:12px}\n.service-description-rule{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:9px;font-weight:900;white-space:nowrap}\n.limit-help{width:20px;height:20px;padding:0;border:1px solid var(--line);border-radius:50%;display:inline-grid;place-items:center;background:var(--cyanp);color:var(--navy2);font-size:11px;font-weight:900;line-height:1}\n.limit-help:hover{background:var(--cyan);color:var(--navy)}\n.service-description-meta{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:9px;line-height:1.4}\n.service-description-meta strong{color:var(--navy2);white-space:nowrap}\n#serviceDescription:invalid:not(:placeholder-shown){border-color:#d78a90}\nhtml[data-theme="dark"] .limit-help{background:#0b314e;color:#dffcff;border-color:#27516a}\n@media(max-width:560px){.service-description-label,.service-description-meta{align-items:flex-start;flex-direction:column;gap:5px}.service-description-rule{white-space:normal}}\n'''
 style_marker='</style>\n</head>'
 if style_marker not in text:
     raise SystemExit('style marker not found')
