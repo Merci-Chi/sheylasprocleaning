@@ -10,7 +10,6 @@ permissions:
 
 jobs:
   patch:
-    if: github.event.head_commit.message == 'Add service stock image picker workflow'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,9 +26,7 @@ jobs:
           old_dialog='''<dialog id="serviceDialog"><div class="modal"><div class="modal-head"><h2 id="serviceTitle">Add service</h2><button class="modal-close" data-close="serviceDialog"><i class="fa-solid fa-xmark"></i></button></div><form class="modal-body" id="serviceForm"><input type="hidden" id="serviceId"><div class="form-grid"><div class="field full"><label>Service name</label><input id="serviceName" required></div><div class="field"><label>Price label</label><input id="servicePrice" placeholder="Free estimate or $120"></div><div class="field full"><label>Description</label><textarea id="serviceDescription"></textarea></div></div><div class="modal-actions"><button class="button ghost" type="button" data-close="serviceDialog">Cancel</button><button class="button primary">Save service</button></div></form></div></dialog>'''
 
           new_dialog='''<dialog id="serviceDialog"><div class="modal"><div class="modal-head"><h2 id="serviceTitle">Add service</h2><button class="modal-close" data-close="serviceDialog"><i class="fa-solid fa-xmark"></i></button></div><form class="modal-body" id="serviceForm"><input type="hidden" id="serviceId"><input type="hidden" id="serviceImageUrl"><div class="form-grid"><div class="field full"><label>Service name</label><input id="serviceName" required></div><div class="field"><label>Price label</label><input id="servicePrice" placeholder="Free estimate or $120"></div><div class="field full"><label>Description</label><textarea id="serviceDescription"></textarea></div><div class="field full"><label>Stock image</label><p class="service-image-help">Choose the photo that will appear on this service card on the main website.</p><div class="service-image-grid" id="serviceImageGrid" role="radiogroup" aria-label="Choose a stock image"></div></div></div><div class="modal-actions"><button class="button ghost" type="button" data-close="serviceDialog">Cancel</button><button class="button primary">Save service</button></div></form></div></dialog>'''
-
-          if old_dialog not in text:
-              raise SystemExit('service dialog marker not found')
+          if old_dialog not in text: raise SystemExit('service dialog marker not found')
           text=text.replace(old_dialog,new_dialog,1)
 
           old_open='''function openService(r=null){serviceTitle.textContent=r?"Edit service":"Add service";serviceId.value=r?.id||"";serviceName.value=r?.name||"";servicePrice.value=r?.price||"";serviceDescription.value=r?.description||"";serviceDialog.showModal()}'''
@@ -57,7 +54,7 @@ jobs:
 ];
 function renderServiceImagePicker(selectedUrl=""){
   if(!serviceImageGrid)return;
-  serviceImageGrid.innerHTML=SERVICE_STOCK_IMAGES.map((image,index)=>`<button type="button" class="service-image-option${image.url===selectedUrl?" selected":""}" data-service-image="${esc(image.url)}" role="radio" aria-checked="${image.url===selectedUrl}" title="${esc(image.label)}"><img src="${esc(image.url)}" alt="${esc(image.label)}" loading="lazy"><span>${esc(image.label)}</span><i class="fa-solid fa-circle-check" aria-hidden="true"></i></button>`).join("");
+  serviceImageGrid.innerHTML=SERVICE_STOCK_IMAGES.map(image=>`<button type="button" class="service-image-option${image.url===selectedUrl?" selected":""}" data-service-image="${esc(image.url)}" role="radio" aria-checked="${image.url===selectedUrl}" title="${esc(image.label)}"><img src="${esc(image.url)}" alt="${esc(image.label)}" loading="lazy"><span>${esc(image.label)}</span><i class="fa-solid fa-circle-check" aria-hidden="true"></i></button>`).join("");
   serviceImageGrid.querySelectorAll("[data-service-image]").forEach(button=>{
     button.onclick=()=>{
       serviceImageUrl.value=button.dataset.serviceImage;
@@ -79,8 +76,7 @@ function openService(r=null){
   renderServiceImagePicker(serviceImageUrl.value);
   serviceDialog.showModal();
 }'''
-          if old_open not in text:
-              raise SystemExit('openService marker not found')
+          if old_open not in text: raise SystemExit('openService marker not found')
           text=text.replace(old_open,new_open,1)
 
           old_map='''        description:x.description||"",
@@ -91,8 +87,7 @@ function openService(r=null){
         icon:x.icon||"",
         isLive:x.is_live!==false,
         sortOrder:x.sort_order||0'''
-          if old_map not in text:
-              raise SystemExit('service mapping marker not found')
+          if old_map not in text: raise SystemExit('service mapping marker not found')
           text=text.replace(old_map,new_map,1)
 
           old_payload='''      description:serviceDescription.value.trim()||null,
@@ -100,8 +95,7 @@ function openService(r=null){
           new_payload='''      description:serviceDescription.value.trim()||null,
       image_url:serviceImageUrl.value||null,
       is_live:true'''
-          if old_payload not in text:
-              raise SystemExit('service payload marker not found')
+          if old_payload not in text: raise SystemExit('service payload marker not found')
           text=text.replace(old_payload,new_payload,1)
 
           css='''
@@ -121,10 +115,8 @@ html[data-theme="dark"] .service-image-option{background:#09243b;color:#f4fcff}
 @media(max-width:700px){#serviceDialog{width:calc(100vw - 16px)!important;max-width:none!important}.service-image-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-height:44dvh}.service-image-option span{font-size:10px}}
 '''
           marker='</style>\n</head>'
-          if marker not in text:
-              raise SystemExit('style marker not found')
+          if marker not in text: raise SystemExit('style marker not found')
           text=text.replace(marker,css+'\n'+marker,1)
-
           p.write_text(text)
           PY
       - name: Commit changes
