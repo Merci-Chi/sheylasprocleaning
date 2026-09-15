@@ -1223,26 +1223,7 @@ function showMessage(title,message,type="info"){
 }
 
 const pages=["dashboard","appointments","estimates","clients","services","team","settings","help"];
-async function showPage(p){
-  if(!pages.includes(p))return;
-  document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active",x.id==="page-"+p));
-  document.querySelectorAll(".nav-item").forEach(x=>x.classList.toggle("active",x.dataset.page===p));
-  const pageTitle=document.getElementById("currentPage");
-  if(pageTitle)pageTitle.textContent=p==="help"?"Help / Requests":p[0].toUpperCase()+p.slice(1);
-  closeDrawer();
-
-  // Always refresh the selected page from Supabase before painting it.
-  // This prevents the dashboard totals and sidebar pages from using different state.
-  if(typeof loadSheylasData==="function"){
-    try{await loadSheylasData()}catch(error){console.error("Page refresh failed:",error)}
-  }
-
-  render();
-  if(p==="help"){
-    await renderHelpRequests();
-    syncCustomSelects();
-  }
-}
+function showPage(p){if(!pages.includes(p))return;document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active",x.id==="page-"+p));document.querySelectorAll(".nav-item").forEach(x=>x.classList.toggle("active",x.dataset.page===p));currentPage.textContent=p==="help"?"Help / Requests":p[0].toUpperCase()+p.slice(1);closeDrawer();render();if(p==="help"){renderHelpRequests();syncCustomSelects()}}
 document.querySelectorAll(".nav-item").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
 document.querySelectorAll("[data-go]").forEach(b=>{
   b.onclick=()=>showPage(b.dataset.go);
@@ -1258,33 +1239,10 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeDrawer();docum
 
 function filter(rows,q,fields){q=(q||"").trim().toLowerCase();return q?rows.filter(r=>fields.some(f=>String(f(r)||"").toLowerCase().includes(q))):rows}
 function render(){
-  // Do not allow one missing/failed control to prevent the sidebar pages from rendering.
-  const setText=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};
-  setText("statAppointments",data.appointments.length);
-  setText("statEstimates",data.estimates.length);
-  setText("statClients",data.clients.length);
-  setText("statServices",data.services.length);
-  setText("statTeam",data.team.length);
-  setText("signedInLabel",data.settings.signedInAs||"You");
-
-  document.querySelectorAll(".website-link").forEach(a=>a.href=data.settings.website||"index.html");
-
-  const settingNameEl=document.getElementById("settingName");
-  const settingWebsiteEl=document.getElementById("settingWebsite");
-  if(settingNameEl)settingNameEl.value=data.settings.signedInAs||"";
-  if(settingWebsiteEl)settingWebsiteEl.value=data.settings.website||"index.html";
-
-  const renderers=[
-    ["clients",renderClients],
-    ["services",renderServices],
-    ["team",renderTeam],
-    ["appointments",renderAppointments],
-    ["estimates",renderEstimates],
-    ["selects",refreshSelects]
-  ];
-  renderers.forEach(([name,fn])=>{
-    try{fn()}catch(error){console.error(`Unable to render ${name}:`,error)}
-  });
+  statAppointments.textContent=data.appointments.length;statEstimates.textContent=data.estimates.length;statClients.textContent=data.clients.length;statServices.textContent=data.services.length;statTeam.textContent=data.team.length;
+  signedInLabel.textContent=data.settings.signedInAs||"You";document.querySelectorAll(".website-link").forEach(a=>a.href=data.settings.website||"index.html");
+  settingName.value=data.settings.signedInAs||"";settingWebsite.value=data.settings.website||"index.html";
+  renderClients();renderServices();renderTeam();renderAppointments();renderEstimates();refreshSelects();
 }
 function bindDelete(){
   document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
@@ -1627,50 +1585,16 @@ appointmentForm.onsubmit=e=>{
 
 function renderEstimates(){
   const rows=filter(
-    [...data.estimates].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))),
-    document.getElementById("estimateSearch")?.value||"",
-    [
-      x=>get("clients",x.clientId)?.name,
-      x=>x.clientName,
-      x=>x.guestName,
-      x=>x.guestPhone,
-      x=>get("services",x.serviceId)?.name,
-      x=>x.serviceName,
-      x=>x.amount,
-      x=>x.date,
-      x=>x.notes
-    ]
+    [...data.estimates].sort((a,b)=>b.date.localeCompare(a.date)),
+    estimateSearch.value,
+    [x=>get("clients",x.clientId)?.name,x=>x.guestName,x=>x.guestPhone,x=>get("services",x.serviceId)?.name,x=>x.amount,x=>x.date,x=>x.notes]
   );
-
-  const countEl=document.getElementById("estimateCount");
-  const emptyEl=document.getElementById("estimateEmpty");
-  const rowsEl=document.getElementById("estimateRows");
-  if(countEl)countEl.textContent=countLabel(data.estimates.length);
-  if(emptyEl)emptyEl.style.display=data.estimates.length?"none":"block";
-  if(!rowsEl)return;
-
-  rowsEl.innerHTML=rows.map(x=>{
-    const c=get("clients",x.clientId);
-    const displayName=c?.name||x.clientName||x.guestName||"—";
-    const serviceName=get("services",x.serviceId)?.name||x.serviceName||"—";
-    const extra=[];
-    if(x.roomCount)extra.push(`${x.roomCount} room${Number(x.roomCount)===1?"":"s"}`);
-    if(Array.isArray(x.photoPaths)&&x.photoPaths.length)extra.push(`${x.photoPaths.length} photo${x.photoPaths.length===1?"":"s"}`);
-    const note=[x.notes||x.details||"",extra.join(" · ")].filter(Boolean).join(" — ")||"—";
-
-    return `<tr>
-      <td data-label="Client"><strong>${esc(displayName)}</strong>${!c&&displayName!=="—"?'<small>Website request</small>':''}</td>
-      <td data-label="Service">${esc(serviceName)}</td>
-      <td data-label="Amount">${esc(money(x.amount))}</td>
-      <td data-label="Date">${esc(fmtDate(x.date))}</td>
-      <td data-label="Notes">${esc(note)}</td>
-      <td data-label="Actions"><div class="row-actions">
-        <button class="icon-btn" data-edit-est="${x.id}" aria-label="Edit estimate"><i class="fa-solid fa-pen"></i></button>
-        <button class="icon-btn" data-del="estimates" data-id="${x.id}" aria-label="Delete estimate"><i class="fa-solid fa-trash"></i></button>
-      </div></td>
-    </tr>`;
+  estimateCount.textContent=countLabel(data.estimates.length);
+  estimateEmpty.style.display=data.estimates.length?"none":"block";
+  estimateRows.innerHTML=rows.map(x=>{
+    const c=get("clients",x.clientId),displayName=c?.name||x.guestName||"—";
+    return `<tr><td data-label="Client"><strong>${esc(displayName)}</strong>${!c&&x.guestName?'<small>Not saved as client</small>':''}</td><td data-label="Service">${esc(get("services",x.serviceId)?.name||"—")}</td><td data-label="Amount">${esc(money(x.amount))}</td><td data-label="Date">${esc(fmtDate(x.date))}</td><td data-label="Notes">${esc(x.notes||"—")}</td><td data-label="Actions"><div class="row-actions"><button class="icon-btn" data-edit-est="${x.id}"><i class="fa-solid fa-pen"></i></button><button class="icon-btn" data-del="estimates" data-id="${x.id}"><i class="fa-solid fa-trash"></i></button></div></td></tr>`;
   }).join("");
-
   document.querySelectorAll("[data-edit-est]").forEach(b=>b.onclick=()=>openEstimate(get("estimates",b.dataset.editEst)));
   bindDelete();
 }
@@ -1993,7 +1917,6 @@ const sheylasDb=window.supabase.createClient(
 
 let sheylasUser=null;
 let sheylasLoading=false;
-let sheylasLoadPromise=null;
 let currentStaffRole="staff";
 
 const loginDialogEl=document.getElementById("loginDialog");
@@ -2034,175 +1957,159 @@ async function requireSession(){
 }
 
 async function loadSheylasData(){
-  if(sheylasLoadPromise)return sheylasLoadPromise;
-
-  sheylasLoadPromise=(async()=>{
-    sheylasLoading=true;
-    setDbStatus("Loading…");
-
-    try{
-      const ok=await requireSession();
-      if(!ok)return false;
-
-      const safe=async promise=>{
-        try{
-          const result=await promise;
-          if(result?.error){
-            console.warn(result.error);
-            return {data:null,error:result.error};
-          }
-          return result;
-        }catch(error){
-          console.warn(error);
-          return {data:null,error};
-        }
-      };
-
-      const [
-        clientsRes,
-        servicesRes,
-        teamRes,
-        appointmentsRes,
-        estimatesRes,
-        profileRes,
-        settingsRes
-      ]=await Promise.all([
-        safe(sheylasDb.from(SHEYLAS_TABLES.clients).select("*").order("name")),
-        safe(sheylasDb.from(SHEYLAS_TABLES.services).select("*").order("sort_order").order("name")),
-        safe(sheylasDb.from(SHEYLAS_TABLES.team).select("*").order("sort_order").order("name")),
-        safe(sheylasDb.from(SHEYLAS_TABLES.appointments).select("*").order("appointment_date",{ascending:false}).order("appointment_time",{ascending:false})),
-        safe(sheylasDb.from(SHEYLAS_TABLES.estimates).select("*").order("estimate_date",{ascending:false}).order("created_at",{ascending:false})),
-        safe(sheylasDb.from(SHEYLAS_TABLES.staff).select("display_name,role,active").eq("user_id",sheylasUser.id).maybeSingle()),
-        safe(sheylasDb.from(SHEYLAS_TABLES.siteContent).select("key,value").in("key",["admin_website_url","admin_business_name"]))
-      ]);
-
-      let failedSections=0;
-
-      if(clientsRes.data!==null){
-        data.clients=(clientsRes.data||[]).map(x=>({
-          id:x.id,
-          name:x.name||"",
-          phone:x.phone||"",
-          email:x.email||"",
-          address:x.address||"",
-          notes:x.notes||"",
-          active:x.active!==false
-        }));
-      }else failedSections++;
-
-      if(servicesRes.data!==null){
-        data.services=(servicesRes.data||[]).map(x=>({
-          id:x.id,
-          name:x.name||"",
-          price:x.price||String(x.price_label||"").replace(/^\$/,""),
-          description:x.description||"",
-          imageUrl:x.image_url||"",
-          icon:x.icon||"",
-          isLive:x.is_live!==false,
-          sortOrder:x.sort_order||0
-        }));
-      }else failedSections++;
-
-      if(teamRes.data!==null){
-        data.team=(teamRes.data||[]).map(x=>({
-          id:x.id,
-          name:x.name||"",
-          role:x.role||"",
-          days:Array.isArray(x.days)?x.days:[],
-          start:cleanTime(x.start_time),
-          end:cleanTime(x.end_time),
-          dayHours:(x.day_hours&&typeof x.day_hours==="object")?x.day_hours:{},
-          active:x.active!==false
-        }));
-      }else failedSections++;
-
-      if(appointmentsRes.data!==null){
-        data.appointments=(appointmentsRes.data||[]).map(x=>{
-          const linkedClient=x.client_id?get("clients",x.client_id):null;
-          const fallbackClient=!linkedClient?matchByName(data.clients,x.client_name):null;
-          const linkedService=x.service_id?get("services",x.service_id):null;
-          const fallbackService=!linkedService?matchByName(data.services,x.service):null;
-          return {
-            id:x.id,
-            clientId:linkedClient?.id||fallbackClient?.id||"",
-            guestName:x.guest_name||((linkedClient||fallbackClient)?"":x.client_name||""),
-            guestPhone:x.guest_phone||((linkedClient||fallbackClient)?"":x.phone||""),
-            clientName:x.client_name||"",
-            serviceId:linkedService?.id||fallbackService?.id||"",
-            serviceName:x.service||"",
-            teamIds:Array.isArray(x.team_ids)?x.team_ids.filter(Boolean):[],
-            teamId:"",
-            date:x.appointment_date||"",
-            time:cleanTime(x.appointment_time),
-            notes:x.notes||"",
-            status:x.status||"pending"
-          };
-        });
-      }else failedSections++;
-
-      if(estimatesRes.data!==null){
-        data.estimates=(estimatesRes.data||[]).map(x=>{
-          const linkedClient=x.client_id?get("clients",x.client_id):null;
-          const fallbackClient=!linkedClient?matchByName(data.clients,x.client_name):null;
-          const linkedService=x.service_id?get("services",x.service_id):null;
-          const fallbackService=!linkedService?matchByName(data.services,x.service):null;
-          return {
-            id:x.id,
-            clientId:linkedClient?.id||fallbackClient?.id||"",
-            guestName:x.guest_name||((linkedClient||fallbackClient)?"":x.client_name||""),
-            guestPhone:x.guest_phone||((linkedClient||fallbackClient)?"":x.phone||""),
-            clientName:x.client_name||"",
-            serviceId:linkedService?.id||fallbackService?.id||"",
-            serviceName:x.service||"",
-            amount:x.amount==null?"":String(x.amount),
-            date:x.estimate_date||String(x.created_at||"").slice(0,10),
-            notes:x.notes||x.details||"",
-            details:x.details||"",
-            status:x.status||"new",
-            roomCount:x.room_count||null,
-            photoPaths:Array.isArray(x.photo_paths)?x.photo_paths.filter(Boolean):[]
-          };
-        });
-      }else failedSections++;
-
-      if(profileRes.data){
-        currentStaffRole=profileRes.data.role||"staff";
-        data.settings.signedInAs=profileRes.data.display_name||sheylasUser.email||"You";
-      }else{
-        data.settings.signedInAs=sheylasUser.email||"You";
-      }
-
-      if(settingsRes.data){
-        const settingRows=Object.fromEntries(settingsRes.data.map(x=>[x.key,x.value]));
-        if(settingRows.admin_website_url)data.settings.website=settingRows.admin_website_url;
-      }
-
-      save();
-      render();
-      await renderHelpRequests();
-
-      if(failedSections===0){
-        setDbStatus("Ready","connected");
-      }else if(failedSections<5){
-        setDbStatus("Partially loaded","error");
-      }else{
-        console.warn("Unable to load some account information. Keeping the current session signed in.");
-        setDbStatus("Couldn’t load all data","error");
-      }
-      return failedSections<5;
-    }catch(error){
-      console.error(error);
-      setDbStatus("Connection problem","error");
-      return false;
-    }finally{
-      sheylasLoading=false;
-    }
-  })();
+  if(sheylasLoading)return;
+  sheylasLoading=true;
+  setDbStatus("Loading…");
 
   try{
-    return await sheylasLoadPromise;
+    const ok=await requireSession();
+    if(!ok)return;
+
+    const safe=async promise=>{
+      try{
+        const result=await promise;
+        if(result?.error){
+          console.warn(result.error);
+          return {data:null,error:result.error};
+        }
+        return result;
+      }catch(error){
+        console.warn(error);
+        return {data:null,error};
+      }
+    };
+
+    const [
+      clientsRes,
+      servicesRes,
+      teamRes,
+      appointmentsRes,
+      estimatesRes,
+      profileRes,
+      settingsRes
+    ]=await Promise.all([
+      safe(sheylasDb.from(SHEYLAS_TABLES.clients).select("*").order("name")),
+      safe(sheylasDb.from(SHEYLAS_TABLES.services).select("*").order("sort_order").order("name")),
+      safe(sheylasDb.from(SHEYLAS_TABLES.team).select("*").order("sort_order").order("name")),
+      safe(sheylasDb.from(SHEYLAS_TABLES.appointments).select("*").order("appointment_date",{ascending:false}).order("appointment_time",{ascending:false})),
+      safe(sheylasDb.from(SHEYLAS_TABLES.estimates).select("*").order("estimate_date",{ascending:false}).order("created_at",{ascending:false})),
+      safe(sheylasDb.from(SHEYLAS_TABLES.staff).select("display_name,role,active").eq("user_id",sheylasUser.id).maybeSingle()),
+      safe(sheylasDb.from(SHEYLAS_TABLES.siteContent).select("key,value").in("key",["admin_website_url","admin_business_name"]))
+    ]);
+
+    let failedSections=0;
+
+    if(clientsRes.data){
+      data.clients=clientsRes.data.map(x=>({
+        id:x.id,
+        name:x.name||"",
+        phone:x.phone||"",
+        email:x.email||"",
+        address:x.address||"",
+        notes:x.notes||"",
+        active:x.active!==false
+      }));
+    }else failedSections++;
+
+    if(servicesRes.data){
+      data.services=servicesRes.data.map(x=>({
+        id:x.id,
+        name:x.name||"",
+        price:x.price||"",
+        description:x.description||"",
+        imageUrl:x.image_url||"",
+        icon:x.icon||"",
+        isLive:x.is_live!==false,
+        sortOrder:x.sort_order||0
+      }));
+    }else failedSections++;
+
+    if(teamRes.data){
+      data.team=teamRes.data.map(x=>({
+        id:x.id,
+        name:x.name||"",
+        role:x.role||"",
+        days:Array.isArray(x.days)?x.days:[],
+        start:cleanTime(x.start_time),
+        end:cleanTime(x.end_time),
+        dayHours:(x.day_hours&&typeof x.day_hours==="object")?x.day_hours:{},
+        active:x.active!==false
+      }));
+    }else failedSections++;
+
+    if(appointmentsRes.data){
+      data.appointments=appointmentsRes.data.map(x=>{
+        const linkedClient=x.client_id?get("clients",x.client_id):null;
+        const fallbackClient=!linkedClient?matchByName(data.clients,x.client_name):null;
+        const linkedService=x.service_id?get("services",x.service_id):null;
+        const fallbackService=!linkedService?matchByName(data.services,x.service):null;
+        return {
+          id:x.id,
+          clientId:linkedClient?.id||fallbackClient?.id||"",
+          guestName:x.guest_name||((linkedClient||fallbackClient)?"":x.client_name||""),
+          guestPhone:x.guest_phone||((linkedClient||fallbackClient)?"":x.phone||""),
+          serviceId:linkedService?.id||fallbackService?.id||"",
+          teamIds:Array.isArray(x.team_ids)?x.team_ids.filter(Boolean):[],
+          teamId:"",
+          date:x.appointment_date||"",
+          time:cleanTime(x.appointment_time),
+          notes:x.notes||"",
+          status:x.status||"pending"
+        };
+      });
+    }else failedSections++;
+
+    if(estimatesRes.data){
+      data.estimates=estimatesRes.data.map(x=>{
+        const linkedClient=x.client_id?get("clients",x.client_id):null;
+        const fallbackClient=!linkedClient?matchByName(data.clients,x.client_name):null;
+        const linkedService=x.service_id?get("services",x.service_id):null;
+        const fallbackService=!linkedService?matchByName(data.services,x.service):null;
+        return {
+          id:x.id,
+          clientId:linkedClient?.id||fallbackClient?.id||"",
+          guestName:x.guest_name||((linkedClient||fallbackClient)?"":x.client_name||""),
+          guestPhone:x.guest_phone||((linkedClient||fallbackClient)?"":x.phone||""),
+          serviceId:linkedService?.id||fallbackService?.id||"",
+          amount:x.amount==null?"":String(x.amount),
+          date:x.estimate_date||String(x.created_at||"").slice(0,10),
+          notes:x.notes||x.details||"",
+          status:x.status||"new"
+        };
+      });
+    }else failedSections++;
+
+    if(profileRes.data){
+      currentStaffRole=profileRes.data.role||"staff";
+      data.settings.signedInAs=profileRes.data.display_name||sheylasUser.email||"You";
+    }else{
+      data.settings.signedInAs=sheylasUser.email||"You";
+    }
+
+    if(settingsRes.data){
+      const settingRows=Object.fromEntries(settingsRes.data.map(x=>[x.key,x.value]));
+      if(settingRows.admin_website_url)data.settings.website=settingRows.admin_website_url;
+    }
+
+    save();
+    render();
+    await renderHelpRequests();
+
+    if(failedSections===0){
+      setDbStatus("Ready","connected");
+    }else if(failedSections<5){
+      setDbStatus("Partially loaded","error");
+    }else{
+      // Data-loading failures must never sign the user out.
+      console.warn("Unable to load some account information. Keeping the current session signed in.");
+      setDbStatus("Couldn’t load all data","error");
+    }
+  }catch(error){
+    // A network/database error is not a logout event. Keep the persisted Supabase session.
+    console.error(error);
+    setDbStatus("Connection problem","error");
   }finally{
-    sheylasLoadPromise=null;
+    sheylasLoading=false;
   }
 }
 
@@ -2725,21 +2632,203 @@ confirmLogout.onclick=async()=>{
 };
 
 (async()=>{
-  // Paint cached UI first, then replace it with authoritative Supabase records.
-  try{render()}catch(error){console.error("Initial render failed:",error)}
   await loadSheylasData();
 })();
 </script>
 
 
 <script>
+// This admin is intentionally loaded network-first. Remove older cached dashboard workers.
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./dashboard-sw.js?v=6', {updateViaCache:'none'}).catch(error => {
-      console.warn('App installation support could not be started.', error);
-    });
+  window.addEventListener('load', async () => {
+    try {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(registrations.map(reg => reg.unregister()));
+    } catch (error) {
+      console.warn('Could not clear an older dashboard cache.', error);
+    }
   });
 }
+</script>
+
+
+<script>
+/* ===== Authoritative live page sync =====
+   The dashboard and every sidebar page are rendered from the SAME live records.
+   This is embedded in admin.html so a separate cached script cannot get out of sync. */
+(()=>{
+  const TABLES={
+    clients:'sheylaspro-clients',
+    services:'sheylaspro-services',
+    team:'sheylaspro-team',
+    appointments:'sheylaspro-appointments',
+    estimates:'sheylaspro-estimates'
+  };
+
+  let liveRefreshRunning=false;
+  let liveRefreshQueued=false;
+
+  const $=id=>document.getElementById(id);
+  const html=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const shortTime=v=>v?String(v).slice(0,5):'';
+  const dateText=v=>{
+    if(!v)return '—';
+    const d=new Date(String(v).length===10?`${v}T00:00:00`:v);
+    return Number.isNaN(d.getTime())?String(v):new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric'}).format(d);
+  };
+  const moneyText=v=>v===''||v==null?'—':`$${Number(v).toFixed(2)}`;
+  const countText=n=>`${n} record${n===1?'':'s'}`;
+
+  function showEmpty(id,show){const el=$(id);if(el)el.style.display=show?'block':'none'}
+  function setCount(id,n){const el=$(id);if(el)el.textContent=countText(n)}
+  function byName(rows,name){
+    const q=String(name||'').trim().toLowerCase();
+    return rows.find(x=>String(x.name||'').trim().toLowerCase()===q)||null;
+  }
+
+  async function query(table,orderCol,ascending=true){
+    if(typeof sheylasDb==='undefined')return null;
+    let request=sheylasDb.from(table).select('*');
+    if(orderCol)request=request.order(orderCol,{ascending});
+    const {data:rows,error}=await request;
+    if(error){console.error(`Unable to load ${table}:`,error);return null}
+    return rows||[];
+  }
+
+  function renderClients(rows){
+    if(rows===null)return;
+    setCount('clientCount',rows.length);showEmpty('clientEmpty',rows.length===0);
+    const body=$('clientRows');if(!body)return;
+    body.innerHTML=rows.map(c=>`<tr>
+      <td data-label="Name"><strong>${html(c.name||'—')}</strong></td>
+      <td data-label="Phone">${html(c.phone||'—')}</td>
+      <td data-label="Email">${html(c.email||'—')}</td>
+      <td data-label="Address">${html(c.address||'—')}</td>
+      <td data-label="Notes">${html(c.notes||'—')}</td>
+      <td data-label="Actions"></td>
+    </tr>`).join('');
+  }
+
+  function renderServices(rows){
+    if(rows===null)return;
+    setCount('serviceCount',rows.length);showEmpty('serviceEmpty',rows.length===0);
+    const body=$('serviceRows');if(!body)return;
+    body.innerHTML=rows.map(s=>`<tr>
+      <td data-label="Name"><strong>${html(s.name||'—')}</strong></td>
+      <td data-label="Price">${html(s.price||s.price_label||'—')}</td>
+      <td data-label="Description">${html(s.description||'—')}</td>
+      <td data-label="Actions"></td>
+    </tr>`).join('');
+  }
+
+  function renderTeam(rows){
+    if(rows===null)return;
+    const grid=$('teamGrid');if(!grid)return;
+    grid.innerHTML=rows.length?rows.map(m=>`<article class="team-card">
+      <div class="team-top"><div class="team-avatar">${html((m.name||'?').slice(0,1).toUpperCase())}</div><div><h3>${html(m.name||'—')}</h3><div class="role">${html(m.role||'')}</div></div></div>
+      <div class="team-meta"><div><i class="fa-regular fa-calendar"></i><span>${html(Array.isArray(m.days)?m.days.join(', '):(m.availability||'No schedule set'))}</span></div></div>
+    </article>`).join(''):'<div class="empty">No team members yet</div>';
+  }
+
+  function renderAppointments(rows,clients,services){
+    if(rows===null)return;
+    setCount('appointmentCount',rows.length);showEmpty('appointmentEmpty',rows.length===0);
+    const body=$('appointmentRows');if(!body)return;
+    body.innerHTML=rows.map(a=>{
+      const client=(a.client_id&&clients?.find(x=>x.id===a.client_id))||byName(clients||[],a.client_name);
+      const service=(a.service_id&&services?.find(x=>x.id===a.service_id))||byName(services||[],a.service);
+      const team=Array.isArray(a.team_ids)&&a.team_ids.length?`${a.team_ids.length} assigned`:(a.team_member||'Unassigned');
+      return `<tr>
+        <td data-label="Date">${html(dateText(a.appointment_date))}</td>
+        <td data-label="Time">${html(shortTime(a.appointment_time)||'—')}</td>
+        <td data-label="Client"><strong>${html(client?.name||a.client_name||a.guest_name||'—')}</strong></td>
+        <td data-label="Service">${html(service?.name||a.service||'—')}</td>
+        <td data-label="Team">${html(team)}</td>
+        <td data-label="Phone">${html(client?.phone||a.phone||a.guest_phone||'—')}</td>
+        <td data-label="Actions"></td>
+      </tr>`;
+    }).join('');
+  }
+
+  function renderEstimates(rows,clients,services){
+    if(rows===null)return;
+    setCount('estimateCount',rows.length);showEmpty('estimateEmpty',rows.length===0);
+    const body=$('estimateRows');if(!body)return;
+    body.innerHTML=rows.map(e=>{
+      const client=(e.client_id&&clients?.find(x=>x.id===e.client_id))||byName(clients||[],e.client_name);
+      const service=(e.service_id&&services?.find(x=>x.id===e.service_id))||byName(services||[],e.service);
+      const photoCount=Array.isArray(e.photo_paths)?e.photo_paths.filter(Boolean).length:0;
+      const extras=[];
+      if(e.room_count)extras.push(`${e.room_count} room${Number(e.room_count)===1?'':'s'}`);
+      if(photoCount)extras.push(`${photoCount} photo${photoCount===1?'':'s'}`);
+      const details=[e.notes||e.details||'',extras.join(' · ')].filter(Boolean).join(' — ')||'—';
+      return `<tr>
+        <td data-label="Client"><strong>${html(client?.name||e.client_name||e.guest_name||'—')}</strong><br><small>${html(client?.phone||e.phone||e.guest_phone||'')}</small></td>
+        <td data-label="Service">${html(service?.name||e.service||'—')}</td>
+        <td data-label="Amount">${html(moneyText(e.amount))}</td>
+        <td data-label="Date">${html(dateText(e.estimate_date||String(e.created_at||'').slice(0,10)))}</td>
+        <td data-label="Notes">${html(details)}</td>
+        <td data-label="Actions"></td>
+      </tr>`;
+    }).join('');
+  }
+
+  function updateDashboard(appointments,estimates,clients,services,team){
+    if(appointments!==null&&$('statAppointments'))$('statAppointments').textContent=appointments.length;
+    if(estimates!==null&&$('statEstimates'))$('statEstimates').textContent=estimates.length;
+    if(clients!==null&&$('statClients'))$('statClients').textContent=clients.length;
+    if(services!==null&&$('statServices'))$('statServices').textContent=services.length;
+    if(team!==null&&$('statTeam'))$('statTeam').textContent=team.length;
+  }
+
+  async function refreshAllLivePages(){
+    if(liveRefreshRunning){liveRefreshQueued=true;return}
+    liveRefreshRunning=true;
+    try{
+      if(typeof sheylasDb==='undefined')return;
+      const {data:sessionInfo}=await sheylasDb.auth.getSession();
+      if(!sessionInfo?.session)return;
+
+      const [clients,services,team,appointments,estimates]=await Promise.all([
+        query(TABLES.clients,'name',true),
+        query(TABLES.services,'sort_order',true),
+        query(TABLES.team,'sort_order',true),
+        query(TABLES.appointments,'appointment_date',false),
+        query(TABLES.estimates,'created_at',false)
+      ]);
+
+      updateDashboard(appointments,estimates,clients,services,team);
+      renderClients(clients);
+      renderServices(services);
+      renderTeam(team);
+      renderAppointments(appointments,clients||[],services||[]);
+      renderEstimates(estimates,clients||[],services||[]);
+
+      // Keep the original admin state synchronized too, so its modals/searches keep working.
+      if(typeof data!=='undefined'){
+        if(clients!==null)data.clients=clients.map(x=>({id:x.id,name:x.name||'',phone:x.phone||'',email:x.email||'',address:x.address||'',notes:x.notes||'',active:x.active!==false}));
+        if(services!==null)data.services=services.map(x=>({id:x.id,name:x.name||'',price:x.price||String(x.price_label||'').replace(/^\$/,''),description:x.description||'',imageUrl:x.image_url||'',icon:x.icon||'',isLive:x.is_live!==false,sortOrder:x.sort_order||0}));
+        if(team!==null)data.team=team.map(x=>({id:x.id,name:x.name||'',role:x.role||'',days:Array.isArray(x.days)?x.days:[],start:shortTime(x.start_time),end:shortTime(x.end_time),dayHours:x.day_hours||{},active:x.active!==false}));
+      }
+    }catch(error){
+      console.error('Admin live refresh failed:',error);
+    }finally{
+      liveRefreshRunning=false;
+      if(liveRefreshQueued){liveRefreshQueued=false;setTimeout(refreshAllLivePages,50)}
+    }
+  }
+
+  window.refreshSheylasAdmin=refreshAllLivePages;
+  document.addEventListener('click',event=>{
+    if(event.target.closest('.nav-item[data-page],[data-go]'))setTimeout(refreshAllLivePages,80);
+  });
+  window.addEventListener('focus',refreshAllLivePages);
+  window.addEventListener('pageshow',refreshAllLivePages);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshAllLivePages()});
+  setTimeout(refreshAllLivePages,250);
+  setTimeout(refreshAllLivePages,1200);
+  setInterval(refreshAllLivePages,15000);
+})();
 </script>
 
 </body>
