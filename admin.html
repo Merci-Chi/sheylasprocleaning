@@ -3052,7 +3052,7 @@ if ('serviceWorker' in navigator) {
       `UID:${crypto.randomUUID()}@sheylasprocleaning`,
       `DTSTART:${start}`,`DTEND:${end}`,
       `SUMMARY:${service.replace(/[,\n;]/g,' ')}`,
-      'DESCRIPTION:Cleaning appointment with Sheyla\\'s Pro Cleaning',
+      "DESCRIPTION:Cleaning appointment with Sheyla's Pro Cleaning",
       'END:VEVENT','END:VCALENDAR'
     ].join('\r\n');
     const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
