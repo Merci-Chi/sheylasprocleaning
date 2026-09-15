@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="auth-locked">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
@@ -2270,27 +2270,59 @@ syncCustomSelects();
 </script>
 
 <style>
-#loginDialog{width:min(430px,calc(100vw - 24px));max-width:430px}
-#loginDialog::backdrop{background:rgba(0,26,56,.82);backdrop-filter:blur(7px)}
-#loginDialog .login-note{margin:0 0 16px;color:var(--muted);font-size:12px;line-height:1.55}
-#loginDialog .login-error{min-height:18px;margin:8px 0 0;color:var(--red);font-size:12px;font-weight:800}
+/* ===== Fully locked authentication gate ===== */
+html.auth-locked,html.auth-locked body{background:#001a38!important;overflow:hidden!important}
+html.auth-locked .sidebar,
+html.auth-locked .main,
+html.auth-locked .mobile-overlay{visibility:hidden!important;pointer-events:none!important;user-select:none!important}
+#loginDialog,#passwordResetDialog{width:min(430px,calc(100vw - 24px));max-width:430px}
+#loginDialog::backdrop,#passwordResetDialog::backdrop{background:#001a38!important;backdrop-filter:none!important}
+#loginDialog .modal,#passwordResetDialog .modal{border:1px solid rgba(168,244,251,.18);box-shadow:0 24px 70px rgba(0,0,0,.28)}
+#loginDialog .login-note,#passwordResetDialog .login-note{margin:0 0 16px;color:var(--muted);font-size:12px;line-height:1.55}
+#loginDialog .login-error,#passwordResetDialog .login-error{min-height:18px;margin:8px 0 0;color:var(--red);font-size:12px;font-weight:800}
+.login-remember{display:flex;align-items:center;gap:9px;margin-top:12px;font-size:12px;font-weight:800;color:var(--muted);cursor:pointer}
+.login-remember input{width:17px;height:17px;accent-color:var(--cyan)}
+.login-secondary-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:4px;flex-wrap:wrap}
+.login-link{border:0;background:transparent;color:var(--navy2);padding:8px 0;font-size:12px;font-weight:900;text-decoration:underline;text-underline-offset:3px}
+html[data-theme="dark"] .login-link{color:#8feef6}
+#loginDialog .modal-actions,#passwordResetDialog .modal-actions{margin-top:12px}
+#loginDialog .modal-actions .button,#passwordResetDialog .modal-actions .button{width:100%}
 .db-status{display:inline-flex;align-items:center;gap:7px;margin-left:8px;color:var(--muted);font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.05em}
 .db-status::before{content:"";width:7px;height:7px;border-radius:50%;background:#f59e0b}
 .db-status.connected::before{background:#22c55e}
 .db-status.error::before{background:#ef4444}
 </style>
 
-<dialog id="loginDialog">
+<dialog id="loginDialog" aria-labelledby="loginTitle">
   <div class="modal">
-    <div class="modal-head"><h2>Admin sign in</h2></div>
-    <form class="modal-body" id="loginForm">
-      <p class="login-note">Sign in to access the admin.</p>
+    <div class="modal-head"><h2 id="loginTitle">Admin sign in</h2></div>
+    <form class="modal-body" id="loginForm" autocomplete="on">
+      <p class="login-note">Sign in to access the admin. Nothing in the dashboard is available until your account is authenticated.</p>
       <div class="form-grid">
-        <div class="field full"><label>Email</label><input id="loginEmail" type="email" autocomplete="username" required></div>
-        <div class="field full"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" required></div>
+        <div class="field full"><label for="loginEmail">Email</label><input id="loginEmail" name="email" type="email" autocomplete="username" inputmode="email" required></div>
+        <div class="field full"><label for="loginPassword">Password</label><input id="loginPassword" name="password" type="password" autocomplete="current-password" required></div>
       </div>
-      <p class="login-error" id="loginError"></p>
+      <label class="login-remember"><input id="rememberEmail" type="checkbox"> Save email on this device</label>
+      <div class="login-secondary-actions">
+        <button class="login-link" type="button" id="forgotPasswordButton">Forgot password?</button>
+      </div>
+      <p class="login-error" id="loginError" aria-live="polite"></p>
       <div class="modal-actions"><button class="button primary" type="submit">Sign in</button></div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="passwordResetDialog" aria-labelledby="passwordResetTitle">
+  <div class="modal">
+    <div class="modal-head"><h2 id="passwordResetTitle">Create a new password</h2></div>
+    <form class="modal-body" id="passwordResetForm">
+      <p class="login-note">Enter a new password for your admin account.</p>
+      <div class="form-grid">
+        <div class="field full"><label for="newPassword">New password</label><input id="newPassword" type="password" autocomplete="new-password" minlength="8" required></div>
+        <div class="field full"><label for="confirmNewPassword">Confirm password</label><input id="confirmNewPassword" type="password" autocomplete="new-password" minlength="8" required></div>
+      </div>
+      <p class="login-error" id="passwordResetError" aria-live="polite"></p>
+      <div class="modal-actions"><button class="button primary" type="submit">Save new password</button></div>
     </form>
   </div>
 </dialog>
@@ -2325,6 +2357,27 @@ const loginFormEl=document.getElementById("loginForm");
 const loginEmailEl=document.getElementById("loginEmail");
 const loginPasswordEl=document.getElementById("loginPassword");
 const loginErrorEl=document.getElementById("loginError");
+const rememberEmailEl=document.getElementById("rememberEmail");
+const forgotPasswordButton=document.getElementById("forgotPasswordButton");
+const passwordResetDialogEl=document.getElementById("passwordResetDialog");
+const passwordResetFormEl=document.getElementById("passwordResetForm");
+const passwordResetErrorEl=document.getElementById("passwordResetError");
+const REMEMBERED_EMAIL_KEY="sheylas_admin_saved_email";
+
+function lockAdmin(){document.documentElement.classList.add("auth-locked")}
+function unlockAdmin(){document.documentElement.classList.remove("auth-locked")}
+function openLockedLogin(){
+  lockAdmin();
+  if(loginDialogEl&&!loginDialogEl.open)loginDialogEl.showModal();
+}
+
+try{
+  const savedEmail=localStorage.getItem(REMEMBERED_EMAIL_KEY)||"";
+  if(savedEmail){loginEmailEl.value=savedEmail;rememberEmailEl.checked=true}
+}catch(_error){}
+
+loginDialogEl?.addEventListener("cancel",event=>event.preventDefault());
+passwordResetDialogEl?.addEventListener("cancel",event=>event.preventDefault());
 
 function setDbStatus(label,state=""){
   /* Connection state is intentionally not shown in the admin UI. */
@@ -2340,20 +2393,21 @@ function matchByName(rows,name){
 }
 
 async function requireSession(){
-  // Supabase persists the session in browser storage and refreshes tokens automatically.
-  // Only show the login dialog when there is genuinely no saved session.
   const {data:{session},error}=await sheylasDb.auth.getSession();
   if(error){
-    console.warn("Session check failed; keeping the current signed-in state.",error);
+    console.warn("Session check failed.",error);
+    if(!sheylasUser)openLockedLogin();
     return !!sheylasUser;
   }
   if(session?.user){
     sheylasUser=session.user;
+    unlockAdmin();
+    if(loginDialogEl?.open)loginDialogEl.close();
     return true;
   }
   sheylasUser=null;
   setDbStatus("Sign in required","error");
-  if(loginDialogEl && !loginDialogEl.open)loginDialogEl.showModal();
+  openLockedLogin();
   return false;
 }
 
@@ -3005,31 +3059,89 @@ loginFormEl?.addEventListener("submit",async e=>{
   loginErrorEl.textContent="";
   const submit=e.currentTarget.querySelector('button[type="submit"]');
   submit.disabled=true;
+  const email=loginEmailEl.value.trim();
 
   const {data:authData,error}=await sheylasDb.auth.signInWithPassword({
-    email:loginEmailEl.value.trim(),
+    email,
     password:loginPasswordEl.value
   });
 
   submit.disabled=false;
   if(error){
+    loginPasswordEl.value="";
     loginErrorEl.textContent="Email or password is incorrect.";
+    openLockedLogin();
     return;
   }
+
+  try{
+    if(rememberEmailEl.checked)localStorage.setItem(REMEMBERED_EMAIL_KEY,email);
+    else localStorage.removeItem(REMEMBERED_EMAIL_KEY);
+  }catch(_error){}
 
   sheylasUser=authData.user;
   loginPasswordEl.value="";
   loginDialogEl?.close();
+  unlockAdmin();
   await loadSheylasData();
+});
+
+forgotPasswordButton?.addEventListener("click",async()=>{
+  const email=loginEmailEl.value.trim();
+  if(!email){
+    loginErrorEl.textContent="Enter your email address first.";
+    loginEmailEl.focus();
+    return;
+  }
+  loginErrorEl.textContent="Sending password reset email…";
+  forgotPasswordButton.disabled=true;
+  const redirectTo=new URL("admin.html",location.href).href;
+  const {error}=await sheylasDb.auth.resetPasswordForEmail(email,{redirectTo});
+  forgotPasswordButton.disabled=false;
+  loginErrorEl.textContent=error?"Couldn’t send the reset email. Please try again.":"Password reset email sent. Check your inbox.";
+});
+
+passwordResetFormEl?.addEventListener("submit",async event=>{
+  event.preventDefault();
+  passwordResetErrorEl.textContent="";
+  const password=document.getElementById("newPassword").value;
+  const confirm=document.getElementById("confirmNewPassword").value;
+  const submit=event.currentTarget.querySelector('button[type="submit"]');
+  if(password.length<8){passwordResetErrorEl.textContent="Use at least 8 characters.";return}
+  if(password!==confirm){passwordResetErrorEl.textContent="Passwords do not match.";return}
+  submit.disabled=true;
+  const {error}=await sheylasDb.auth.updateUser({password});
+  submit.disabled=false;
+  if(error){passwordResetErrorEl.textContent="Couldn’t update your password. Please request a new reset link.";return}
+  document.getElementById("newPassword").value="";
+  document.getElementById("confirmNewPassword").value="";
+  passwordResetDialogEl?.close();
+  unlockAdmin();
+  await loadSheylasData();
+});
+
+sheylasDb.auth.onAuthStateChange((event,session)=>{
+  if(event==="PASSWORD_RECOVERY"){
+    sheylasUser=session?.user||null;
+    lockAdmin();
+    if(loginDialogEl?.open)loginDialogEl.close();
+    if(passwordResetDialogEl&&!passwordResetDialogEl.open)passwordResetDialogEl.showModal();
+    return;
+  }
+  if(event==="SIGNED_OUT"){
+    sheylasUser=null;
+    openLockedLogin();
+  }
 });
 
 logoutButton.onclick=()=>logoutDialog.showModal();
 confirmLogout.onclick=async()=>{
+  lockAdmin();
   await sheylasDb.auth.signOut();
   sheylasUser=null;
   logoutDialog.close();
   setDbStatus("Signed out","error");
-  if(loginDialogEl && !loginDialogEl.open)loginDialogEl.showModal();
+  openLockedLogin();
 };
 
 (async()=>{
