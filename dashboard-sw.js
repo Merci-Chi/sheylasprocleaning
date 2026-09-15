@@ -1,29 +1,14 @@
-const CACHE_NAME = 'dashboard-shell-v2';
+const CACHE_NAME = 'dashboard-shell-v3';
 const SHELL = [
   './admin.html',
+  './admin-fix.js',
   './dashboard.webmanifest',
   './Images/logo-icon.png',
   './Images/logo-wordmark.png'
 ];
 
 const LIVE_REFRESH_SCRIPT = `
-<script>
-(() => {
-  const refreshLiveAdmin = () => {
-    if (typeof loadSheylasData === 'function') {
-      Promise.resolve(loadSheylasData()).catch(error => console.warn('Could not refresh admin data.', error));
-    }
-  };
-
-  document.addEventListener('click', event => {
-    const target = event.target.closest('.nav-item[data-page], [data-go]');
-    if (!target) return;
-    setTimeout(refreshLiveAdmin, 0);
-  });
-
-  window.addEventListener('pageshow', refreshLiveAdmin);
-})();
-</script>`;
+<script src="./admin-fix.js?v=3"></script>`;
 
 function withLiveAdminRefresh(response) {
   if (!response || !response.ok) return Promise.resolve(response);
@@ -31,8 +16,7 @@ function withLiveAdminRefresh(response) {
   if (!type.includes('text/html')) return Promise.resolve(response);
 
   return response.text().then(html => {
-    if (!html.includes('loadSheylasData')) return response;
-    if (!html.includes('refreshLiveAdmin')) {
+    if (!html.includes('admin-fix.js')) {
       html = html.replace('</body>', `${LIVE_REFRESH_SCRIPT}\n</body>`);
     }
     const headers = new Headers(response.headers);
