@@ -4,8 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#001a38">
-<title>Admin Dashboard</title>
+<meta name="application-name" content="Dashboard">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dashboard">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Dashboard</title>
+<link rel="manifest" href="dashboard.webmanifest">
 <link rel="icon" href="Images/logo-icon.png">
+<link rel="apple-touch-icon" href="Images/logo-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
@@ -2627,6 +2634,17 @@ confirmLogout.onclick=async()=>{
 (async()=>{
   await loadSheylasData();
 })();
+</script>
+
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./dashboard-sw.js').catch(error => {
+      console.warn('App installation support could not be started.', error);
+    });
+  });
+}
 </script>
 
 </body>
