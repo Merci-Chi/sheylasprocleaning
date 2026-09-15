@@ -1797,15 +1797,21 @@ function matchByName(rows,name){
 }
 
 async function requireSession(){
+  // Supabase persists the session in browser storage and refreshes tokens automatically.
+  // Only show the login dialog when there is genuinely no saved session.
   const {data:{session},error}=await sheylasDb.auth.getSession();
-  if(error)throw error;
-  sheylasUser=session?.user||null;
-  if(!sheylasUser){
-    setDbStatus("Sign in required","error");
-    if(loginDialogEl && !loginDialogEl.open)loginDialogEl.showModal();
-    return false;
+  if(error){
+    console.warn("Session check failed; keeping the current signed-in state.",error);
+    return !!sheylasUser;
   }
-  return true;
+  if(session?.user){
+    sheylasUser=session.user;
+    return true;
+  }
+  sheylasUser=null;
+  setDbStatus("Sign in required","error");
+  if(loginDialogEl && !loginDialogEl.open)loginDialogEl.showModal();
+  return false;
 }
 
 async function loadSheylasData(){
@@ -1950,16 +1956,14 @@ async function loadSheylasData(){
     }else if(failedSections<5){
       setDbStatus("Partially loaded","error");
     }else{
-      console.warn("Unable to load account information.");
-      await sheylasDb.auth.signOut();
-      sheylasUser=null;
-      if(loginDialogEl && !loginDialogEl.open)loginDialogEl.showModal();
+      // Data-loading failures must never sign the user out.
+      console.warn("Unable to load some account information. Keeping the current session signed in.");
+      setDbStatus("Couldn’t load all data","error");
     }
   }catch(error){
+    // A network/database error is not a logout event. Keep the persisted Supabase session.
     console.error(error);
-    await sheylasDb.auth.signOut().catch(()=>{});
-    sheylasUser=null;
-    if(loginDialogEl && !loginDialogEl.open)loginDialogEl.showModal();
+    setDbStatus("Connection problem","error");
   }finally{
     sheylasLoading=false;
   }
