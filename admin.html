@@ -1060,6 +1060,65 @@ html[data-theme="dark"] #page-estimates .appointment-action:hover{
 }
 
 </style>
+
+<style>
+/* ===== Refined dashboard cards: calmer, less glow ===== */
+#page-dashboard .stats{gap:16px;margin-bottom:20px}
+#page-dashboard .stat{
+  min-height:104px;padding:18px 20px;position:relative;overflow:hidden;
+  border:1px solid rgba(101,163,205,.34);border-radius:22px;
+  background:linear-gradient(180deg,#0a2740 0%,#082238 100%);
+  box-shadow:0 10px 24px rgba(0,10,22,.16);
+}
+#page-dashboard .stat::after{
+  width:84px;height:84px;right:-22px;top:-26px;opacity:.9;
+  box-shadow:none;filter:none;
+}
+#page-dashboard .stat small{color:#b9cad8;font-size:10px;letter-spacing:.12em}
+#page-dashboard .stat strong{color:#fff;font-size:32px;line-height:1;margin-top:12px}
+
+#page-dashboard .workspace-grid{gap:18px}
+#page-dashboard .workspace-card{
+  min-height:220px;padding:26px;display:flex;flex-direction:column;align-items:flex-start;
+  border:1px solid rgba(87,151,194,.38);border-radius:26px;overflow:hidden;
+  background:linear-gradient(180deg,#0b2943 0%,#082238 100%);
+  box-shadow:0 12px 26px rgba(0,10,22,.18);
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+#page-dashboard .workspace-card:hover{
+  transform:translateY(-2px);border-color:rgba(78,194,224,.58);
+  box-shadow:0 15px 30px rgba(0,10,22,.22);
+}
+#page-dashboard .workspace-card::after{
+  right:-28px;bottom:-36px;width:116px;height:86px;opacity:.28;filter:none;box-shadow:none;
+}
+#page-dashboard .workspace-card:nth-child(2)::after,
+#page-dashboard .workspace-card:nth-child(5)::after{opacity:.14}
+#page-dashboard .workspace-icon{
+  width:54px;height:54px;border-radius:17px;
+  background:linear-gradient(180deg,#dff5ff 0%,#c7e8f5 100%);
+  color:#07558c;font-size:20px;box-shadow:0 5px 12px rgba(0,12,28,.15);
+}
+#page-dashboard .workspace-card h2{margin:22px 0 7px;color:#fff;font-size:20px;line-height:1.15}
+#page-dashboard .workspace-card p{margin:0;color:#b8c9d5;font-size:13px;line-height:1.5}
+#page-dashboard .workspace-open{
+  margin-top:auto;padding-top:22px;color:#27cde3;font-size:12px;font-weight:900;
+}
+
+html[data-theme="dark"] #page-dashboard .stat,
+html[data-theme="dark"] #page-dashboard .workspace-card{
+  background:linear-gradient(180deg,#0a2740 0%,#071f34 100%);
+  border-color:rgba(86,145,184,.36);
+}
+html[data-theme="dark"] #page-dashboard .workspace-icon{
+  background:linear-gradient(180deg,#dff5ff 0%,#c7e8f5 100%);color:#07558c;
+}
+@media(max-width:760px){
+  #page-dashboard .workspace-card{min-height:190px;padding:22px}
+  #page-dashboard .workspace-card h2{font-size:19px}
+}
+</style>
+
 </head>
 <body>
 <aside class="sidebar" id="sidebar">
