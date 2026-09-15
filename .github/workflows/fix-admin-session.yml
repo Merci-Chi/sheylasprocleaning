@@ -1,0 +1,50 @@
+name: Fix admin session persistence
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-admin-session.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch-admin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Keep admin signed in unless logout is clicked
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('admin.html')
+          text = path.read_text()
+
+          old1 = '''    }else{\n      console.warn("Unable to load account information.");\n      await sheylasDb.auth.signOut();\n      sheylasUser=null;\n      if(loginDialogEl && !loginDialogEl.open)loginDialogEl.showModal();\n    }\n  }catch(error){\n    console.error(error);\n    await sheylasDb.auth.signOut().catch(()=>{});\n    sheylasUser=null;\n    if(loginDialogEl && !loginDialogEl.open)loginDialogEl.showModal();\n  }finally{'''
+
+          new1 = '''    }else{\n      // Data-loading failures must never sign the user out.\n      console.warn("Unable to load some account information. Keeping the current session signed in.");\n      setDbStatus("Couldn’t load all data","error");\n    }\n  }catch(error){\n    // A network/database error is not a logout event. Keep the persisted Supabase session.\n    console.error(error);\n    setDbStatus("Connection problem","error");\n  }finally{'''
+
+          old2 = '''async function requireSession(){\n  const {data:{session},error}=await sheylasDb.auth.getSession();\n  if(error)throw error;\n  sheylasUser=session?.user||null;\n  if(!sheylasUser){\n    setDbStatus("Sign in required","error");\n    if(loginDialogEl && !loginDialogEl.open)loginDialogEl.showModal();\n    return false;\n  }\n  return true;\n}'''
+
+          new2 = '''async function requireSession(){\n  // Supabase persists the session in browser storage and refreshes tokens automatically.\n  // Only show the login dialog when there is genuinely no saved session.\n  const {data:{session},error}=await sheylasDb.auth.getSession();\n  if(error){\n    console.warn("Session check failed; keeping the current signed-in state.",error);\n    return !!sheylasUser;\n  }\n  if(session?.user){\n    sheylasUser=session.user;\n    return true;\n  }\n  sheylasUser=null;\n  setDbStatus("Sign in required","error");\n  if(loginDialogEl && !loginDialogEl.open)loginDialogEl.showModal();\n  return false;\n}'''
+
+          if old1 not in text:
+              raise SystemExit('Expected loadSheylasData sign-out block not found')
+          if old2 not in text:
+              raise SystemExit('Expected requireSession block not found')
+
+          text = text.replace(old1, new1, 1).replace(old2, new2, 1)
+          path.write_text(text)
+          PY
+      - name: Commit fix
+        run: |
+          if git diff --quiet -- admin.html; then
+            echo 'No changes needed.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add admin.html
+          git commit -m 'Keep admin session signed in'
+          git push
