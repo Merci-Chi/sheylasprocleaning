@@ -1,0 +1,32 @@
+name: Replace admin file
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'admin-payload.gz.b64'
+      - '.github/workflows/replace-admin.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  replace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore uploaded admin file
+        run: |
+          base64 --decode admin-payload.gz.b64 | gzip -dc > admin.html.new
+          echo "e8307798900b1aaf282ebd6efcd2503b804f8c6aa509cd5bcb4c57a92aebbccb  admin.html.new" | sha256sum -c -
+          mv admin.html.new admin.html
+          rm -f admin-payload.gz.b64 .github/workflows/replace-admin.yml
+      - name: Commit replacement
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Replace admin.html with uploaded file"
+          git push
