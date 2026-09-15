@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Add Appointment to Calendar</title>
+<style>
+body{font-family:Inter,system-ui,sans-serif;margin:0;background:#fffdf7;color:#031d3e;min-height:100vh;display:grid;place-items:center;padding:20px}
+.card{width:min(520px,100%);background:#fff;border:1px solid #d6e6eb;border-radius:24px;padding:24px;box-shadow:0 18px 50px rgba(0,26,56,.12)}
+h1{margin:0 0 8px}.muted{color:#607489;line-height:1.55}.summary{padding:16px;border-radius:16px;background:#e8fcfd;margin:18px 0}.row{margin:7px 0}
+button{width:100%;min-height:48px;border:0;border-radius:14px;background:#20ddec;color:#001a38;font-weight:900;font-size:15px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>Add appointment</h1>
+<p class="muted">Save your Sheyla's Pro Cleaning appointment to your device calendar.</p>
+<div class="summary">
+  <div class="row"><strong id="service"></strong></div>
+  <div class="row" id="when"></div>
+  <div class="row" id="name"></div>
+</div>
+<button id="add">Add to calendar</button>
+</div>
+<script>
+const q=new URLSearchParams(location.search);
+const service=q.get('service')||"Cleaning appointment";
+const date=q.get('date')||"";
+const time=q.get('time')||"09:00";
+const name=q.get('name')||"Client";
+document.getElementById('service').textContent=service;
+document.getElementById('name').textContent=name;
+const start=new Date(`${date}T${time}:00`);
+document.getElementById('when').textContent=Number.isNaN(start.getTime())?'Appointment time':start.toLocaleString([], {dateStyle:'full',timeStyle:'short'});
+const pad=n=>String(n).padStart(2,'0');
+const stamp=d=>`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+document.getElementById('add').onclick=()=>{
+  if(Number.isNaN(start.getTime()))return;
+  const end=new Date(start.getTime()+120*60000);
+  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Sheylas Pro Cleaning//Appointment//EN','BEGIN:VEVENT',
+    `UID:${Date.now()}@sheylasprocleaning`,`DTSTART:${stamp(start)}`,`DTEND:${stamp(end)}`,
+    `SUMMARY:${service.replace(/[,\n;]/g,' ')}`,"DESCRIPTION:Appointment with Sheyla's Pro Cleaning",
+    'END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='sheylas-pro-cleaning-appointment.ics';document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+</script>
+</body>
+</html>
