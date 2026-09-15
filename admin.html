@@ -741,6 +741,18 @@ html[data-theme="dark"] .service-image-option{background:#09243b;color:#f4fcff}
 html[data-theme="dark"] .service-icon-option{background:#09243b;color:#f4fcff}
 @media(max-width:700px){.service-icon-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.service-icon-option{font-size:8px}}
 
+
+/* ===== Required service fields + description limits ===== */
+.service-description-label{display:flex!important;align-items:center;justify-content:space-between;gap:12px}
+.service-description-rule{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:9px;font-weight:900;white-space:nowrap}
+.limit-help{width:20px;height:20px;padding:0;border:1px solid var(--line);border-radius:50%;display:inline-grid;place-items:center;background:var(--cyanp);color:var(--navy2);font-size:11px;font-weight:900;line-height:1}
+.limit-help:hover{background:var(--cyan);color:var(--navy)}
+.service-description-meta{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:9px;line-height:1.4}
+.service-description-meta strong{color:var(--navy2);white-space:nowrap}
+#serviceDescription:invalid:not(:placeholder-shown){border-color:#d78a90}
+html[data-theme="dark"] .limit-help{background:#0b314e;color:#dffcff;border-color:#27516a}
+@media(max-width:560px){.service-description-label,.service-description-meta{align-items:flex-start;flex-direction:column;gap:5px}.service-description-rule{white-space:normal}}
+
 </style>
 </head>
 <body>
@@ -936,7 +948,7 @@ html[data-theme="dark"] .service-icon-option{background:#09243b;color:#f4fcff}
 
 <dialog id="clientDialog"><div class="modal"><div class="modal-head"><h2 id="clientTitle">Add client</h2><button class="modal-close" data-close="clientDialog"><i class="fa-solid fa-xmark"></i></button></div><form class="modal-body" id="clientForm"><input type="hidden" id="clientId"><div class="form-grid"><div class="field"><label>Name</label><input id="clientName" required></div><div class="field"><label>Phone</label><input id="clientPhone" type="tel"></div><div class="field"><label>Email</label><input id="clientEmail" type="email"></div><div class="field"><label>Address</label><input id="clientAddress"></div><div class="field full"><label>Notes</label><textarea id="clientNotes"></textarea></div></div><div class="modal-actions"><button class="button ghost" type="button" data-close="clientDialog">Cancel</button><button class="button primary">Save client</button></div></form></div></dialog>
 
-<dialog id="serviceDialog"><div class="modal"><div class="modal-head"><h2 id="serviceTitle">Add service</h2><button class="modal-close" data-close="serviceDialog"><i class="fa-solid fa-xmark"></i></button></div><form class="modal-body" id="serviceForm"><input type="hidden" id="serviceId"><input type="hidden" id="serviceImageUrl"><input type="hidden" id="serviceIcon"><div class="form-grid"><div class="field full"><label>Service name</label><input id="serviceName" required></div><div class="field"><label>Price label</label><input id="servicePrice" placeholder="Free estimate or $120"></div><div class="field full"><label>Description</label><textarea id="serviceDescription"></textarea></div><div class="field full"><label>Stock image</label><p class="service-image-help">Choose the photo that will appear on this service card on the main website.</p><div class="service-image-grid" id="serviceImageGrid" role="radiogroup" aria-label="Choose a stock image"></div></div><div class="field full"><label>Service icon</label><p class="service-image-help">Choose the icon shown in the circle on the service card.</p><div class="service-icon-grid" id="serviceIconGrid" role="radiogroup" aria-label="Choose a service icon"></div></div></div><div class="modal-actions"><button class="button ghost" type="button" data-close="serviceDialog">Cancel</button><button class="button primary">Save service</button></div></form></div></dialog>
+<dialog id="serviceDialog"><div class="modal"><div class="modal-head"><h2 id="serviceTitle">Add service</h2><button class="modal-close" data-close="serviceDialog"><i class="fa-solid fa-xmark"></i></button></div><form class="modal-body" id="serviceForm"><input type="hidden" id="serviceId"><input type="hidden" id="serviceImageUrl"><input type="hidden" id="serviceIcon"><div class="form-grid"><div class="field full"><label>Service name</label><input id="serviceName" required></div><div class="field"><label>Price label</label><input id="servicePrice" placeholder="Free estimate or $120" required></div><div class="field full"><label class="service-description-label"><span>Description</span><span class="service-description-rule">75 min · 160 max <button type="button" class="limit-help" id="serviceDescriptionHelp" aria-label="Why is there a description limit?">?</button></span></label><textarea id="serviceDescription" minlength="75" maxlength="160" required></textarea><div class="service-description-meta"><span>Keep the description concise enough to fit the website card.</span><strong><span id="serviceDescriptionCount">0</span>/160</strong></div></div><div class="field full"><label>Stock image</label><p class="service-image-help">Choose the photo that will appear on this service card on the main website.</p><div class="service-image-grid" id="serviceImageGrid" role="radiogroup" aria-label="Choose a stock image"></div></div><div class="field full"><label>Service icon</label><p class="service-image-help">Choose the icon shown in the circle on the service card.</p><div class="service-icon-grid" id="serviceIconGrid" role="radiogroup" aria-label="Choose a service icon"></div></div></div><div class="modal-actions"><button class="button ghost" type="button" data-close="serviceDialog">Cancel</button><button class="button primary">Save service</button></div></form></div></dialog>
 
 <dialog id="teamDialog"><div class="modal"><div class="modal-head"><h2 id="teamTitle">Add team member</h2><button class="modal-close" data-close="teamDialog" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div><form class="modal-body" id="teamForm"><input type="hidden" id="teamId"><div class="form-grid"><div class="field"><label>Name</label><input id="teamName" required></div><div class="field"><label>Role</label><input id="teamRole" required></div><div class="field full"><label>Working days</label><div class="day-grid"><label class="day-check"><input type="checkbox" name="workday" value="Sun">Sun</label><label class="day-check"><input type="checkbox" name="workday" value="Mon">Mon</label><label class="day-check"><input type="checkbox" name="workday" value="Tue">Tue</label><label class="day-check"><input type="checkbox" name="workday" value="Wed">Wed</label><label class="day-check"><input type="checkbox" name="workday" value="Thu">Thu</label><label class="day-check"><input type="checkbox" name="workday" value="Fri">Fri</label><label class="day-check"><input type="checkbox" name="workday" value="Sat">Sat</label></div></div><div class="field"><label>Starts</label><div class="compact-time" data-time-prefix="teamStart">
 <select id="teamStartHour" aria-label="Hour">
@@ -1327,12 +1339,23 @@ function openService(r=null){
   serviceName.value=r?.name||"";
   servicePrice.value=r?.price||"";
   serviceDescription.value=r?.description||"";
-  serviceImageUrl.value=r?.imageUrl||SERVICE_STOCK_IMAGES[0].url;
-  serviceIcon.value=r?.icon||"fa-solid fa-house-chimney";
+  serviceImageUrl.value=r?.imageUrl||"";
+  serviceIcon.value=r?.icon||"";
   renderServiceImagePicker(serviceImageUrl.value);
   renderServiceIconPicker(serviceIcon.value);
+  updateServiceDescriptionCount();
   serviceDialog.showModal();
 }
+function updateServiceDescriptionCount(){
+  if(serviceDescriptionCount)serviceDescriptionCount.textContent=String(serviceDescription.value.length);
+}
+serviceDescription.addEventListener("input",updateServiceDescriptionCount);
+serviceDescriptionHelp.onclick=()=>showMessage(
+  "Why 75–160 characters?",
+  "This range keeps each service card visually balanced on the website. Too little text can make one card look empty, while too much text can make the card taller or crowded compared with the others.",
+  "info"
+);
+
 addService.onclick=()=>openService();
 serviceForm.onsubmit=e=>{e.preventDefault();const id=serviceId.value||uid(),r={id,name:serviceName.value.trim(),price:servicePrice.value.trim().replace(/^\$/,""),description:serviceDescription.value.trim()};data.services=serviceId.value?data.services.map(x=>x.id===id?r:x):[...data.services,r];save();serviceDialog.close();render()};
 
@@ -2138,6 +2161,17 @@ clientForm.onsubmit=async e=>{
 
 serviceForm.onsubmit=async e=>{
   e.preventDefault();
+
+  const serviceNameValue=serviceName.value.trim();
+  const servicePriceValue=servicePrice.value.trim();
+  const serviceDescriptionValue=serviceDescription.value.trim();
+
+  if(!serviceNameValue)return showMessage("Service name required","Enter a service name before saving.","error");
+  if(!servicePriceValue)return showMessage("Price label required","Enter a price label such as Free estimate or $120.","error");
+  if(serviceDescriptionValue.length<75)return showMessage("Description too short","The description must be at least 75 characters so the service card has enough visual content.","error");
+  if(serviceDescriptionValue.length>160)return showMessage("Description too long","The description can be no more than 160 characters so it fits cleanly inside the service card.","error");
+  if(!serviceImageUrl.value)return showMessage("Stock image required","Choose a stock image before saving the service.","error");
+  if(!serviceIcon.value)return showMessage("Service icon required","Choose an icon before saving the service.","error");
   try{
     if(!await requireSession())return;
     const id=serviceId.value;
@@ -2146,9 +2180,9 @@ serviceForm.onsubmit=async e=>{
       name:serviceName.value.trim(),
       price:rawPrice,
       price_label:rawPrice?`$${rawPrice}`:"Custom estimate",
-      description:serviceDescription.value.trim()||null,
+      description:serviceDescriptionValue,
       image_url:serviceImageUrl.value||null,
-      icon:serviceIcon.value||"fa-solid fa-house-chimney",
+      icon:serviceIcon.value,
       is_live:true
     };
     if(!id)payload.sort_order=(data.services.length+1)*10;
