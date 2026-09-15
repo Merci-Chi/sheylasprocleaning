@@ -1,13 +1,13 @@
-const CACHE_NAME = 'dashboard-shell-v4';
+const CACHE_NAME = 'dashboard-shell-v5';
 const SHELL = [
   './admin.html',
-  './admin-fix.js?v=4',
+  './admin-fix.js?v=5',
   './dashboard.webmanifest',
   './Images/logo-icon.png',
   './Images/logo-wordmark.png'
 ];
 
-const LIVE_REFRESH_SCRIPT = `\n<script src="./admin-fix.js?v=4"></script>`;
+const LIVE_REFRESH_SCRIPT = `\n<script src="./admin-fix.js?v=5"></script>`;
 
 function withLiveAdminRefresh(response) {
   if (!response || !response.ok) return Promise.resolve(response);
