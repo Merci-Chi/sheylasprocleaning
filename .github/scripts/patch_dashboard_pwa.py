@@ -39,3 +39,5 @@ if marker not in text:
 text = text.replace(marker, register + '\n' + marker, 1)
 
 p.write_text(text)
+
+# trigger dashboard PWA patch workflow
