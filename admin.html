@@ -1072,60 +1072,235 @@ html[data-theme="dark"] #page-estimates .appointment-action:hover{
 </style>
 
 <style>
-/* ===== Refined dashboard cards: calmer, less glow ===== */
-#page-dashboard .stats{gap:16px;margin-bottom:20px}
-#page-dashboard .stat{
-  min-height:104px;padding:18px 20px;position:relative;overflow:hidden;
-  border:1px solid rgba(101,163,205,.34);border-radius:22px;
-  background:linear-gradient(180deg,#0a2740 0%,#082238 100%);
-  box-shadow:0 10px 24px rgba(0,10,22,.16);
-}
-#page-dashboard .stat::after{
-  width:84px;height:84px;right:-22px;top:-26px;opacity:.9;
-  box-shadow:none;filter:none;
-}
-#page-dashboard .stat small{color:#b9cad8;font-size:10px;letter-spacing:.12em}
-#page-dashboard .stat strong{color:#fff;font-size:32px;line-height:1;margin-top:12px}
+/* ===== Dashboard cards ===== */
 
-#page-dashboard .workspace-grid{gap:18px}
-#page-dashboard .workspace-card{
-  min-height:220px;padding:26px;display:flex;flex-direction:column;align-items:flex-start;
-  border:1px solid rgba(87,151,194,.38);border-radius:26px;overflow:hidden;
-  background:linear-gradient(180deg,#0b2943 0%,#082238 100%);
-  box-shadow:0 12px 26px rgba(0,10,22,.18);
-  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+#page-dashboard .stats{
+  gap:16px;
+  margin-bottom:20px;
 }
-#page-dashboard .workspace-card:hover{
-  transform:translateY(-2px);border-color:rgba(78,194,224,.58);
-  box-shadow:0 15px 30px rgba(0,10,22,.22);
+
+
+/* =====================================
+   LIGHT MODE — STAT CARDS
+===================================== */
+
+html:not([data-theme="dark"]) #page-dashboard .stat{
+  min-height:104px;
+  padding:18px 20px;
+  position:relative;
+  overflow:hidden;
+
+  background:linear-gradient(
+    145deg,
+    #ffffff 0%,
+    #f5fcfd 100%
+  );
+
+  border:1px solid #d6e6eb;
+  border-radius:22px;
+
+  box-shadow:
+    0 8px 24px rgba(0,26,56,.08),
+    0 2px 6px rgba(0,26,56,.04);
 }
-#page-dashboard .workspace-card::after{
-  right:-28px;bottom:-36px;width:116px;height:86px;opacity:.28;filter:none;box-shadow:none;
+
+html:not([data-theme="dark"]) #page-dashboard .stat small{
+  color:#607489;
+  font-size:10px;
+  letter-spacing:.12em;
 }
-#page-dashboard .workspace-card:nth-child(2)::after,
-#page-dashboard .workspace-card:nth-child(5)::after{opacity:.14}
-#page-dashboard .workspace-icon{
-  width:54px;height:54px;border-radius:17px;
-  background:linear-gradient(180deg,#dff5ff 0%,#c7e8f5 100%);
-  color:#07558c;font-size:20px;box-shadow:0 5px 12px rgba(0,12,28,.15);
+
+html:not([data-theme="dark"]) #page-dashboard .stat strong{
+  color:#031d3e;
+  font-size:32px;
+  line-height:1;
+  margin-top:12px;
 }
-#page-dashboard .workspace-card h2{margin:22px 0 7px;color:#fff;font-size:20px;line-height:1.15}
-#page-dashboard .workspace-card p{margin:0;color:#b8c9d5;font-size:13px;line-height:1.5}
-#page-dashboard .workspace-open{
-  margin-top:auto;padding-top:22px;color:#27cde3;font-size:12px;font-weight:900;
+
+
+/* decorative circle */
+
+html:not([data-theme="dark"]) #page-dashboard .stat::after{
+  width:84px;
+  height:84px;
+  right:-22px;
+  top:-26px;
+
+  opacity:.8;
+  box-shadow:none;
+  filter:none;
 }
+
+
+/* =====================================
+   LIGHT MODE — LARGE DASHBOARD CARDS
+===================================== */
+
+#page-dashboard .workspace-grid{
+  gap:18px;
+}
+
+html:not([data-theme="dark"]) #page-dashboard .workspace-card{
+  min-height:220px;
+  padding:26px;
+
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+
+  position:relative;
+  overflow:hidden;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 0%,
+      #f8fdfe 100%
+    );
+
+  border:1px solid #d6e6eb;
+  border-radius:26px;
+
+  box-shadow:
+    0 10px 28px rgba(0,26,56,.08),
+    0 2px 7px rgba(0,26,56,.04);
+
+  transition:
+    transform .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease;
+}
+
+
+html:not([data-theme="dark"]) #page-dashboard .workspace-card:hover{
+  transform:translateY(-3px);
+
+  border-color:rgba(32,221,236,.55);
+
+  box-shadow:
+    0 16px 34px rgba(0,26,56,.11),
+    0 4px 10px rgba(0,26,56,.05);
+}
+
+
+/* decorative bottom blob */
+
+html:not([data-theme="dark"]) #page-dashboard .workspace-card::after{
+  right:-28px;
+  bottom:-36px;
+  width:116px;
+  height:86px;
+
+  opacity:.22;
+  filter:none;
+  box-shadow:none;
+}
+
+
+/* icon */
+
+html:not([data-theme="dark"]) #page-dashboard .workspace-icon{
+  width:54px;
+  height:54px;
+
+  border-radius:17px;
+
+  background:linear-gradient(
+    145deg,
+    #e5f9fc,
+    #ffffff
+  );
+
+  color:#07558c;
+
+  border:1px solid #d4edf2;
+
+  box-shadow:
+    0 6px 16px rgba(0,26,56,.07);
+}
+
+
+/* text */
+
+html:not([data-theme="dark"]) #page-dashboard .workspace-card h2{
+  color:#031d3e;
+  font-size:21px;
+  font-weight:900;
+}
+
+html:not([data-theme="dark"]) #page-dashboard .workspace-card p{
+  color:#607489;
+  font-size:13px;
+}
+
+html:not([data-theme="dark"]) #page-dashboard .workspace-open{
+  color:#07869c;
+}
+
+
+/* =====================================
+   DARK MODE
+   keep the dark design
+===================================== */
 
 html[data-theme="dark"] #page-dashboard .stat,
 html[data-theme="dark"] #page-dashboard .workspace-card{
-  background:linear-gradient(180deg,#0a2740 0%,#071f34 100%);
+  background:linear-gradient(
+    180deg,
+    #0a2740 0%,
+    #071f34 100%
+  );
+
   border-color:rgba(86,145,184,.36);
 }
-html[data-theme="dark"] #page-dashboard .workspace-icon{
-  background:linear-gradient(180deg,#dff5ff 0%,#c7e8f5 100%);color:#07558c;
+
+
+html[data-theme="dark"] #page-dashboard .stat small{
+  color:#b9cad8;
 }
+
+html[data-theme="dark"] #page-dashboard .stat strong{
+  color:#fff;
+}
+
+
+html[data-theme="dark"] #page-dashboard .workspace-card h2{
+  color:#fff;
+}
+
+html[data-theme="dark"] #page-dashboard .workspace-card p{
+  color:#b9cad8;
+}
+
+html[data-theme="dark"] #page-dashboard .workspace-open{
+  color:#20ddec;
+}
+
+
+html[data-theme="dark"] #page-dashboard .workspace-icon{
+  background:linear-gradient(
+    180deg,
+    #dff5ff 0%,
+    #c7e8f5 100%
+  );
+
+  color:#07558c;
+}
+
+
+/* Mobile */
+
 @media(max-width:760px){
-  #page-dashboard .workspace-card{min-height:190px;padding:22px}
-  #page-dashboard .workspace-card h2{font-size:19px}
+
+  #page-dashboard .workspace-card{
+    min-height:190px;
+    padding:22px;
+  }
+
+  #page-dashboard .workspace-card h2{
+    font-size:19px;
+  }
+
 }
 </style>
 
