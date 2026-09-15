@@ -760,6 +760,62 @@ html[data-theme="dark"] .service-icon-option{background:#09243b;color:#f4fcff}
 html[data-theme="dark"] .limit-help{background:#0b314e;color:#dffcff;border-color:#27516a}
 @media(max-width:560px){.service-description-label,.service-description-meta{align-items:flex-start;flex-direction:column;gap:5px}.service-description-rule{white-space:normal}}
 
+
+/* ===== Estimate cards / photo carousel / quick actions ===== */
+#page-estimates .table-wrap{overflow:visible}
+#page-estimates table{min-width:0;display:block;background:transparent}
+#page-estimates thead{display:none}
+#page-estimates tbody{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding:18px}
+#page-estimates tbody tr.estimate-card-row{display:block;border:1px solid var(--line);border-radius:24px;overflow:hidden;background:#fff;box-shadow:var(--softshadow)}
+#page-estimates tbody tr.estimate-card-row:hover{background:#fff}
+#page-estimates tbody tr.estimate-card-row>td{display:block;padding:0;border:0}
+.estimate-card{display:grid;grid-template-columns:minmax(0,180px) 1fr;min-height:220px}
+.estimate-media{position:relative;background:#eaf5f7;min-height:220px;overflow:hidden}
+.estimate-photo-track{height:100%;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none}
+.estimate-photo-track::-webkit-scrollbar{display:none}
+.estimate-photo-slide{min-width:100%;height:100%;scroll-snap-align:start;position:relative;display:grid;place-items:center;background:#eef7f9}
+.estimate-photo-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.estimate-photo-slide.photo-loading::after{content:"Loading photo…";font-size:11px;color:var(--muted)}
+.estimate-no-photo{height:100%;min-height:220px;display:grid;place-items:center;text-align:center;color:var(--muted);padding:18px}
+.estimate-no-photo i{font-size:34px;color:var(--navy2);margin-bottom:8px}
+.estimate-carousel-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:36px;height:36px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(0,26,56,.82);color:#fff;box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.estimate-carousel-arrow.prev{left:8px}.estimate-carousel-arrow.next{right:8px}
+.estimate-photo-count{position:absolute;right:9px;bottom:9px;z-index:3;padding:5px 8px;border-radius:999px;background:rgba(0,26,56,.82);color:#fff;font-size:10px;font-weight:900}
+.estimate-body{padding:18px;display:flex;flex-direction:column;min-width:0}
+.estimate-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.estimate-card h3{margin:0;font-size:18px;line-height:1.2}.estimate-card .estimate-phone{display:block;margin-top:4px;color:var(--muted);font-size:11px}
+.estimate-service-pill{display:inline-flex;align-items:center;gap:6px;width:max-content;max-width:100%;padding:6px 9px;margin:12px 0 8px;border-radius:999px;background:var(--cyanp);color:var(--navy2);font-size:10px;font-weight:900}
+.estimate-meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}
+.estimate-meta span{padding:5px 8px;border-radius:999px;background:#f4f8fa;color:var(--muted);font-size:10px;font-weight:800}
+.estimate-note{margin:0;color:var(--muted);font-size:12px;line-height:1.55;white-space:pre-wrap}
+.estimate-actions{margin-top:auto;padding-top:16px;display:flex;flex-wrap:wrap;gap:7px}
+.estimate-action{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--navy2);display:grid;place-items:center}
+.estimate-action:hover{background:var(--cyanp)}
+.estimate-action.danger{color:var(--red);background:#fff7f7}
+.estimate-action[disabled]{opacity:.38;cursor:not-allowed}
+.estimate-card-row:focus-within{outline:3px solid rgba(32,221,236,.22);outline-offset:3px}
+#estimateMessageDialog .message-option-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px}
+#estimateMessageDialog .message-option{min-height:78px;padding:10px;border:1px solid var(--line);border-radius:16px;background:#fff;color:var(--ink);display:grid;gap:5px;place-items:center;text-align:center;font-size:11px;font-weight:900}
+#estimateMessageDialog .message-option i{font-size:18px;color:var(--navy2)}
+#estimateMessageDialog .message-option.active{background:var(--cyanp);border-color:var(--cyan)}
+#estimateMessageDialog textarea{width:100%;min-height:170px;padding:12px;border:1px solid var(--line);border-radius:14px;resize:vertical;background:#fff;color:var(--ink);font:inherit;line-height:1.55}
+#estimateMessageDialog .message-help{margin:9px 0 0;color:var(--muted);font-size:10px;line-height:1.5}
+html[data-theme="dark"] #page-estimates tbody tr.estimate-card-row,
+html[data-theme="dark"] .estimate-body,
+html[data-theme="dark"] #estimateMessageDialog .message-option,
+html[data-theme="dark"] #estimateMessageDialog textarea{background:#071d31;color:#f4fcff}
+html[data-theme="dark"] .estimate-media,
+html[data-theme="dark"] .estimate-photo-slide{background:#09243b}
+html[data-theme="dark"] .estimate-meta span{background:#09243b}
+@media(max-width:1000px){#page-estimates tbody{grid-template-columns:1fr}}
+@media(max-width:650px){
+  #page-estimates tbody{padding:12px;gap:12px}
+  .estimate-card{grid-template-columns:1fr}
+  .estimate-media{min-height:250px}
+  .estimate-photo-slide,.estimate-no-photo{min-height:250px}
+  #estimateMessageDialog .message-option-grid{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
@@ -2652,6 +2708,29 @@ if ('serviceWorker' in navigator) {
 </script>
 
 
+
+<dialog id="estimateMessageDialog">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Text client</h2>
+      <button class="modal-close" type="button" id="estimateMessageClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="message-option-grid">
+        <button class="message-option" type="button" data-message-kind="reminder"><i class="fa-regular fa-clock"></i><span>Reminder</span></button>
+        <button class="message-option" type="button" data-message-kind="photos"><i class="fa-regular fa-images"></i><span>Request photos</span></button>
+        <button class="message-option" type="button" data-message-kind="confirmation"><i class="fa-regular fa-circle-check"></i><span>Send confirmation</span></button>
+      </div>
+      <textarea id="estimateMessageText" aria-label="Text message"></textarea>
+      <p class="message-help" id="estimateMessageHelp">You can edit the message before opening Messages.</p>
+      <div class="modal-actions">
+        <button class="button ghost" type="button" id="estimateMessageCopy"><i class="fa-regular fa-copy"></i>Copy</button>
+        <button class="button primary" type="button" id="estimateMessageSend"><i class="fa-regular fa-message"></i>Open Messages</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
 <script>
 /* ===== Authoritative live page sync =====
    The dashboard and every sidebar page are rendered from the SAME live records.
@@ -2750,29 +2829,100 @@ if ('serviceWorker' in navigator) {
     }).join('');
   }
 
-  function renderEstimates(rows,clients,services){
+  async function hydrateEstimatePhotos(root){
+    if(!root||typeof sheylasDb==='undefined')return;
+    const images=[...root.querySelectorAll('img[data-photo-path]')];
+    await Promise.all(images.map(async img=>{
+      const path=img.dataset.photoPath;
+      try{
+        const {data:signed,error}=await sheylasDb.storage.from('sheylaspro-estimate-photos').createSignedUrl(path,3600);
+        if(error||!signed?.signedUrl)throw error||new Error('No signed URL');
+        img.src=signed.signedUrl;
+        img.closest('.estimate-photo-slide')?.classList.remove('photo-loading');
+      }catch(error){
+        console.error('Could not load estimate photo:',error);
+        const slide=img.closest('.estimate-photo-slide');
+        if(slide){
+          slide.classList.remove('photo-loading');
+          slide.innerHTML='<div class="estimate-no-photo"><div><i class="fa-regular fa-image"></i><br>Photo unavailable</div></div>';
+        }
+      }
+    }));
+  }
+
+  function findEstimateAppointment(estimate,appointments){
+    if(!Array.isArray(appointments))return null;
+    const today=new Date().toISOString().slice(0,10);
+    const matches=appointments.filter(a=>{
+      const sameClient=estimate.client_id&&a.client_id&&estimate.client_id===a.client_id;
+      const estimatePhone=String(estimate.phone||estimate.guest_phone||'').replace(/\D/g,'');
+      const apptPhone=String(a.phone||a.guest_phone||'').replace(/\D/g,'');
+      const samePhone=estimatePhone&&apptPhone&&estimatePhone===apptPhone;
+      const sameName=String(a.client_name||a.guest_name||'').trim().toLowerCase()===String(estimate.client_name||estimate.guest_name||'').trim().toLowerCase();
+      return (sameClient||samePhone||sameName)&&String(a.appointment_date||'')>=today&&!['cancelled','completed'].includes(String(a.status||'').toLowerCase());
+    });
+    return matches.sort((a,b)=>`${a.appointment_date||''} ${a.appointment_time||''}`.localeCompare(`${b.appointment_date||''} ${b.appointment_time||''}`))[0]||null;
+  }
+
+  function renderEstimates(rows,clients,services,appointments){
     if(rows===null)return;
     setCount('estimateCount',rows.length);showEmpty('estimateEmpty',rows.length===0);
     const body=$('estimateRows');if(!body)return;
+
+    window.__estimateLiveRows=new Map((rows||[]).map(r=>[String(r.id),r]));
+    window.__estimateAppointments=appointments||[];
+
     body.innerHTML=rows.map(e=>{
       const client=(e.client_id&&clients?.find(x=>x.id===e.client_id))||byName(clients||[],e.client_name);
       const service=(e.service_id&&services?.find(x=>x.id===e.service_id))||byName(services||[],e.service);
-      const photoCount=Array.isArray(e.photo_paths)?e.photo_paths.filter(Boolean).length:0;
-      const extras=[];
-      if(e.room_count)extras.push(`${e.room_count} room${Number(e.room_count)===1?'':'s'}`);
-      if(photoCount)extras.push(`${photoCount} photo${photoCount===1?'':'s'}`);
-      const details=[e.notes||e.details||'',extras.join(' · ')].filter(Boolean).join(' — ')||'—';
-      return `<tr>
-        <td data-label="Client"><strong>${html(client?.name||e.client_name||e.guest_name||'—')}</strong><br><small>${html(client?.phone||e.phone||e.guest_phone||'')}</small></td>
-        <td data-label="Service">${html(service?.name||e.service||'—')}</td>
-        <td data-label="Amount">${html(moneyText(e.amount))}</td>
-        <td data-label="Date">${html(dateText(e.estimate_date||String(e.created_at||'').slice(0,10)))}</td>
-        <td data-label="Notes">${html(details)}</td>
-        <td data-label="Actions"></td>
-      </tr>`;
+      const photos=Array.isArray(e.photo_paths)?e.photo_paths.filter(Boolean):[];
+      const appointment=findEstimateAppointment(e,appointments||[]);
+      const roomText=e.room_count?`${e.room_count} room${Number(e.room_count)===1?'':'s'}`:'';
+      const date=dateText(e.estimate_date||String(e.created_at||'').slice(0,10));
+      const phone=client?.phone||e.phone||e.guest_phone||'';
+      const clientName=client?.name||e.client_name||e.guest_name||'Client';
+      const serviceName=service?.name||e.service||'Service';
+      const slides=photos.length
+        ? photos.map((path,i)=>`<div class="estimate-photo-slide photo-loading" data-slide="${i}"><img data-photo-path="${html(path)}" alt="Estimate photo ${i+1}"></div>`).join('')
+        : '<div class="estimate-no-photo"><div><i class="fa-regular fa-images"></i><br>No photos attached</div></div>';
+      const arrows=photos.length>1
+        ? `<button class="estimate-carousel-arrow prev" type="button" data-photo-prev="${html(e.id)}" aria-label="Previous photo"><i class="fa-solid fa-chevron-left"></i></button>
+           <button class="estimate-carousel-arrow next" type="button" data-photo-next="${html(e.id)}" aria-label="Next photo"><i class="fa-solid fa-chevron-right"></i></button>`
+        : '';
+      return `<tr class="estimate-card-row" data-estimate-card="${html(e.id)}"><td colspan="6">
+        <article class="estimate-card">
+          <div class="estimate-media">
+            <div class="estimate-photo-track" data-photo-track="${html(e.id)}" tabindex="0">${slides}</div>
+            ${arrows}
+            ${photos.length?`<span class="estimate-photo-count">${photos.length} photo${photos.length===1?'':'s'}</span>`:''}
+          </div>
+          <div class="estimate-body">
+            <div class="estimate-card-top">
+              <div><h3>${html(clientName)}</h3><span class="estimate-phone">${html(phone||'No phone number')}</span></div>
+              <strong>${html(moneyText(e.amount))}</strong>
+            </div>
+            <span class="estimate-service-pill"><i class="fa-solid fa-spray-can-sparkles"></i>${html(serviceName)}</span>
+            <div class="estimate-meta">
+              <span><i class="fa-regular fa-calendar"></i> ${html(date)}</span>
+              ${roomText?`<span><i class="fa-solid fa-door-open"></i> ${html(roomText)}</span>`:''}
+              ${appointment?`<span><i class="fa-regular fa-clock"></i> Appointment ${html(dateText(appointment.appointment_date))} ${html(shortTime(appointment.appointment_time))}</span>`:''}
+            </div>
+            <p class="estimate-note">${html(e.notes||e.details||'No notes')}</p>
+            <div class="estimate-actions">
+              <button class="estimate-action" type="button" data-est-edit="${html(e.id)}" title="Edit estimate" aria-label="Edit estimate"><i class="fa-solid fa-pen"></i></button>
+              <button class="estimate-action danger" type="button" data-est-delete="${html(e.id)}" title="Delete estimate" aria-label="Delete estimate"><i class="fa-solid fa-trash"></i></button>
+              <a class="estimate-action" href="${phone?`tel:${html(String(phone).replace(/[^\d+]/g,''))}`:'#'}" ${phone?'':'aria-disabled="true"'} title="Call client" aria-label="Call client"><i class="fa-solid fa-phone"></i></a>
+              <button class="estimate-action" type="button" data-est-message="${html(e.id)}" title="Text client" aria-label="Text client" ${phone?'':'disabled'}><i class="fa-regular fa-message"></i></button>
+              <button class="estimate-action" type="button" data-est-calendar="${html(e.id)}" title="${appointment?'Add appointment to calendar':'No upcoming appointment'}" aria-label="Add appointment to calendar" ${appointment?'':'disabled'}><i class="fa-regular fa-calendar-plus"></i></button>
+            </div>
+          </div>
+        </article>
+      </td></tr>`;
     }).join('');
-  }
 
+    hydrateEstimatePhotos(body);
+    bindEstimateCardActions(body,clients||[],services||[],appointments||[]);
+  }
   function updateDashboard(appointments,estimates,clients,services,team){
     if(appointments!==null&&$('statAppointments'))$('statAppointments').textContent=appointments.length;
     if(estimates!==null&&$('statEstimates'))$('statEstimates').textContent=estimates.length;
@@ -2802,13 +2952,39 @@ if ('serviceWorker' in navigator) {
       renderServices(services);
       renderTeam(team);
       renderAppointments(appointments,clients||[],services||[]);
-      renderEstimates(estimates,clients||[],services||[]);
+      renderEstimates(estimates,clients||[],services||[],appointments||[]);
 
       // Keep the original admin state synchronized too, so its modals/searches keep working.
       if(typeof data!=='undefined'){
         if(clients!==null)data.clients=clients.map(x=>({id:x.id,name:x.name||'',phone:x.phone||'',email:x.email||'',address:x.address||'',notes:x.notes||'',active:x.active!==false}));
         if(services!==null)data.services=services.map(x=>({id:x.id,name:x.name||'',price:x.price||String(x.price_label||'').replace(/^\$/,''),description:x.description||'',imageUrl:x.image_url||'',icon:x.icon||'',isLive:x.is_live!==false,sortOrder:x.sort_order||0}));
         if(team!==null)data.team=team.map(x=>({id:x.id,name:x.name||'',role:x.role||'',days:Array.isArray(x.days)?x.days:[],start:shortTime(x.start_time),end:shortTime(x.end_time),dayHours:x.day_hours||{},active:x.active!==false}));
+        if(appointments!==null)data.appointments=appointments.map(x=>({
+          id:x.id,
+          clientId:x.client_id||'',
+          guestName:x.guest_name||x.client_name||'',
+          guestPhone:x.guest_phone||x.phone||'',
+          serviceId:x.service_id||'',
+          teamIds:Array.isArray(x.team_ids)?x.team_ids:[],
+          teamId:'',
+          date:x.appointment_date||'',
+          time:shortTime(x.appointment_time),
+          notes:x.notes||'',
+          status:x.status||'pending'
+        }));
+        if(estimates!==null)data.estimates=estimates.map(x=>({
+          id:x.id,
+          clientId:x.client_id||'',
+          guestName:x.guest_name||x.client_name||'',
+          guestPhone:x.guest_phone||x.phone||'',
+          serviceId:x.service_id||'',
+          amount:x.amount==null?'':String(x.amount),
+          date:x.estimate_date||String(x.created_at||'').slice(0,10),
+          notes:x.notes||x.details||'',
+          status:x.status||'new',
+          photoPaths:Array.isArray(x.photo_paths)?x.photo_paths:[],
+          roomCount:x.room_count||null
+        }));
       }
     }catch(error){
       console.error('Admin live refresh failed:',error);
@@ -2817,6 +2993,175 @@ if ('serviceWorker' in navigator) {
       if(liveRefreshQueued){liveRefreshQueued=false;setTimeout(refreshAllLivePages,50)}
     }
   }
+
+
+  function firstNameFromEstimate(e,clients){
+    const client=(e.client_id&&clients.find(c=>c.id===e.client_id))||byName(clients,e.client_name);
+    return String(client?.name||e.client_name||e.guest_name||'there').trim().split(/\s+/)[0]||'there';
+  }
+
+  function companySenderName(){
+    return (typeof data!=='undefined'&&data?.settings?.signedInAs?String(data.settings.signedInAs).split(/\s+—\s+/)[0]:'Sheyla')||'Sheyla';
+  }
+
+  function phoneForEstimate(e,clients){
+    const client=(e.client_id&&clients.find(c=>c.id===e.client_id))||byName(clients,e.client_name);
+    return client?.phone||e.phone||e.guest_phone||'';
+  }
+
+  function serviceNameForEstimate(e,services){
+    return (e.service_id&&services.find(s=>s.id===e.service_id)?.name)||e.service||'your cleaning service';
+  }
+
+  function friendlyAppointmentDate(a){
+    if(!a)return '';
+    const d=new Date(`${a.appointment_date}T12:00:00`);
+    return new Intl.DateTimeFormat('en-US',{weekday:'long',month:'long',day:'numeric'}).format(d);
+  }
+
+  function friendlyAppointmentTime(a){
+    if(!a?.appointment_time)return '';
+    const raw=String(a.appointment_time).slice(0,5);
+    const d=new Date(`2000-01-01T${raw}:00`);
+    return d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+  }
+
+  function calendarQueryLink(a,e,services){
+    if(!a)return '';
+    const base=new URL('calendar.html',location.href);
+    base.searchParams.set('service',serviceNameForEstimate(e,services));
+    base.searchParams.set('date',a.appointment_date||'');
+    base.searchParams.set('time',shortTime(a.appointment_time)||'');
+    base.searchParams.set('name',a.client_name||e.client_name||e.guest_name||'Client');
+    return base.href;
+  }
+
+  function makeIcsDownload(a,e,services){
+    if(!a)return;
+    const startDate=String(a.appointment_date||'').replaceAll('-','');
+    const time=String(a.appointment_time||'09:00').slice(0,5).replace(':','')+'00';
+    const start=`${startDate}T${time}`;
+    const duration=Math.max(30,Number(a.duration_minutes)||120);
+    const startObj=new Date(`${a.appointment_date}T${String(a.appointment_time||'09:00').slice(0,5)}:00`);
+    const endObj=new Date(startObj.getTime()+duration*60000);
+    const pad=n=>String(n).padStart(2,'0');
+    const end=`${endObj.getFullYear()}${pad(endObj.getMonth()+1)}${pad(endObj.getDate())}T${pad(endObj.getHours())}${pad(endObj.getMinutes())}00`;
+    const service=serviceNameForEstimate(e,services);
+    const ics=[
+      'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Sheylas Pro Cleaning//Appointment//EN','BEGIN:VEVENT',
+      `UID:${crypto.randomUUID()}@sheylasprocleaning`,
+      `DTSTART:${start}`,`DTEND:${end}`,
+      `SUMMARY:${service.replace(/[,\n;]/g,' ')}`,
+      'DESCRIPTION:Cleaning appointment with Sheyla\\'s Pro Cleaning',
+      'END:VEVENT','END:VCALENDAR'
+    ].join('\r\n');
+    const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const aTag=document.createElement('a');
+    aTag.href=url;aTag.download='sheylas-pro-cleaning-appointment.ics';
+    document.body.append(aTag);aTag.click();aTag.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+  }
+
+  let activeMessageContext=null;
+
+  function buildMessage(kind,e,clients,services,appointments){
+    const first=firstNameFromEstimate(e,clients);
+    const sender=companySenderName();
+    const appointment=findEstimateAppointment(e,appointments);
+    const service=serviceNameForEstimate(e,services);
+    if(kind==='photos'){
+      return `Hey ${first}, this is ${sender} from Sheyla's Pro Cleaning. I can help put together an accurate estimate for you. When you get a chance, could you send a few clear photos of the areas you'd like cleaned? Wide shots plus any spots that need extra attention are especially helpful. Thank you!`;
+    }
+    if(!appointment){
+      return `Hey ${first}, this is ${sender} from Sheyla's Pro Cleaning. I wanted to follow up about your ${service}. We don't have an appointment date and time saved yet, so please let me know what works best for you.`;
+    }
+    const date=friendlyAppointmentDate(appointment),time=friendlyAppointmentTime(appointment);
+    if(kind==='reminder'){
+      return `Hey ${first}, this is ${sender} from Sheyla's Pro Cleaning. Just a friendly reminder that your ${service} is scheduled for ${date} at ${time}. If anything changes or you have any questions before then, just reply here. We look forward to seeing you!`;
+    }
+    const calendarLink=calendarQueryLink(appointment,e,services);
+    return `Hey ${first}, this is ${sender} from Sheyla's Pro Cleaning. Your ${service} is confirmed for ${date} at ${time}. You can add the appointment to your calendar here: ${calendarLink} If you need to make any changes, just reply to this message.`;
+  }
+
+  function openEstimateMessage(e,clients,services,appointments){
+    activeMessageContext={e,clients,services,appointments,kind:'reminder'};
+    const dialog=document.getElementById('estimateMessageDialog');
+    const textarea=document.getElementById('estimateMessageText');
+    if(!dialog||!textarea)return;
+    document.querySelectorAll('#estimateMessageDialog [data-message-kind]').forEach(b=>b.classList.toggle('active',b.dataset.messageKind==='reminder'));
+    textarea.value=buildMessage('reminder',e,clients,services,appointments);
+    dialog.showModal();
+  }
+
+  function bindEstimateCardActions(root,clients,services,appointments){
+    root.querySelectorAll('[data-photo-prev],[data-photo-next]').forEach(btn=>btn.onclick=()=>{
+      const id=btn.dataset.photoPrev||btn.dataset.photoNext;
+      const track=root.querySelector(`[data-photo-track="${CSS.escape(id)}"]`);
+      if(!track)return;
+      const delta=track.clientWidth*(btn.dataset.photoPrev?-1:1);
+      track.scrollBy({left:delta,behavior:'smooth'});
+    });
+
+    root.querySelectorAll('[data-photo-track]').forEach(track=>{
+      track.addEventListener('keydown',event=>{
+        if(event.key==='ArrowLeft'){event.preventDefault();track.scrollBy({left:-track.clientWidth,behavior:'smooth'})}
+        if(event.key==='ArrowRight'){event.preventDefault();track.scrollBy({left:track.clientWidth,behavior:'smooth'})}
+      });
+    });
+
+    root.querySelectorAll('[data-est-edit]').forEach(btn=>btn.onclick=()=>{
+      const e=window.__estimateLiveRows?.get(String(btn.dataset.estEdit));if(!e)return;
+      const mapped=typeof data!=='undefined'?data.estimates.find(x=>String(x.id)===String(e.id)):null;
+      if(mapped&&typeof openEstimate==='function')openEstimate(mapped);
+    });
+
+    root.querySelectorAll('[data-est-delete]').forEach(btn=>btn.onclick=async()=>{
+      const id=btn.dataset.estDelete;
+      const e=window.__estimateLiveRows?.get(String(id));
+      const name=e?.client_name||e?.guest_name||'this estimate';
+      if(!confirm(`Delete ${name}'s estimate? This cannot be undone.`))return;
+      const {error}=await sheylasDb.from(TABLES.estimates).delete().eq('id',id);
+      if(error){console.error(error);if(typeof showMessage==='function')showMessage('Couldn’t delete estimate','Please try again.','error');return}
+      await refreshAllLivePages();
+    });
+
+    root.querySelectorAll('[data-est-message]').forEach(btn=>btn.onclick=()=>{
+      const e=window.__estimateLiveRows?.get(String(btn.dataset.estMessage));if(e)openEstimateMessage(e,clients,services,appointments);
+    });
+
+    root.querySelectorAll('[data-est-calendar]').forEach(btn=>btn.onclick=()=>{
+      const e=window.__estimateLiveRows?.get(String(btn.dataset.estCalendar));if(!e)return;
+      const appointment=findEstimateAppointment(e,appointments);
+      if(appointment)makeIcsDownload(appointment,e,services);
+    });
+  }
+
+  document.getElementById('estimateMessageClose')?.addEventListener('click',()=>document.getElementById('estimateMessageDialog')?.close());
+  document.querySelectorAll('#estimateMessageDialog [data-message-kind]').forEach(btn=>btn.addEventListener('click',()=>{
+    if(!activeMessageContext)return;
+    activeMessageContext.kind=btn.dataset.messageKind;
+    document.querySelectorAll('#estimateMessageDialog [data-message-kind]').forEach(b=>b.classList.toggle('active',b===btn));
+    document.getElementById('estimateMessageText').value=buildMessage(
+      activeMessageContext.kind,
+      activeMessageContext.e,
+      activeMessageContext.clients,
+      activeMessageContext.services,
+      activeMessageContext.appointments
+    );
+  }));
+  document.getElementById('estimateMessageCopy')?.addEventListener('click',async()=>{
+    const value=document.getElementById('estimateMessageText')?.value||'';
+    try{await navigator.clipboard.writeText(value)}catch(_){ }
+  });
+  document.getElementById('estimateMessageSend')?.addEventListener('click',()=>{
+    if(!activeMessageContext)return;
+    const phone=phoneForEstimate(activeMessageContext.e,activeMessageContext.clients);
+    const body=document.getElementById('estimateMessageText')?.value||'';
+    const clean=String(phone||'').replace(/[^\d+]/g,'');
+    if(!clean)return;
+    location.href=`sms:${clean}?&body=${encodeURIComponent(body)}`;
+  });
 
   window.refreshSheylasAdmin=refreshAllLivePages;
   document.addEventListener('click',event=>{
