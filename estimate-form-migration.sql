@@ -35,7 +35,10 @@ values (
   'sheylaspro-estimate-photos',
   false,
   10485760,
-  array['image/jpeg','image/png','image/webp','image/heic','image/heif']
+  array[
+    'image/jpeg','image/png','image/webp','image/heic','image/heif',
+    'image/gif','image/bmp','image/tiff','image/avif'
+  ]
 )
 on conflict (id) do update
 set public = false,
