@@ -1,44 +1,51 @@
 from pathlib import Path
 
-p = Path('admin.html')
-text = p.read_text()
+p=Path('admin.html')
+text=p.read_text()
 
-old_dialog = '''<dialog id="serviceDialog"><div class="modal"><div class="modal-head"><h2 id="serviceTitle">Add service</h2><button class="modal-close" data-close="serviceDialog"><i class="fa-solid fa-xmark"></i></button></div><form class="modal-body" id="serviceForm"><input type="hidden" id="serviceId"><div class="form-grid"><div class="field full"><label>Service name</label><input id="serviceName" required></div><div class="field"><label>Price label</label><input id="servicePrice" placeholder="Free estimate or $120"></div><div class="field full"><label>Description</label><textarea id="serviceDescription"></textarea></div></div><div class="modal-actions"><button class="button ghost" type="button" data-close="serviceDialog">Cancel</button><button class="button primary">Save service</button></div></form></div></dialog>'''
-new_dialog = '''<dialog id="serviceDialog"><div class="modal"><div class="modal-head"><h2 id="serviceTitle">Add service</h2><button class="modal-close" data-close="serviceDialog"><i class="fa-solid fa-xmark"></i></button></div><form class="modal-body" id="serviceForm"><input type="hidden" id="serviceId"><input type="hidden" id="serviceImageUrl"><div class="form-grid"><div class="field full"><label>Service name</label><input id="serviceName" required></div><div class="field"><label>Price label</label><input id="servicePrice" placeholder="Free estimate or $120"></div><div class="field full"><label>Description</label><textarea id="serviceDescription"></textarea></div><div class="field full"><label>Stock image</label><p class="service-image-help">Choose the photo that will appear on this service card on the main website.</p><div class="service-image-grid" id="serviceImageGrid" role="radiogroup" aria-label="Choose a stock image"></div></div></div><div class="modal-actions"><button class="button ghost" type="button" data-close="serviceDialog">Cancel</button><button class="button primary">Save service</button></div></form></div></dialog>'''
-if old_dialog not in text:
-    raise SystemExit('service dialog marker not found')
-text = text.replace(old_dialog, new_dialog, 1)
+# Add hidden icon value next to selected image value.
+old='<input type="hidden" id="serviceImageUrl">'
+new='<input type="hidden" id="serviceImageUrl"><input type="hidden" id="serviceIcon">'
+if old not in text:
+    raise SystemExit('service image hidden field marker not found')
+text=text.replace(old,new,1)
 
-old_open = '''function openService(r=null){serviceTitle.textContent=r?"Edit service":"Add service";serviceId.value=r?.id||"";serviceName.value=r?.name||"";servicePrice.value=r?.price||"";serviceDescription.value=r?.description||"";serviceDialog.showModal()}'''
-new_open = '''const SERVICE_STOCK_IMAGES=[
-  {label:"Cleaning supplies",url:"https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Deep cleaning",url:"https://images.unsplash.com/photo-1585421514738-01798e348b17?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Modern home",url:"https://images.unsplash.com/photo-1600585152915-d208bec867a1?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Bedroom",url:"https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Office",url:"https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Construction",url:"https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Professional cleaning",url:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1200&q=85"},
-  {label:"House cleaning",url:"https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Bright kitchen",url:"https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Clean bathroom",url:"https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Living room",url:"https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Modern house",url:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Apartment",url:"https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Cozy apartment",url:"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Workspace",url:"https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Open office",url:"https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Luxury interior",url:"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Fresh bedroom",url:"https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Bright interior",url:"https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=85"},
-  {label:"Home interior",url:"https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=85"}
+# Add visual icon picker below the stock-image picker.
+old='''<div class="field full"><label>Stock image</label><p class="service-image-help">Choose the photo that will appear on this service card on the main website.</p><div class="service-image-grid" id="serviceImageGrid" role="radiogroup" aria-label="Choose a stock image"></div></div>'''
+new='''<div class="field full"><label>Stock image</label><p class="service-image-help">Choose the photo that will appear on this service card on the main website.</p><div class="service-image-grid" id="serviceImageGrid" role="radiogroup" aria-label="Choose a stock image"></div></div><div class="field full"><label>Service icon</label><p class="service-image-help">Choose the icon shown in the circle on the service card.</p><div class="service-icon-grid" id="serviceIconGrid" role="radiogroup" aria-label="Choose a service icon"></div></div>'''
+if old not in text:
+    raise SystemExit('stock image picker marker not found')
+text=text.replace(old,new,1)
+
+icon_code='''const SERVICE_ICON_OPTIONS=[
+  {label:"Home",value:"fa-solid fa-house-chimney"},
+  {label:"Sparkles",value:"fa-solid fa-sparkles"},
+  {label:"Spray bottle",value:"fa-solid fa-spray-can-sparkles"},
+  {label:"Soap",value:"fa-solid fa-soap"},
+  {label:"Broom",value:"fa-solid fa-broom"},
+  {label:"Bucket",value:"fa-solid fa-bucket"},
+  {label:"Bed",value:"fa-solid fa-bed"},
+  {label:"Building",value:"fa-solid fa-building"},
+  {label:"Boxes",value:"fa-solid fa-box-open"},
+  {label:"Construction",value:"fa-solid fa-helmet-safety"},
+  {label:"Kitchen",value:"fa-solid fa-kitchen-set"},
+  {label:"Bath",value:"fa-solid fa-bath"},
+  {label:"Couch",value:"fa-solid fa-couch"},
+  {label:"Office",value:"fa-solid fa-briefcase"},
+  {label:"Store",value:"fa-solid fa-store"},
+  {label:"Hotel",value:"fa-solid fa-hotel"},
+  {label:"Car",value:"fa-solid fa-car"},
+  {label:"Party",value:"fa-solid fa-champagne-glasses"},
+  {label:"Star",value:"fa-solid fa-star"},
+  {label:"Shield",value:"fa-solid fa-shield-heart"}
 ];
-function renderServiceImagePicker(selectedUrl=""){
-  if(!serviceImageGrid)return;
-  serviceImageGrid.innerHTML=SERVICE_STOCK_IMAGES.map(image=>`<button type="button" class="service-image-option${image.url===selectedUrl?" selected":""}" data-service-image="${esc(image.url)}" role="radio" aria-checked="${image.url===selectedUrl}" title="${esc(image.label)}"><img src="${esc(image.url)}" alt="${esc(image.label)}" loading="lazy"><span>${esc(image.label)}</span><i class="fa-solid fa-circle-check" aria-hidden="true"></i></button>`).join("");
-  serviceImageGrid.querySelectorAll("[data-service-image]").forEach(button=>{
+function renderServiceIconPicker(selectedIcon=""){
+  if(!serviceIconGrid)return;
+  serviceIconGrid.innerHTML=SERVICE_ICON_OPTIONS.map(item=>`<button type="button" class="service-icon-option${item.value===selectedIcon?" selected":""}" data-service-icon="${esc(item.value)}" role="radio" aria-checked="${item.value===selectedIcon}" title="${esc(item.label)}"><span class="service-icon-preview"><i class="${esc(item.value)}"></i></span><span>${esc(item.label)}</span><i class="fa-solid fa-circle-check service-icon-check" aria-hidden="true"></i></button>`).join("");
+  serviceIconGrid.querySelectorAll("[data-service-icon]").forEach(button=>{
     button.onclick=()=>{
-      serviceImageUrl.value=button.dataset.serviceImage;
-      serviceImageGrid.querySelectorAll(".service-image-option").forEach(option=>{
+      serviceIcon.value=button.dataset.serviceIcon;
+      serviceIconGrid.querySelectorAll(".service-icon-option").forEach(option=>{
         const selected=option===button;
         option.classList.toggle("selected",selected);
         option.setAttribute("aria-checked",String(selected));
@@ -46,60 +53,49 @@ function renderServiceImagePicker(selectedUrl=""){
     };
   });
 }
-function openService(r=null){
-  serviceTitle.textContent=r?"Edit service":"Add service";
-  serviceId.value=r?.id||"";
-  serviceName.value=r?.name||"";
-  servicePrice.value=r?.price||"";
-  serviceDescription.value=r?.description||"";
-  serviceImageUrl.value=r?.imageUrl||SERVICE_STOCK_IMAGES[0].url;
-  renderServiceImagePicker(serviceImageUrl.value);
-  serviceDialog.showModal();
-}'''
-if old_open not in text:
-    raise SystemExit('openService marker not found')
-text = text.replace(old_open, new_open, 1)
-
-old_map = '''        description:x.description||"",
-        isLive:x.is_live!==false,
-        sortOrder:x.sort_order||0'''
-new_map = '''        description:x.description||"",
-        imageUrl:x.image_url||"",
-        icon:x.icon||"",
-        isLive:x.is_live!==false,
-        sortOrder:x.sort_order||0'''
-if old_map not in text:
-    raise SystemExit('service mapping marker not found')
-text = text.replace(old_map, new_map, 1)
-
-old_payload = '''      description:serviceDescription.value.trim()||null,
-      is_live:true'''
-new_payload = '''      description:serviceDescription.value.trim()||null,
-      image_url:serviceImageUrl.value||null,
-      is_live:true'''
-if old_payload not in text:
-    raise SystemExit('service payload marker not found')
-text = text.replace(old_payload, new_payload, 1)
-
-css = '''
-/* ===== Service stock image picker ===== */
-#serviceDialog{width:min(780px,calc(100vw - 24px))!important;max-width:780px!important}
-#serviceDialog .modal{width:100%!important;max-width:780px!important}
-.service-image-help{margin:0 0 10px;color:var(--muted);font-size:11px;line-height:1.5}
-.service-image-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;max-height:390px;overflow:auto;padding:2px 3px 4px;overscroll-behavior:contain}
-.service-image-option{position:relative;min-width:0;padding:0;border:2px solid transparent;border-radius:14px;background:#f4fafc;overflow:hidden;text-align:left;color:var(--ink);box-shadow:0 5px 14px rgba(0,26,56,.06);transition:.16s}
-.service-image-option:hover{transform:translateY(-2px);border-color:rgba(32,221,236,.55)}
-.service-image-option img{display:block;width:100%;aspect-ratio:1.35/1;object-fit:cover;background:#e9f4f7}
-.service-image-option span{display:block;padding:7px 8px 8px;font-size:9px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.service-image-option>i{position:absolute;right:7px;top:7px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--navy2);font-size:16px;opacity:0;transform:scale(.7);transition:.16s;box-shadow:0 4px 12px rgba(0,26,56,.2)}
-.service-image-option.selected{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(32,221,236,.16),0 8px 18px rgba(0,26,56,.11)}
-.service-image-option.selected>i{opacity:1;transform:scale(1)}
-html[data-theme="dark"] .service-image-option{background:#09243b;color:#f4fcff}
-@media(max-width:700px){#serviceDialog{width:calc(100vw - 16px)!important;max-width:none!important}.service-image-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-height:44dvh}.service-image-option span{font-size:10px}}
 '''
-marker = '</style>\n</head>'
+marker='function openService(r=null){'
 if marker not in text:
+    raise SystemExit('openService marker not found')
+text=text.replace(marker,icon_code+marker,1)
+
+old='''  serviceImageUrl.value=r?.imageUrl||SERVICE_STOCK_IMAGES[0].url;
+  renderServiceImagePicker(serviceImageUrl.value);
+  serviceDialog.showModal();'''
+new='''  serviceImageUrl.value=r?.imageUrl||SERVICE_STOCK_IMAGES[0].url;
+  serviceIcon.value=r?.icon||"fa-solid fa-house-chimney";
+  renderServiceImagePicker(serviceImageUrl.value);
+  renderServiceIconPicker(serviceIcon.value);
+  serviceDialog.showModal();'''
+if old not in text:
+    raise SystemExit('openService image selection marker not found')
+text=text.replace(old,new,1)
+
+old='''      image_url:serviceImageUrl.value||null,
+      is_live:true'''
+new='''      image_url:serviceImageUrl.value||null,
+      icon:serviceIcon.value||"fa-solid fa-house-chimney",
+      is_live:true'''
+if old not in text:
+    raise SystemExit('service save payload marker not found')
+text=text.replace(old,new,1)
+
+css='''
+/* ===== Service icon picker ===== */
+.service-icon-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+.service-icon-option{position:relative;min-width:0;padding:10px 6px 8px;border:2px solid transparent;border-radius:14px;background:#f4fafc;color:var(--ink);display:grid;place-items:center;gap:6px;font-size:9px;font-weight:900;transition:.16s;box-shadow:0 5px 14px rgba(0,26,56,.06)}
+.service-icon-option:hover{transform:translateY(-2px);border-color:rgba(32,221,236,.55)}
+.service-icon-preview{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--cyan);color:var(--navy);font-size:18px;box-shadow:0 5px 12px rgba(0,26,56,.12)}
+.service-icon-option>span:last-of-type{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.service-icon-check{position:absolute;right:5px;top:5px;color:var(--navy2);background:#fff;border-radius:50%;opacity:0;transform:scale(.7);transition:.16s}
+.service-icon-option.selected{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(32,221,236,.16),0 8px 18px rgba(0,26,56,.11)}
+.service-icon-option.selected .service-icon-check{opacity:1;transform:scale(1)}
+html[data-theme="dark"] .service-icon-option{background:#09243b;color:#f4fcff}
+@media(max-width:700px){.service-icon-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.service-icon-option{font-size:8px}}
+'''
+style_marker='</style>\n</head>'
+if style_marker not in text:
     raise SystemExit('style marker not found')
-text = text.replace(marker, css + '\n' + marker, 1)
+text=text.replace(style_marker,css+'\n'+style_marker,1)
 
 p.write_text(text)
