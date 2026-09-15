@@ -1,14 +1,13 @@
-const CACHE_NAME = 'dashboard-shell-v3';
+const CACHE_NAME = 'dashboard-shell-v4';
 const SHELL = [
   './admin.html',
-  './admin-fix.js',
+  './admin-fix.js?v=4',
   './dashboard.webmanifest',
   './Images/logo-icon.png',
   './Images/logo-wordmark.png'
 ];
 
-const LIVE_REFRESH_SCRIPT = `
-<script src="./admin-fix.js?v=3"></script>`;
+const LIVE_REFRESH_SCRIPT = `\n<script src="./admin-fix.js?v=4"></script>`;
 
 function withLiveAdminRefresh(response) {
   if (!response || !response.ok) return Promise.resolve(response);
@@ -16,11 +15,11 @@ function withLiveAdminRefresh(response) {
   if (!type.includes('text/html')) return Promise.resolve(response);
 
   return response.text().then(html => {
-    if (!html.includes('admin-fix.js')) {
-      html = html.replace('</body>', `${LIVE_REFRESH_SCRIPT}\n</body>`);
-    }
+    html = html.replace(/<script src="\.\/admin-fix\.js\?v=\d+"><\/script>/g, '');
+    html = html.replace('</body>', `${LIVE_REFRESH_SCRIPT}\n</body>`);
     const headers = new Headers(response.headers);
     headers.delete('content-length');
+    headers.set('cache-control','no-store');
     return new Response(html, {
       status: response.status,
       statusText: response.statusText,
@@ -54,11 +53,8 @@ self.addEventListener('fetch', event => {
   if (request.mode === 'navigate') {
     event.respondWith((async () => {
       try {
-        const networkResponse = await fetch(request, {cache: 'no-store'});
-        const response = await withLiveAdminRefresh(networkResponse);
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put('./admin.html', copy)).catch(() => {});
-        return response;
+        const networkResponse = await fetch(request, {cache:'no-store'});
+        return await withLiveAdminRefresh(networkResponse);
       } catch (_error) {
         const cached = await caches.match('./admin.html');
         return cached ? withLiveAdminRefresh(cached) : Response.error();
@@ -69,12 +65,7 @@ self.addEventListener('fetch', event => {
 
   event.respondWith((async () => {
     try {
-      const networkResponse = await fetch(request, {cache: 'no-store'});
-      if (networkResponse && networkResponse.ok) {
-        const copy = networkResponse.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(request, copy)).catch(() => {});
-      }
-      return networkResponse;
+      return await fetch(request,{cache:'no-store'});
     } catch (_error) {
       return (await caches.match(request)) || Response.error();
     }
