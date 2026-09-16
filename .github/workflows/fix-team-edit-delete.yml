@@ -1,0 +1,27 @@
+name: Fix team edit and delete controls
+
+on:
+  push:
+    paths:
+      - '.github/scripts/patch_team_edit_delete.py'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Update team controls
+        run: python3 .github/scripts/patch_team_edit_delete.py
+      - name: Commit admin update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Fix team member edit and delete controls"
+          git push origin main
