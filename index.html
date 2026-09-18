@@ -392,6 +392,165 @@
         background: rgba(210, 250, 255, 0.88);
         border-radius: 46% 54% 41% 59% / 12% 13% 87% 88%;
       }
+
+      /* REVIEWS */
+      .reviews {
+        position: relative;
+        padding: 100px 0 110px;
+        background: #fff;
+        overflow: hidden;
+      }
+
+      .reviews .section-head {
+        text-align: center;
+        margin-bottom: 48px;
+      }
+
+      .reviews-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+
+      .review-card {
+        position: relative;
+        background: var(--navy);
+        color: #fff;
+        border-radius: 28px;
+        padding: 34px 30px 30px;
+        min-height: 285px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 18px 45px rgba(0, 26, 56, 0.13);
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease;
+      }
+
+      .review-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 24px 55px rgba(0, 26, 56, 0.2);
+      }
+
+      .review-quote {
+        position: absolute;
+        right: 25px;
+        top: 18px;
+        font-size: 3.8rem;
+        color: var(--yellow);
+        opacity: 0.18;
+      }
+
+      .review-stars {
+        color: var(--yellow);
+        font-size: 1rem;
+        letter-spacing: 3px;
+        margin-bottom: 20px;
+      }
+
+      .review-text {
+        font-size: 1rem;
+        line-height: 1.7;
+        margin: 0 0 28px;
+        color: rgba(255, 255, 255, 0.9);
+        flex: 1;
+      }
+
+      .review-person {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+      }
+
+      .review-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--yellow);
+        color: var(--navy);
+        display: grid;
+        place-items: center;
+        font-size: 1.05rem;
+        font-weight: 900;
+        flex-shrink: 0;
+      }
+
+      .review-name {
+        font-weight: 800;
+        margin-bottom: 3px;
+      }
+
+      .review-source {
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.65);
+      }
+
+      .review-source i {
+        margin-right: 4px;
+      }
+
+      .review-links {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 38px;
+      }
+
+      .review-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 13px 22px;
+        border-radius: 999px;
+        background: var(--navy);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 800;
+        transition:
+          transform 0.2s ease,
+          background 0.2s ease;
+      }
+
+      .review-link:hover {
+        transform: translateY(-2px);
+        background: var(--navy2);
+      }
+
+      .review-link .fa-star {
+        color: var(--yellow);
+      }
+
+      @media (max-width: 900px) {
+        .reviews-grid {
+          grid-template-columns: 1fr;
+          max-width: 620px;
+          margin-inline: auto;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .reviews {
+          padding: 75px 0 80px;
+        }
+
+        .review-card {
+          min-height: 0;
+          padding: 28px 24px;
+          border-radius: 24px;
+        }
+
+        .review-links {
+          display: grid;
+        }
+
+        .review-link {
+          width: 100%;
+        }
+      }
       .section-head {
         text-align: center;
         margin-bottom: 35px;
@@ -2842,6 +3001,7 @@
           <a href="#home">Home</a>
           <a href="#about">About</a>
           <a href="#services">Services</a>
+          <a href="#reviews">Reviews</a>
           <a href="#contact">Contact</a>
         </nav>
 
@@ -3000,9 +3160,137 @@
             <div class="eyebrow">What we clean</div>
             <h2>Our Cleaning Services</h2>
           </div>
-          <div class="service-grid"><div class="live-empty">Loading live services…</div></div>
+          <div class="service-grid">
+            <div class="live-empty">Loading live services…</div>
+          </div>
         </div>
       </section>
+
+      <!-- REVIEWS -->
+      <section class="reviews" id="reviews">
+        <div class="wrap">
+          <div class="section-head">
+            <div class="eyebrow">Happy clients</div>
+            <h2>What Our Clients Say</h2>
+          </div>
+
+          <div class="reviews-grid">
+
+            <!-- REVIEW 1 -->
+            <article class="review-card">
+              <i class="fa-solid fa-quote-right review-quote"></i>
+
+              <div class="review-stars" aria-label="5 out of 5 stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+
+              <p class="review-text">
+                Paste the customer's review here.
+              </p>
+
+              <div class="review-person">
+                <div class="review-avatar">A</div>
+
+                <div>
+                  <div class="review-name">Customer Name</div>
+                  <div class="review-source">
+                    <i class="fa-brands fa-google"></i>
+                    Google Review
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- REVIEW 2 -->
+            <article class="review-card">
+              <i class="fa-solid fa-quote-right review-quote"></i>
+
+              <div class="review-stars" aria-label="5 out of 5 stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+
+              <p class="review-text">
+                Paste the customer's review here.
+              </p>
+
+              <div class="review-person">
+                <div class="review-avatar">B</div>
+
+                <div>
+                  <div class="review-name">Customer Name</div>
+                  <div class="review-source">
+                    <i class="fa-brands fa-google"></i>
+                    Google Review
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- REVIEW 3 -->
+            <article class="review-card">
+              <i class="fa-solid fa-quote-right review-quote"></i>
+
+              <div class="review-stars" aria-label="5 out of 5 stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+
+              <p class="review-text">
+                Paste the customer's review here.
+              </p>
+
+              <div class="review-person">
+                <div class="review-avatar">C</div>
+
+                <div>
+                  <div class="review-name">Customer Name</div>
+                  <div class="review-source">
+                    <i class="fa-brands fa-yelp"></i>
+                    Yelp Review
+                  </div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+
+          <div class="review-links">
+            <a
+              class="review-link"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <i class="fa-brands fa-google"></i>
+              Google Reviews
+              <i class="fa-solid fa-star"></i>
+            </a>
+
+            <a
+              class="review-link"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <i class="fa-brands fa-yelp"></i>
+              Yelp Reviews
+              <i class="fa-solid fa-star"></i>
+            </a>
+          </div>
+        </div>
+      </section>
+
       <section class="contact" id="contact">
         <svg class="contact-blob-defs" aria-hidden="true">
           <defs>
