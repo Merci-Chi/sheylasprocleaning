@@ -6,8 +6,90 @@ function applyContent(rows){const c=Object.fromEntries((rows||[]).map(x=>[x.key,
 function serviceIconClass(name){const value=String(name||'').toLowerCase();if(value.includes('airbnb')||value.includes('turnover'))return'fa-solid fa-bed';if(value.includes('move'))return'fa-solid fa-box-open';if(value.includes('office')||value.includes('commercial'))return'fa-solid fa-building';if(value.includes('construction'))return'fa-solid fa-helmet-safety';if(value.includes('deep'))return'fa-solid fa-soap';return'fa-solid fa-house-chimney'}
 function serviceImageUrl(name){const value=String(name||'').toLowerCase();if(value.includes('airbnb')||value.includes('turnover'))return'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=900&q=82';if(value.includes('move'))return'https://images.unsplash.com/photo-1600585152915-d208bec867a1?auto=format&fit=crop&w=900&q=82';if(value.includes('office')||value.includes('commercial'))return'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=82';if(value.includes('construction'))return'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=900&q=82';if(value.includes('deep'))return'https://images.unsplash.com/photo-1585421514738-01798e348b17?auto=format&fit=crop&w=900&q=82';return'https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?auto=format&fit=crop&w=900&q=82'}
 function renderServices(rows){const grid=document.querySelector('#services .service-grid');if(!grid)return;grid.innerHTML=rows?.length?rows.map(s=>`<article class="service-card live-service-card" data-live-service="${esc(s.name)}" role="button" tabindex="0" aria-label="Request ${esc(s.name)} estimate"><div class="service-photo"><img src="${esc(s.image_url||serviceImageUrl(s.name))}" alt="${esc(s.name)}" loading="lazy"></div><span class="service-icon" aria-hidden="true"><i class="${esc(s.icon||serviceIconClass(s.name))}"></i></span><div class="service-copy"><h3>${esc(s.name)}</h3><p>${esc(s.description||'')}</p><span class="card-arrow open-estimate" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span></div></article>`).join(''):empty('Services will appear here when published.');const select=document.querySelector('#service');if(!select)return;select.innerHTML='<option value="">Choose a service</option>'+rows.map(s=>`<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('');select.required=false;select.classList.add('native-select-hidden');select.tabIndex=-1;select.setAttribute('aria-hidden','true');const shell=select.nextElementSibling,trigger=shell?.querySelector('.custom-select-trigger'),menu=shell?.querySelector('.custom-select-menu');const syncServiceUI=name=>{select.value=name||'';select.dispatchEvent(new Event('change',{bubbles:true}));if(trigger){trigger.textContent=name||'Choose a service';trigger.dataset.value=name||''}if(menu)menu.querySelectorAll('.custom-select-option').forEach(option=>option.setAttribute('aria-selected',option.dataset.value===name?'true':'false'))};if(shell?.classList.contains('custom-select')&&trigger&&menu){menu.innerHTML='';rows.forEach(service=>{const choice=document.createElement('button');choice.type='button';choice.className='custom-select-option';choice.setAttribute('role','option');choice.setAttribute('aria-selected','false');choice.dataset.value=service.name;choice.textContent=service.name;choice.onclick=()=>{syncServiceUI(service.name);shell.classList.remove('open');trigger.setAttribute('aria-expanded','false');trigger.focus()};menu.append(choice)});syncServiceUI(select.value)}const openService=card=>{const name=card?.dataset?.liveService||'';if(!name)return;syncServiceUI(name);card.blur();const modal=document.querySelector('#estimate');if(modal&&!modal.open)modal.showModal()};grid.onclick=e=>{const card=e.target.closest('.live-service-card[data-live-service]');if(card)openService(card)};grid.onkeydown=e=>{if(e.key!=='Enter'&&e.key!==' ')return;const card=e.target.closest('.live-service-card[data-live-service]');if(!card)return;e.preventDefault();openService(card)}}
-function renderReviews(rows){let section=document.querySelector('#reviews-live');if(!rows?.length){section?.remove();return}if(!section){section=document.createElement('section');section.id='reviews-live';section.className='live-reviews';document.querySelector('#contact')?.before(section)}section.innerHTML=`<div class="wrap"><div class="section-head"><div class="eyebrow">Customer feedback</div><h2>Reviews</h2></div><div class="live-review-grid">${rows.map(r=>`<article class="live-review"><div class="stars">${'★'.repeat(r.rating)}</div><p>${esc(r.body)}</p><strong>${esc(r.author)}</strong></article>`).join('')}</div></div>`}
-async function load(){const [services,reviews,content]=await Promise.all([db.from('sheylaspro-services').select('*').eq('is_live',true).order('sort_order'),db.from('sheylaspro-reviews').select('*').eq('published',true).order('created_at',{ascending:false}),db.from('sheylaspro-site_content').select('*')]);if(services.error)renderServices([]);else renderServices(services.data||[]);if(reviews.error)renderReviews([]);else renderReviews(reviews.data||[]);if(!content.error)applyContent(content.data||[]);const error=services.error||reviews.error||content.error;document.documentElement.dataset.supabase=error?'error':'connected';if(error)console.error('Sheylas Pro connection:',error.message)}
+function renderReviews(rows){
+
+  const section=document.querySelector('#reviews');
+  const grid=document.querySelector('#reviews .reviews-grid');
+
+  if(!section||!grid)return;
+
+  if(!rows?.length){
+    section.hidden=true;
+    grid.innerHTML='';
+    return;
+  }
+
+  section.hidden=false;
+
+  grid.innerHTML=rows.map(r=>{
+
+    const rating=Math.max(
+      1,
+      Math.min(5,Number(r.rating)||5)
+    );
+
+    const source=String(r.source||'Google');
+
+    let sourceIcon='fa-solid fa-star';
+
+    if(source.toLowerCase()==='google'){
+      sourceIcon='fa-brands fa-google';
+    }
+
+    if(source.toLowerCase()==='yelp'){
+      sourceIcon='fa-brands fa-yelp';
+    }
+
+    if(source.toLowerCase()==='facebook'){
+      sourceIcon='fa-brands fa-facebook';
+    }
+
+    const initial=
+      String(r.name||'C')
+        .trim()
+        .charAt(0)
+        .toUpperCase()||'C';
+
+    return `
+      <article class="review-card">
+        <i class="fa-solid fa-quote-right review-quote"></i>
+
+        <div
+          class="review-stars"
+          aria-label="${rating} out of 5 stars"
+        >
+          ${'<i class="fa-solid fa-star"></i>'.repeat(rating)}
+        </div>
+
+        <p class="review-text">
+          ${esc(r.review||'')}
+        </p>
+
+        <div class="review-person">
+          <div class="review-avatar">
+            ${esc(initial)}
+          </div>
+
+          <div>
+            <div class="review-name">
+              ${esc(r.name||'Customer')}
+            </div>
+
+            <div class="review-source">
+              <i class="${sourceIcon}"></i>
+              ${esc(source)} Review
+            </div>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+async function load(){const [services,reviews,content]=await Promise.all([db.from('sheylaspro-services').select('*').eq('is_live',true).order('sort_order'),db.from('sheylaspro-reviews')
+  .select('*')
+  .eq('is_live',true)
+  .order('sort_order',{ascending:true})
+  .order('created_at',{ascending:false}),db.from('sheylaspro-site_content').select('*')]);if(services.error)renderServices([]);else renderServices(services.data||[]);if(reviews.error)renderReviews([]);else renderReviews(reviews.data||[]);if(!content.error)applyContent(content.data||[]);const error=services.error||reviews.error||content.error;document.documentElement.dataset.supabase=error?'error':'connected';if(error)console.error('Sheylas Pro connection:',error.message)}
 const photoInput=document.querySelector('#estimate-photos');
 const allowedImageExtensions=new Set(['jpg','jpeg','png','webp','heic','heif','gif','bmp','tif','tiff','avif']);
 const allowedImageTypes=new Set(['image/jpeg','image/png','image/webp','image/heic','image/heif','image/gif','image/bmp','image/tiff','image/avif']);
