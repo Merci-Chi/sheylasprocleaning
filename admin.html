@@ -439,10 +439,6 @@ html[data-theme="dark"] .schedule-detail{background:linear-gradient(145deg,#071d
 }
 @media(max-width:430px){
  #teamDialog .custom-time,
- 
- 
-}
-
 
 /* ===== Compact day pills + compact time pickers ===== */
 #teamDialog .day-grid{
@@ -791,7 +787,52 @@ html[data-theme="dark"] .service-icon-option{background:#09243b;color:#f4fcff}
 html[data-theme="dark"] .limit-help{background:#0b314e;color:#dffcff;border-color:#27516a}
 @media(max-width:560px){.service-description-label,.service-description-meta{align-items:flex-start;flex-direction:column;gap:5px}.service-description-rule{white-space:normal}}
 
+/* ===== Reviews admin ===== */
 
+#page-reviews .table-wrap{
+  overflow:visible;
+}
+
+#page-reviews table{
+  min-width:0;
+}
+
+.admin-review-stars{
+  color:var(--yellow);
+  font-size:17px;
+  letter-spacing:2px;
+  white-space:nowrap;
+}
+
+.review-status{
+  display:inline-flex;
+  align-items:center;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:9px;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.review-status.live{
+  background:#e5f8ee;
+  color:#16834c;
+}
+
+.review-status.hidden{
+  background:#f2f6f8;
+  color:var(--muted);
+}
+
+html[data-theme="dark"] .review-status.live{
+  background:#123d30;
+  color:#8ef0bd;
+}
+
+html[data-theme="dark"] .review-status.hidden{
+  background:#09243b;
+  color:#a9bfcd;
+}
 /* ===== Compact estimate cards / image preview / quick actions ===== */
 #page-estimates .table-wrap{overflow:visible}
 #page-estimates table{min-width:0;display:block;background:transparent}
@@ -1339,8 +1380,21 @@ html[data-theme="dark"] #page-dashboard .workspace-icon{
     <button class="nav-item" data-page="appointments"><span class="nav-icon"><i class="fa-regular fa-calendar-check"></i></span>Appointments</button>
     <button class="nav-item" data-page="estimates"><span class="nav-icon"><i class="fa-regular fa-file-lines"></i></span>Estimates</button>
     <button class="nav-item" data-page="clients"><span class="nav-icon"><i class="fa-regular fa-address-book"></i></span>Clients</button>
-    <button class="nav-item" data-page="services"><span class="nav-icon"><i class="fa-solid fa-spray-can-sparkles"></i></span>Services</button>
-    <button class="nav-item" data-page="team"><span class="nav-icon"><i class="fa-solid fa-user-group"></i></span>Team</button>
+    <button class="nav-item" data-page="services">
+  <span class="nav-icon">
+    <i class="fa-solid fa-spray-can-sparkles"></i>
+  </span>
+  Services
+</button>
+
+<button class="nav-item" data-page="reviews">
+  <span class="nav-icon">
+    <i class="fa-solid fa-star"></i>
+  </span>
+  Reviews
+</button>
+
+<button class="nav-item" data-page="team"><span class="nav-icon"><i class="fa-solid fa-user-group"></i></span>Team</button>
   </nav>
   <div class="nav-label">Website</div>
   <nav class="nav website-nav">
@@ -1424,7 +1478,66 @@ html[data-theme="dark"] #page-dashboard .workspace-icon{
   <div class="page-head"><div><div class="eyebrow">Offerings</div><h1>Services</h1><p>Add, edit, price, and remove services.</p></div><button class="button primary" id="addService"><i class="fa-solid fa-plus"></i>Add service</button></div>
   <article class="panel"><div class="panel-head"><div><h2>Services</h2><p id="serviceCount">0 records</p></div><div class="toolbar"><input class="search" id="serviceSearch" placeholder="Search services"></div></div><div class="table-wrap"><table><thead><tr><th>Name</th><th>Price</th><th>Description</th><th>Actions</th></tr></thead><tbody id="serviceRows"></tbody></table><div class="empty" id="serviceEmpty"><i class="fa-solid fa-spray-can-sparkles"></i><strong>No services yet</strong>Add the services you actually offer.</div></div></article>
 </section>
+<section class="page" id="page-reviews">
 
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Website</div>
+      <h1>Reviews</h1>
+      <p>Add and manage customer reviews shown on the website.</p>
+    </div>
+
+    <button class="button primary" id="addReview">
+      <i class="fa-solid fa-plus"></i>
+      Add review
+    </button>
+  </div>
+
+  <article class="panel">
+
+    <div class="panel-head">
+      <div>
+        <h2>Customer Reviews</h2>
+        <p id="reviewCount">0 records</p>
+      </div>
+
+      <div class="toolbar">
+        <input
+          class="search"
+          id="reviewSearch"
+          placeholder="Search reviews"
+        >
+      </div>
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Rating</th>
+            <th>Source</th>
+            <th>Review</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody id="reviewRows"></tbody>
+      </table>
+
+      <div class="empty" id="reviewEmpty">
+        <i class="fa-regular fa-star"></i>
+        <strong>No reviews yet</strong>
+        Add a customer review when you are ready.
+      </div>
+
+    </div>
+
+  </article>
+
+</section>
 <section class="page" id="page-team">
   <div class="page-head"><div><div class="eyebrow">People</div><h1>Team</h1><p>Manage team members, roles, working days, and hours.</p></div><button class="button primary" id="addTeam"><i class="fa-solid fa-user-plus"></i>Add team member</button></div>
   <div class="team-grid" id="teamGrid"></div>
@@ -1520,7 +1633,103 @@ html[data-theme="dark"] #page-dashboard .workspace-icon{
 <dialog id="clientDialog"><div class="modal"><div class="modal-head"><h2 id="clientTitle">Add client</h2><button class="modal-close" data-close="clientDialog"><i class="fa-solid fa-xmark"></i></button></div><form class="modal-body" id="clientForm"><input type="hidden" id="clientId"><div class="form-grid"><div class="field"><label>Name</label><input id="clientName" required></div><div class="field"><label>Phone</label><input id="clientPhone" type="tel"></div><div class="field"><label>Email</label><input id="clientEmail" type="email"></div><div class="field"><label>Address</label><input id="clientAddress"></div><div class="field full"><label>Notes</label><textarea id="clientNotes"></textarea></div></div><div class="modal-actions"><button class="button ghost" type="button" data-close="clientDialog">Cancel</button><button class="button primary">Save client</button></div></form></div></dialog>
 
 <dialog id="serviceDialog"><div class="modal"><div class="modal-head"><h2 id="serviceTitle">Add service</h2><button class="modal-close" data-close="serviceDialog"><i class="fa-solid fa-xmark"></i></button></div><form class="modal-body" id="serviceForm"><input type="hidden" id="serviceId"><input type="hidden" id="serviceImageUrl"><input type="hidden" id="serviceIcon"><div class="form-grid"><div class="field full"><label>Service name</label><input id="serviceName" required></div><div class="field"><label>Price label</label><input id="servicePrice" placeholder="Free estimate or $120" required></div><div class="field full"><label class="service-description-label"><span>Description</span><span class="service-description-rule">75 min · 160 max <button type="button" class="limit-help" id="serviceDescriptionHelp" aria-label="Why is there a description limit?">?</button></span></label><textarea id="serviceDescription" minlength="75" maxlength="160" required></textarea><div class="service-description-meta"><span>Keep the description concise enough to fit the website card.</span><strong><span id="serviceDescriptionCount">0</span>/160</strong></div></div><div class="field full"><label>Stock image</label><p class="service-image-help">Choose the photo that will appear on this service card on the main website.</p><div class="service-image-grid" id="serviceImageGrid" role="radiogroup" aria-label="Choose a stock image"></div></div><div class="field full"><label>Service icon</label><p class="service-image-help">Choose the icon shown in the circle on the service card.</p><div class="service-icon-grid" id="serviceIconGrid" role="radiogroup" aria-label="Choose a service icon"></div></div></div><div class="modal-actions"><button class="button ghost" type="button" data-close="serviceDialog">Cancel</button><button class="button primary">Save service</button></div></form></div></dialog>
+<dialog id="reviewDialog">
+  <div class="modal">
 
+    <div class="modal-head">
+      <h2 id="reviewTitle">Add review</h2>
+
+      <button
+        class="modal-close"
+        data-close="reviewDialog"
+        type="button"
+        aria-label="Close"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <form class="modal-body" id="reviewForm">
+
+      <input type="hidden" id="reviewId">
+
+      <div class="form-grid">
+
+        <div class="field full">
+          <label>Customer name</label>
+          <input
+            id="reviewName"
+            placeholder="Customer name"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label>Rating</label>
+
+          <select id="reviewRating" required>
+            <option value="5">★★★★★ — 5 stars</option>
+            <option value="4">★★★★☆ — 4 stars</option>
+            <option value="3">★★★☆☆ — 3 stars</option>
+            <option value="2">★★☆☆☆ — 2 stars</option>
+            <option value="1">★☆☆☆☆ — 1 star</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Source</label>
+
+          <select id="reviewSource">
+            <option value="Google">Google</option>
+            <option value="Yelp">Yelp</option>
+            <option value="Facebook">Facebook</option>
+            <option value="Direct">Direct customer</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label>Review</label>
+
+          <textarea
+            id="reviewText"
+            maxlength="500"
+            placeholder="Paste the customer's review here..."
+            required
+          ></textarea>
+        </div>
+
+        <div class="field full">
+          <label class="day-check">
+            <input
+              type="checkbox"
+              id="reviewLive"
+              checked
+            >
+            Show this review on the website
+          </label>
+        </div>
+
+      </div>
+
+      <div class="modal-actions">
+        <button
+          class="button ghost"
+          type="button"
+          data-close="reviewDialog"
+        >
+          Cancel
+        </button>
+
+        <button class="button primary" type="submit">
+          Save review
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</dialog>
 <dialog id="teamDialog"><div class="modal"><div class="modal-head"><h2 id="teamTitle">Add team member</h2><button class="modal-close" data-close="teamDialog" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div><form class="modal-body" id="teamForm"><input type="hidden" id="teamId"><div class="form-grid"><div class="field"><label>Name</label><input id="teamName" required></div><div class="field"><label>Role</label><input id="teamRole" required></div><div class="field full"><label>Working days</label><div class="day-grid"><label class="day-check"><input type="checkbox" name="workday" value="Sun">Sun</label><label class="day-check"><input type="checkbox" name="workday" value="Mon">Mon</label><label class="day-check"><input type="checkbox" name="workday" value="Tue">Tue</label><label class="day-check"><input type="checkbox" name="workday" value="Wed">Wed</label><label class="day-check"><input type="checkbox" name="workday" value="Thu">Thu</label><label class="day-check"><input type="checkbox" name="workday" value="Fri">Fri</label><label class="day-check"><input type="checkbox" name="workday" value="Sat">Sat</label></div></div><div class="field"><label>Starts</label><div class="compact-time" data-time-prefix="teamStart">
 <select id="teamStartHour" aria-label="Hour">
 <option value="">00</option><option value="1">01</option><option value="2">02</option><option value="3">03</option><option value="4">04</option><option value="5">05</option><option value="6">06</option><option value="7">07</option><option value="8">08</option><option value="9">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option>
@@ -1775,7 +1984,18 @@ html[data-theme="dark"] #page-dashboard .workspace-icon{
 
 <script>
 const KEY="cleaning_admin_data_v1";
-const blank=()=>({clients:[],services:[],team:[],appointments:[],estimates:[],settings:{signedInAs:"",website:"index.html"}});
+const blank=()=>({
+  clients:[],
+  services:[],
+  reviews:[],
+  team:[],
+  appointments:[],
+  estimates:[],
+  settings:{
+    signedInAs:"",
+    website:"index.html"
+  }
+});
 let data=load(), pendingDelete=null;
 let pendingGuestClient=null;
 function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||"null");return v?{...blank(),...v,settings:{...blank().settings,...(v.settings||{})}}:blank()}catch{return blank()}}
@@ -1802,7 +2022,17 @@ function showMessage(title,message,type="info"){
   messageDialog.showModal();
 }
 
-const pages=["dashboard","appointments","estimates","clients","services","team","settings","help"];
+const pages=[
+  "dashboard",
+  "appointments",
+  "estimates",
+  "clients",
+  "services",
+  "reviews",
+  "team",
+  "settings",
+  "help"
+];
 function showPage(p){if(!pages.includes(p))return;document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active",x.id==="page-"+p));document.querySelectorAll(".nav-item").forEach(x=>x.classList.toggle("active",x.dataset.page===p));currentPage.textContent=p==="help"?"Help / Requests":p[0].toUpperCase()+p.slice(1);closeDrawer();render();if(p==="help"){renderHelpRequests();syncCustomSelects()}}
 document.querySelectorAll(".nav-item").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
 document.querySelectorAll("[data-go]").forEach(b=>{
@@ -1822,7 +2052,13 @@ function render(){
   statAppointments.textContent=data.appointments.length;statEstimates.textContent=data.estimates.length;statClients.textContent=data.clients.length;statServices.textContent=data.services.length;statTeam.textContent=data.team.length;
   signedInLabel.textContent=data.settings.signedInAs||"You";document.querySelectorAll(".website-link").forEach(a=>a.href=data.settings.website||"index.html");
   settingName.value=data.settings.signedInAs||"";settingWebsite.value=data.settings.website||"index.html";
-  renderClients();renderServices();renderTeam();renderAppointments();renderEstimates();refreshSelects();
+  renderClients();
+renderServices();
+renderReviews();
+renderTeam();
+renderAppointments();
+renderEstimates();
+refreshSelects();
 }
 function bindDelete(){
   document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
@@ -2957,6 +3193,7 @@ const APP_PUBLIC_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const SHEYLAS_TABLES={
   clients:"sheylaspro-clients",
   services:"sheylaspro-services",
+  reviews:"sheylaspro-reviews",
   team:"sheylaspro-team",
   appointments:"sheylaspro-appointments",
   estimates:"sheylaspro-estimates",
@@ -3060,6 +3297,7 @@ async function loadSheylasData(){
     const [
       clientsRes,
       servicesRes,
+      reviewsRes,
       teamRes,
       appointmentsRes,
       estimatesRes,
@@ -3068,6 +3306,13 @@ async function loadSheylasData(){
     ]=await Promise.all([
       safe(sheylasDb.from(SHEYLAS_TABLES.clients).select("*").order("name")),
       safe(sheylasDb.from(SHEYLAS_TABLES.services).select("*").order("sort_order").order("name")),
+      safe(
+        sheylasDb
+          .from(SHEYLAS_TABLES.reviews)
+          .select("*")
+          .order("sort_order")
+          .order("created_at",{ascending:false})
+      ),
       safe(sheylasDb.from(SHEYLAS_TABLES.team).select("*").order("sort_order").order("name")),
       safe(sheylasDb.from(SHEYLAS_TABLES.appointments).select("*").order("appointment_date",{ascending:false}).order("appointment_time",{ascending:false})),
       safe(sheylasDb.from(SHEYLAS_TABLES.estimates).select("*").order("estimate_date",{ascending:false}).order("created_at",{ascending:false})),
@@ -3097,6 +3342,17 @@ async function loadSheylasData(){
         description:x.description||"",
         imageUrl:x.image_url||"",
         icon:x.icon||"",
+        isLive:x.is_live!==false,
+        sortOrder:x.sort_order||0
+      }));
+    }else failedSections++;
+    if(reviewsRes.data){
+      data.reviews=reviewsRes.data.map(x=>({
+        id:x.id,
+        name:x.name||"",
+        review:x.review||"",
+        rating:Number(x.rating)||5,
+        source:x.source||"Google",
         isLive:x.is_live!==false,
         sortOrder:x.sort_order||0
       }));
@@ -3218,6 +3474,135 @@ renderServices=function(){
   bindDelete();
 };
 
+function renderReviews(){
+
+  const rows=filter(
+    data.reviews,
+    reviewSearch.value,
+    [
+      x=>x.name,
+      x=>x.review,
+      x=>x.source
+    ]
+  );
+
+  reviewCount.textContent=countLabel(data.reviews.length);
+
+  reviewEmpty.style.display=
+    data.reviews.length ? "none" : "block";
+
+  reviewRows.innerHTML=rows.map(x=>{
+
+    const rating=Math.max(
+      1,
+      Math.min(5,Number(x.rating)||5)
+    );
+
+    const stars=
+      "★".repeat(rating)+
+      "☆".repeat(5-rating);
+
+    return `
+      <tr>
+
+        <td data-label="Customer">
+          <strong>${esc(x.name)}</strong>
+        </td>
+
+        <td data-label="Rating">
+          <span class="admin-review-stars">
+            ${stars}
+          </span>
+        </td>
+
+        <td data-label="Source">
+          ${esc(x.source||"Google")}
+        </td>
+
+        <td data-label="Review">
+          ${esc(x.review)}
+        </td>
+
+        <td data-label="Status">
+          <span class="review-status ${x.isLive?"live":"hidden"}">
+            ${x.isLive?"Live":"Hidden"}
+          </span>
+        </td>
+
+        <td data-label="Actions">
+
+          <div class="row-actions">
+
+            <button
+              class="icon-btn"
+              data-edit-review="${x.id}"
+              aria-label="Edit review"
+            >
+              <i class="fa-solid fa-pen"></i>
+            </button>
+
+            <button
+              class="icon-btn"
+              data-del="reviews"
+              data-id="${x.id}"
+              aria-label="Delete review"
+            >
+              <i class="fa-solid fa-trash"></i>
+            </button>
+
+          </div>
+
+        </td>
+
+      </tr>
+    `;
+
+  }).join("");
+
+  document
+    .querySelectorAll("[data-edit-review]")
+    .forEach(button=>{
+
+      button.onclick=()=>{
+        openReview(
+          get("reviews",button.dataset.editReview)
+        );
+      };
+
+    });
+
+  bindDelete();
+}
+
+reviewSearch.oninput=renderReviews;
+
+function openReview(review=null){
+
+  reviewForm.reset();
+
+  reviewTitle.textContent=
+    review ? "Edit review" : "Add review";
+
+  reviewId.value=review?.id||"";
+
+  reviewName.value=review?.name||"";
+
+  reviewText.value=review?.review||"";
+
+  reviewRating.value=String(review?.rating||5);
+
+  reviewSource.value=review?.source||"Google";
+
+  reviewLive.checked=
+    review ? review.isLive!==false : true;
+
+  syncCustomSelects();
+
+  reviewDialog.showModal();
+}
+
+addReview.onclick=()=>openReview();
+
 clientForm.onsubmit=async e=>{
   e.preventDefault();
   try{
@@ -3281,6 +3666,86 @@ serviceForm.onsubmit=async e=>{
     showMessage(serviceId.value?"Service updated":"Service added","","check");
   }catch(error){
     showMessage("Couldn’t save service","Please try again.","error");
+  }
+};
+
+reviewForm.onsubmit=async e=>{
+
+  e.preventDefault();
+
+  const name=reviewName.value.trim();
+  const review=reviewText.value.trim();
+
+  if(!name){
+    return showMessage(
+      "Customer name required",
+      "Enter the customer's name.",
+      "error"
+    );
+  }
+
+  if(!review){
+    return showMessage(
+      "Review required",
+      "Enter the customer's review.",
+      "error"
+    );
+  }
+
+  try{
+
+    if(!await requireSession())return;
+
+    const id=reviewId.value;
+
+    const payload={
+      name,
+      review,
+      rating:Number(reviewRating.value)||5,
+      source:reviewSource.value||"Google",
+      is_live:reviewLive.checked
+    };
+
+    if(!id){
+      payload.sort_order=
+        (data.reviews.length+1)*10;
+    }
+
+    const query=id
+
+      ? sheylasDb
+          .from(SHEYLAS_TABLES.reviews)
+          .update(payload)
+          .eq("id",id)
+
+      : sheylasDb
+          .from(SHEYLAS_TABLES.reviews)
+          .insert(payload);
+
+    const {error}=await query;
+
+    if(error)throw error;
+
+    reviewDialog.close();
+
+    await loadSheylasData();
+
+    showMessage(
+      id ? "Review updated" : "Review added",
+      "The website review was saved.",
+      "check"
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showMessage(
+      "Couldn’t save review",
+      "Please try again.",
+      "error"
+    );
+
   }
 };
 
