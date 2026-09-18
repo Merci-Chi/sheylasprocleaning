@@ -3202,7 +3202,69 @@
       </a>
     </div>
   </div>
-</section>
+      </section>
+
+      <section class="contact" id="contact">
+        <svg class="contact-blob-defs" aria-hidden="true">
+          <defs>
+            <clipPath id="contactBlobClip" clipPathUnits="objectBoundingBox">
+              <path
+                d="M.018,.20 C.035,.09 .085,.14 .13,.07 C.18,-.01 .225,.09 .275,.045 C.33,-.005 .375,.085 .425,.04 C.48,-.01 .525,.08 .575,.035 C.635,-.015 .675,.08 .73,.04 C.79,-.005 .83,.095 .885,.055 C.95,.01 .985,.105 .995,.21 C1.005,.31 .965,.37 .99,.46 C1.015,.555 .97,.62 .99,.71 C1.005,.81 .955,.89 .895,.855 C.835,.82 .805,.97 .74,.925 C.68,.88 .645,1.015 .58,.96 C.52,.91 .475,1.02 .415,.965 C.355,.91 .315,1.015 .255,.955 C.20,.90 .15,1.005 .095,.94 C.035,.87 -.005,.80 .02,.70 C.045,.61 -.01,.54 .015,.45 C.04,.365 -.005,.29 .018,.20 Z"
+              />
+            </clipPath>
+          </defs>
+        </svg>
+
+        <div class="contact-rotator" aria-hidden="true">
+          <img
+            class="contact-photo is-active"
+            src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&amp;fit=crop&amp;w=1800&amp;q=88"
+            alt=""
+          />
+          <img
+            class="contact-photo"
+            src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&amp;fit=crop&amp;w=1800&amp;q=88"
+            alt=""
+          />
+          <img
+            class="contact-photo"
+            src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&amp;fit=crop&amp;w=1800&amp;q=88"
+            alt=""
+          />
+        </div>
+
+        <div class="photo-progress" aria-hidden="true">
+          <span class="is-active"></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="wrap contact-grid">
+          <div>
+            <h2>Cleaner. Brighter.<br />Together.</h2>
+
+            <p>
+              Tell us what you need cleaned and receive a free in-home estimate.
+            </p>
+          </div>
+
+          <div class="contact-actions">
+            <a class="btn btn-yellow open-estimate" href="#estimate">
+              <i class="fa-solid fa-calendar-check"></i>
+              Request a Free In-Home Estimate
+            </a>
+
+            <a class="btn btn-white" href="tel:+17028599565">
+              <i class="fa-solid fa-phone"></i>
+              Call (702) 859-9565
+            </a>
+
+            <a class="email" href="mailto:sheylacleaning91@gmail.com">
+              sheylacleaning91@gmail.com
+            </a>
+          </div>
+        </div>
+      </section>
     </main>
     <dialog id="estimate">
       <div class="modal-head">
@@ -3975,133 +4037,6 @@
       }
     </script>
     <script src="live-data.js?v=20260918-1"></script>
-
-<script>
-  async function loadLiveReviews() {
-    const reviewsSection = document.querySelector("#reviews");
-    const reviewsGrid = document.querySelector(".reviews-grid");
-
-    if (!reviewsSection || !reviewsGrid) return;
-
-    try {
-      const REVIEWS_SUPABASE_URL =
-        "https://wfxuxrvygyzonkflpwoq.supabase.co";
-
-      const REVIEWS_SUPABASE_KEY =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndmeHV4cnZ5Z3l6b25rZmxwd29xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4ODI2MjEsImV4cCI6MjEwMzQ1ODYyMX0.SpvX06m-ZptRRy5LNU6pOa-ZvMmGJ-8vFUi9cZekS7M";
-
-      const reviewDb = window.supabase.createClient(
-        REVIEWS_SUPABASE_URL,
-        REVIEWS_SUPABASE_KEY
-      );
-
-      const { data: reviews, error } = await reviewDb
-        .from("sheylaspro-reviews")
-        .select("*")
-        .eq("is_live", true)
-        .order("sort_order", { ascending: true })
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-
-      if (!reviews || !reviews.length) {
-        reviewsSection.hidden = true;
-        reviewsGrid.innerHTML = "";
-        return;
-      }
-
-      reviewsSection.hidden = false;
-
-      reviewsGrid.innerHTML = reviews
-        .map((review) => {
-          const name = escapeReviewHtml(review.name || "Customer");
-          const text = escapeReviewHtml(review.review || "");
-          const source = escapeReviewHtml(review.source || "Google");
-
-          const rating = Math.max(
-            1,
-            Math.min(5, Number(review.rating) || 5)
-          );
-
-          const stars = Array.from(
-            { length: rating },
-            () => '<i class="fa-solid fa-star"></i>'
-          ).join("");
-
-          const initial =
-            String(review.name || "C")
-              .trim()
-              .charAt(0)
-              .toUpperCase() || "C";
-
-          let sourceIcon = "fa-solid fa-star";
-
-          if (String(review.source).toLowerCase() === "google") {
-            sourceIcon = "fa-brands fa-google";
-          }
-
-          if (String(review.source).toLowerCase() === "yelp") {
-            sourceIcon = "fa-brands fa-yelp";
-          }
-
-          if (String(review.source).toLowerCase() === "facebook") {
-            sourceIcon = "fa-brands fa-facebook";
-          }
-
-          return `
-            <article class="review-card">
-              <i class="fa-solid fa-quote-right review-quote"></i>
-
-              <div
-                class="review-stars"
-                aria-label="${rating} out of 5 stars"
-              >
-                ${stars}
-              </div>
-
-              <p class="review-text">
-                ${text}
-              </p>
-
-              <div class="review-person">
-                <div class="review-avatar">
-                  ${escapeReviewHtml(initial)}
-                </div>
-
-                <div>
-                  <div class="review-name">
-                    ${name}
-                  </div>
-
-                  <div class="review-source">
-                    <i class="${sourceIcon}"></i>
-                    ${source} Review
-                  </div>
-                </div>
-              </div>
-            </article>
-          `;
-        })
-        .join("");
-    } catch (error) {
-      console.error("Could not load reviews:", error);
-
-      reviewsSection.hidden = true;
-      reviewsGrid.innerHTML = "";
-    }
-  }
-
-  function escapeReviewHtml(value) {
-    return String(value ?? "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
-  loadLiveReviews();
-</script>
 
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   </body>
