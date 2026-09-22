@@ -1,0 +1,37 @@
+{
+  "id": "./",
+  "name": "Sheyla's Pro Cleaning",
+  "short_name": "Sheyla's Cleaning",
+  "description": "Professional cleaning services in Las Vegas.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#001a38",
+  "theme_color": "#001a38",
+  "icons": [
+    {
+      "src": "Images/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "Images/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "Images/app-icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "Images/app-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
