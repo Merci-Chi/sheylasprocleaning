@@ -2233,12 +2233,12 @@
         z-index: 2;
       }
 
-      /* Keep the floating arrow out of content and contain the full form */
+      /* Keep the scroll-to-top button just below the sticky header */
       .to-top,
       .to-top.show {
-        top: auto;
+        top: 138px;
         right: 22px;
-        bottom: 22px;
+        bottom: auto;
       }
       dialog {
         max-height: calc(100dvh - 28px);
@@ -2271,8 +2271,9 @@
       @media (max-width: 560px) {
         .to-top,
         .to-top.show {
+          top: 90px;
           right: 14px;
-          bottom: 14px;
+          bottom: auto;
         }
         .modal-head {
           padding: 26px 25px 20px;
