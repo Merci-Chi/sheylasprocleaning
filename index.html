@@ -2967,6 +2967,37 @@
         }
       }
 
+
+      /* Header fit fix — keep the full CTA visible on desktop */
+      @media (min-width: 951px) {
+        .top .nav,
+        .top.scrolled .nav {
+          width: min(1480px, calc(100% - 24px));
+          gap: clamp(8px, 1vw, 16px);
+        }
+
+        .top .brand,
+        .top.scrolled .brand {
+          flex-basis: clamp(430px, 32vw, 520px);
+          transform: scale(1.75);
+        }
+
+        .top .links,
+        .top.scrolled .links {
+          gap: clamp(12px, 1.3vw, 22px);
+          font-size: clamp(0.88rem, 1vw, 1rem);
+        }
+
+        .top .call-top,
+        .top.scrolled .call-top {
+          padding: 12px 16px;
+          gap: 8px;
+          font-size: 0.9rem;
+          line-height: 1;
+          white-space: nowrap;
+        }
+      }
+
 </style>
   </head>
   <body>
@@ -2974,7 +3005,7 @@
     <header class="top">
       <div class="wrap nav">
         <div class="brand">
-          <img class="brand-icon" src="Images/app-icon-192.png" alt="" /><img
+          <img class="brand-icon" src="Images/logo-icon.png" alt="" /><img
             class="brand-word"
             src="Images/logo-wordmark.png"
             alt="Sheyla’s Pro Cleaning"
